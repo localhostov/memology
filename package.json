@@ -1,0 +1,36 @@
+{
+  "name": "memology-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,jsx,tsx}\"",
+    "preview": "vite preview",
+    "lint:fix": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,jsx,tsx}\" --fix"
+  },
+  "dependencies": {
+    "@vkontakte/icons": "^2.73.0",
+    "@vkontakte/vk-bridge": "^2.11.2",
+    "@vkontakte/vk-mini-apps-router": "^1.1.1",
+    "@vkontakte/vk-miniapps-deploy": "^0.1.6",
+    "@vkontakte/vkui": "^5.9.5",
+    "effector": "^22.8.7",
+    "effector-react": "^22.5.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.53.0",
+    "eslint-kit": "^10.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "prettier": "^3.0.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}
