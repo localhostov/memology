@@ -1,4 +1,8 @@
-import { Icon28NewsfeedOutline } from "@vkontakte/icons"
+import {
+    Icon28NewsfeedOutline,
+    Icon28GameOutline,
+    Icon28PollSquareOutline,
+} from "@vkontakte/icons"
 import {
     useActiveVkuiLocation,
     useRouteNavigator,
@@ -20,8 +24,9 @@ import {
     useAdaptivityConditionalRender,
     usePlatform,
 } from "@vkontakte/vkui"
-import { Games, Meme, Memes } from "../panels"
+import { Games, Meme, Memes, Rating } from "../panels"
 import { panelNames, Panels, routes } from "../shared"
+import { ITab } from "../types"
 
 export const Epic = () => {
     const platform = usePlatform()
@@ -52,8 +57,52 @@ export const Epic = () => {
             .includes(activePanel!)
     }
 
-    const memesTabIsActive = checkTabIsActive(routes.root.memes)
-    const gamesTabIsActive = checkTabIsActive(routes.root.games)
+    const tabs: ITab[] = [
+        {
+            title: panelNames[Panels.MEMES],
+            isActive: checkTabIsActive(routes.root.memes),
+            route: routes.root.memes.memes,
+            icon: <Icon28NewsfeedOutline />,
+        },
+        {
+            title: panelNames[Panels.GAMES],
+            isActive: checkTabIsActive(routes.root.games),
+            route: routes.root.games.games,
+            icon: <Icon28GameOutline />,
+        },
+        {
+            title: panelNames[Panels.RATING],
+            isActive: checkTabIsActive(routes.root.rating),
+            route: routes.root.rating.rating,
+            icon: <Icon28PollSquareOutline />,
+        },
+    ]
+
+    const desktopTabs = tabs.map((tab) => {
+        return (
+            <Cell
+                disabled={tab.isActive}
+                style={tab.isActive ? activeStoryStyles : undefined}
+                onClick={() => onStoryChange(tab.route)}
+                before={tab.icon}
+            >
+                {tab.title}
+            </Cell>
+        )
+    })
+
+    const mobileTabs = tabs.map((tab) => {
+        return (
+            <TabbarItem
+                disabled={tab.isActive}
+                onClick={() => onStoryChange(tab.route)}
+                selected={tab.isActive}
+                text={tab.title}
+            >
+                {tab.icon}
+            </TabbarItem>
+        )
+    })
 
     return (
         <SplitLayout
@@ -69,43 +118,14 @@ export const Epic = () => {
                 >
                     <Panel>
                         {hasHeader && <PanelHeader />}
-                        <Group>
-                            <Cell
-                                disabled={memesTabIsActive}
-                                style={
-                                    memesTabIsActive
-                                        ? activeStoryStyles
-                                        : undefined
-                                }
-                                onClick={() =>
-                                    onStoryChange(routes.root.memes.memes)
-                                }
-                                before={<Icon28NewsfeedOutline />}
-                            >
-                                {panelNames[Panels.MEMES]}
-                            </Cell>
-                            <Cell
-                                disabled={gamesTabIsActive}
-                                style={
-                                    gamesTabIsActive
-                                        ? activeStoryStyles
-                                        : undefined
-                                }
-                                onClick={() =>
-                                    onStoryChange(routes.root.games.games)
-                                }
-                                before={<Icon28NewsfeedOutline />}
-                            >
-                                {panelNames[Panels.GAMES]}
-                            </Cell>
-                        </Group>
+                        <Group>{desktopTabs}</Group>
                     </Panel>
                 </SplitCol>
             )}
 
             <SplitCol
                 width="100%"
-                maxWidth="860px"
+                maxWidth="680px"
                 stretchedOnMobile
                 autoSpaced
             >
@@ -114,27 +134,7 @@ export const Epic = () => {
                     tabbar={
                         viewWidth.tabletMinus && (
                             <Tabbar className={viewWidth.tabletMinus.className}>
-                                <TabbarItem
-                                    disabled={memesTabIsActive}
-                                    onClick={() =>
-                                        onStoryChange(routes.root.memes.memes)
-                                    }
-                                    selected={memesTabIsActive}
-                                    text={panelNames[Panels.MEMES]}
-                                >
-                                    <Icon28NewsfeedOutline />
-                                </TabbarItem>
-
-                                <TabbarItem
-                                    disabled={gamesTabIsActive}
-                                    onClick={() =>
-                                        onStoryChange(routes.root.games.games)
-                                    }
-                                    selected={gamesTabIsActive}
-                                    text={panelNames[Panels.GAMES]}
-                                >
-                                    <Icon28NewsfeedOutline />
-                                </TabbarItem>
+                                {mobileTabs}
                             </Tabbar>
                         )
                     }
@@ -142,6 +142,7 @@ export const Epic = () => {
                     <Memes id={Panels.MEMES} />
                     <Games id={Panels.GAMES} />
                     <Meme id={Panels.MEME} />
+                    <Rating id={Panels.RATING} />
                 </VKUIEpic>
             </SplitCol>
         </SplitLayout>
