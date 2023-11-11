@@ -10,12 +10,14 @@ export enum Panels {
     MEMES = "memes",
     GAMES = "games",
     MEME = "meme",
+    RATING = "rating",
 }
 
 export const panelNames: Record<Panels, string> = {
     [Panels.MEMES]: "Мемы",
     [Panels.GAMES]: "Игры",
     [Panels.MEME]: "О меме",
+    [Panels.RATING]: "Рейтинг",
 }
 
 export const routes = RoutesConfig.create([
@@ -26,6 +28,8 @@ export const routes = RoutesConfig.create([
         ]),
 
         createView(Panels.GAMES, [createPanel(Panels.GAMES, "/games")]),
+
+        createView(Panels.RATING, [createPanel(Panels.RATING, "/rating")]),
     ]),
 ])
 
