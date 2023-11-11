@@ -8,13 +8,14 @@ import {
 
 export enum Panels {
     MEMES = "memes",
-    MEMES_NAME = "Мемы",
-
     GAMES = "games",
-    GAMES_NAME = "Игры",
-
     MEME = "meme",
-    MEME_NAME = "О меме",
+}
+
+export const panelNames: Record<Panels, string> = {
+    [Panels.MEMES]: "Мемы",
+    [Panels.GAMES]: "Игры",
+    [Panels.MEME]: "О меме",
 }
 
 export const routes = RoutesConfig.create([

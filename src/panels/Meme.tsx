@@ -7,9 +7,10 @@ import {
     PanelHeaderBack,
     Placeholder,
 } from "@vkontakte/vkui"
-import { Panels } from "../shared"
+import { panelNames } from "../shared"
+import { IPanelProps } from "../types"
 
-export const Meme = ({ id }: Props) => {
+export const Meme = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
     const params = useParams<"memeId">()
 
@@ -18,7 +19,7 @@ export const Meme = ({ id }: Props) => {
             <PanelHeader
                 before={<PanelHeaderBack onClick={() => navigator.back()} />}
             >
-                {Panels.MEME_NAME}
+                {panelNames[id]}
             </PanelHeader>
 
             <Group style={{ height: "1000px" }}>
@@ -30,8 +31,4 @@ export const Meme = ({ id }: Props) => {
             </Group>
         </Panel>
     )
-}
-
-interface Props {
-    id: string
 }

@@ -6,20 +6,21 @@ import {
 } from "@vkontakte/icons"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Group, Panel, PanelHeader } from "@vkontakte/vkui"
-import { Panels } from "../shared"
+import { panelNames } from "../shared"
 import styles from "../styles/memes.module.css"
+import { IPanelProps } from "../types"
 
-export const Memes = ({ id }: Props) => {
+export const Memes = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
 
     const openMeme = (id: number) => {
         navigator.push(`meme/${id}`)
     }
 
-    const renderMemesList = mockMemesList.map((item: MemeItem, index) => {
+    const renderMemesList = mockMemesList.map((item: MemeItem) => {
         return (
             <div
-                key={`card-${index}`}
+                key={item.id}
                 className={styles.card}
                 onClick={() => openMeme(item.id)}
             >
@@ -43,7 +44,7 @@ export const Memes = ({ id }: Props) => {
                             <div>
                                 <Icon32PollOutline
                                     style={{ width: 20, height: 20 }}
-                                />{" "}
+                                />
                                 {item.placeInRating}
                             </div>
                         ) : (
@@ -80,17 +81,13 @@ export const Memes = ({ id }: Props) => {
 
     return (
         <Panel id={id}>
-            <PanelHeader>{Panels.MEMES_NAME}</PanelHeader>
+            <PanelHeader>{panelNames[id]}</PanelHeader>
 
             <Group style={{ padding: 16 }}>
                 <div className={styles.cardsContainer}>{renderMemesList}</div>
             </Group>
         </Panel>
     )
-}
-
-interface Props {
-    id: string
 }
 
 const mockMemesList: MemeItem[] = [

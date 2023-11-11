@@ -5,6 +5,7 @@ import {
 } from "@vkontakte/vk-mini-apps-router"
 import { useLocation } from "@vkontakte/vk-mini-apps-router/dist/hooks/hooks"
 import { PanelPage } from "@vkontakte/vk-mini-apps-router/dist/page-types/PanelPage"
+import { ViewConfig } from "@vkontakte/vk-mini-apps-router/dist/page-types/ViewConfig"
 import {
     Cell,
     Epic as VKUIEpic,
@@ -20,8 +21,7 @@ import {
     usePlatform,
 } from "@vkontakte/vkui"
 import { Games, Meme, Memes } from "../panels"
-import { Panels, routes } from "../shared"
-import { ViewConfig } from "@vkontakte/vk-mini-apps-router/dist/page-types/ViewConfig"
+import { panelNames, Panels, routes } from "../shared"
 
 export const Epic = () => {
     const platform = usePlatform()
@@ -49,7 +49,7 @@ export const Epic = () => {
         return view
             .getRoutes()
             .map((it) => it.panel)
-            .includes(activePanel as string)
+            .includes(activePanel!)
     }
 
     const memesTabIsActive = checkTabIsActive(routes.root.memes)
@@ -82,7 +82,7 @@ export const Epic = () => {
                                 }
                                 before={<Icon28NewsfeedOutline />}
                             >
-                                {Panels.MEMES_NAME}
+                                {panelNames[Panels.MEMES]}
                             </Cell>
                             <Cell
                                 disabled={gamesTabIsActive}
@@ -96,7 +96,7 @@ export const Epic = () => {
                                 }
                                 before={<Icon28NewsfeedOutline />}
                             >
-                                {Panels.GAMES_NAME}
+                                {panelNames[Panels.GAMES]}
                             </Cell>
                         </Group>
                     </Panel>
@@ -120,7 +120,7 @@ export const Epic = () => {
                                         onStoryChange(routes.root.memes.memes)
                                     }
                                     selected={memesTabIsActive}
-                                    text={Panels.MEMES_NAME}
+                                    text={panelNames[Panels.MEMES]}
                                 >
                                     <Icon28NewsfeedOutline />
                                 </TabbarItem>
@@ -131,7 +131,7 @@ export const Epic = () => {
                                         onStoryChange(routes.root.games.games)
                                     }
                                     selected={gamesTabIsActive}
-                                    text={Panels.GAMES_NAME}
+                                    text={panelNames[Panels.GAMES]}
                                 >
                                     <Icon28NewsfeedOutline />
                                 </TabbarItem>

@@ -1,14 +1,11 @@
 import { Panel, PanelHeader } from "@vkontakte/vkui"
-import { Panels } from "../shared"
+import { panelNames } from "../shared"
+import { IPanelProps } from "../types"
 
-export const Games = ({ id }: Props) => {
+export const Games = ({ id }: IPanelProps) => {
     return (
         <Panel id={id}>
-            <PanelHeader>{Panels.GAMES_NAME}</PanelHeader>
+            <PanelHeader>{panelNames[id]}</PanelHeader>
         </Panel>
     )
-}
-
-interface Props {
-    id: string
 }
