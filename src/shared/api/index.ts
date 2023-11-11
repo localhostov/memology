@@ -5,8 +5,7 @@ import { MemeListResponse } from "../proto/meme"
 
 const api = wretch("https://memology.animaru.app")
     .headers({
-        //TODO: rewrite
-        "vk-params": window.location.href.replace(/(.*)\?/i, ""),
+        "vk-params": window.location.search.slice(1),
     })
     .addon(QueryStringAddon)
 

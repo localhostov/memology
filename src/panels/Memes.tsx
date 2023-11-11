@@ -18,7 +18,6 @@ export const Memes = ({ id }: IPanelProps) => {
     useEffect(() => {
         fetchMemes()
     }, [])
-
     const openMeme = (id: number) => {
         navigator.push(`meme/${id}`)
     }
