@@ -11,6 +11,7 @@ export enum Panels {
     GAMES = "games",
     MEME = "meme",
     RATING = "rating",
+    SUGGEST = "suggest",
 }
 
 export const panelNames: Record<Panels, string> = {
@@ -18,6 +19,7 @@ export const panelNames: Record<Panels, string> = {
     [Panels.GAMES]: "Игры",
     [Panels.MEME]: "О меме",
     [Panels.RATING]: "Рейтинг",
+    [Panels.SUGGEST]: "Предложить мем",
 }
 
 export const routes = RoutesConfig.create([
@@ -25,6 +27,7 @@ export const routes = RoutesConfig.create([
         createView(Panels.MEMES, [
             createPanel(Panels.MEMES, "/"),
             createPanel(Panels.MEME, "/meme/:memeId"),
+            createPanel(Panels.SUGGEST, "/suggest"),
         ]),
 
         createView(Panels.GAMES, [createPanel(Panels.GAMES, "/games")]),
