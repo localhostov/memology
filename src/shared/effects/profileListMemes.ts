@@ -19,6 +19,9 @@ export namespace ProfileEffects {
     export const selectTab = createEvent<TListType>()
 
     $selectedTab.on(selectTab, (_, tab) => tab)
+
+    $memesList.reset(selectTab)
+
     export const getMemesListFx = createEffect(
         ({ type, query }: { type: TListType; query: string }) =>
             API.profileMemesList({ type, query, page: 1, pageSize: 20 }),
