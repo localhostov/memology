@@ -1,4 +1,5 @@
 import { createEffect, createEvent, createStore, sample } from "effector"
+import { debounce } from "patronum"
 import { ReturnApiType } from "../../types"
 import { API } from "../api"
 
@@ -31,11 +32,8 @@ sample({
     target: getMemesListFx,
 })
 
-sample({
-    source: {
-        search: $memesSearch,
-    },
-    fn: ({ search }) => search,
-    clock: searchMeme,
+debounce({
+    source: $memesSearch,
+    timeout: 200,
     target: getMemesListFx,
 })
