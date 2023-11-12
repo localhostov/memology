@@ -1,9 +1,6 @@
 import {
     Icon16Dropdown,
     Icon28AddCircleOutline,
-    Icon28ArrowUpRectangleOutline,
-    Icon28BookmarkCircleFillYellow,
-    Icon28BookmarkOutline,
     Icon28SadFaceOutline,
 } from "@vkontakte/icons"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
@@ -32,6 +29,7 @@ import {
 } from "../shared"
 import styles from "../styles/memes.module.css"
 import { IPanelProps } from "../types"
+import { MemeListItem } from "../components"
 
 export const Memes = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
@@ -40,7 +38,7 @@ export const Memes = ({ id }: IPanelProps) => {
     const isLoading = useUnit(getMemesListFx.pending)
     const [contextMenuIsOpen, setContextMenuIsOpen] = useState(false)
 
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeSearchValue = (e: ChangeEvent<HTMLInputElement>) => {
         searchMeme(e.target.value)
     }
 
@@ -48,66 +46,8 @@ export const Memes = ({ id }: IPanelProps) => {
         fetchMemes()
     }, [])
 
-    const openMeme = (id: number) => {
-        navigator.push(`meme/${id}`)
-    }
-
     const memesList = useList($memesList, (item) => (
-        <div
-            key={item.id}
-            className={styles.card}
-            onClick={() => openMeme(item.id)}
-        >
-            <img
-                src={item.image}
-                style={{ background: `url(${item.image})` }}
-                className={styles.cardImage}
-                alt=""
-            />
-
-            <div className={styles.cardContent}>
-                <div className={styles.cardHeader}>{item.title}</div>
-                <div className={styles.cardDescription}>{item.description}</div>
-
-                <div style={{ height: 8 }} />
-
-                <div className={styles.cardInfoBox}>
-                    {/*{item.placeInRating > -1 ? (*/}
-                    {/*    <div>*/}
-                    {/*        <Icon32PollOutline*/}
-                    {/*            style={{ width: 20, height: 20 }}*/}
-                    {/*        />*/}
-                    {/*        {item.placeInRating}*/}
-                    {/*    </div>*/}
-                    {/*) : (*/}
-                    {/*    <div />*/}
-                    {/*)}*/}
-
-                    <div>
-                        <div>
-                            {item.isFavorites ? (
-                                <Icon28BookmarkCircleFillYellow
-                                    style={{ width: 20, height: 20 }}
-                                />
-                            ) : (
-                                <Icon28BookmarkOutline
-                                    style={{ width: 20, height: 20 }}
-                                />
-                            )}
-
-                            {item.favoritesCount}
-                        </div>
-
-                        <div>
-                            <Icon28ArrowUpRectangleOutline
-                                style={{ width: 20, height: 20 }}
-                            />
-                            {item.likesCount}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <MemeListItem item={item} />
     ))
 
     return (
@@ -144,7 +84,7 @@ export const Memes = ({ id }: IPanelProps) => {
             <Group style={{ padding: 16 }}>
                 <Search
                     value={search}
-                    onChange={onChange}
+                    onChange={onChangeSearchValue}
                     after={null}
                     style={{ paddingLeft: 0, paddingRight: 0 }}
                     placeholder="Поиск мемов"
