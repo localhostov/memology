@@ -2,7 +2,7 @@ import "../styles/root.css"
 import { RouterProvider } from "@vkontakte/vk-mini-apps-router"
 import { AdaptivityProvider, AppRoot, ConfigProvider } from "@vkontakte/vkui"
 import { useCallback, useEffect, useState } from "react"
-import { getNamedWindowWidth, router } from "../shared"
+import { getNamedWindowWidth, getUser, getVkUser, router } from "../shared"
 import { Epic } from "./Epic"
 
 export const App = () => {
@@ -12,6 +12,11 @@ export const App = () => {
 
     const handleWindowResize = useCallback(() => {
         setWindowWidth(getNamedWindowWidth(window.innerWidth))
+    }, [])
+
+    useEffect(() => {
+        getUser()
+        getVkUser()
     }, [])
 
     useEffect(() => {
