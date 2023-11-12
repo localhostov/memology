@@ -102,7 +102,15 @@ export const Memes = ({ id }: IPanelProps) => {
                             />
                         }
                         header="Ничего не найдено"
-                        action={<Button>Предложить мем</Button>}
+                        action={
+                            <Button
+                                onClick={() =>
+                                    navigator.push(routes.root.memes.suggest)
+                                }
+                            >
+                                Предложить мем
+                            </Button>
+                        }
                     >
                         Похоже, у нас ещё нет ничего об этом меме. Но вы можете
                         предложить этот мем и мы обязательно его добавим
