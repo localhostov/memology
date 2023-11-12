@@ -26,7 +26,7 @@ import {
     usePlatform,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
-import { ReactElement, SetStateAction, useEffect, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { Games, Meme, Memes, Rating, Suggest } from "../panels"
 import { getUserFx, panelNames, Panels, routes } from "../shared"
 import { ITab } from "../types"
@@ -37,8 +37,7 @@ export const Epic = () => {
     const navigator = useRouteNavigator()
     const location = useLocation()
     const userIsLoading = useUnit(getUserFx.pending)
-    const [popout, setPopout] =
-        useState<SetStateAction<ReactElement | null>>(null)
+    const [popout, setPopout] = useState<ReactNode | null>(null)
 
     const { viewWidth } = useAdaptivityConditionalRender()
     const activeStoryStyles = {

@@ -1,7 +1,6 @@
 import wretch from "wretch"
 import QueryStringAddon from "wretch/addons/queryString"
-import { UserResponse_UserItem } from "../proto"
-import { MemeListResponse } from "../proto/meme"
+import { MemeListResponse, UserResponse_UserItem } from "../proto"
 
 const api = wretch("https://memology.animaru.app")
     .headers({
