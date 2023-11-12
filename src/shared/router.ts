@@ -45,7 +45,7 @@ export const routes = RoutesConfig.create([
             createPanel(Panels.PROFILE, "/me", [
                 createModal(
                     Modals.PROFILE_MEME_LIST_ACTIONS,
-                    "profileMemeListActions",
+                    "/me/profileMemeListActions/:list/:memeId",
                 ),
             ]),
         ]),

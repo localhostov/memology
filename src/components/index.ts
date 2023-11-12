@@ -1,1 +1,2 @@
-export * from "./MemeListItem.tsx"
+export * from "./MemeListItem"
+export * from "./ProfileTabList"

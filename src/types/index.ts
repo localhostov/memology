@@ -20,3 +20,5 @@ export interface ITab {
     route: PanelPage<string>
     icon: ReactElement
 }
+
+export type TListType = "like" | "dislike" | "favorite"
