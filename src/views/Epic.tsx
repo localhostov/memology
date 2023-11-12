@@ -17,6 +17,7 @@ import {
     Panel,
     PanelHeader,
     Platform,
+    ScreenSpinner,
     SplitCol,
     SplitLayout,
     Tabbar,
@@ -24,15 +25,20 @@ import {
     useAdaptivityConditionalRender,
     usePlatform,
 } from "@vkontakte/vkui"
-import { Games, Meme, Memes, Rating } from "../panels"
-import { panelNames, Panels, routes } from "../shared"
+import { Games, Meme, Memes, Rating, Suggest } from "../panels"
+import { getUserFx, panelNames, Panels, routes } from "../shared"
 import { ITab } from "../types"
+import { ReactElement, SetStateAction, useEffect, useState } from "react"
+import { useUnit } from "effector-react"
 
 export const Epic = () => {
     const platform = usePlatform()
     const { panel: activePanel } = useActiveVkuiLocation()
     const navigator = useRouteNavigator()
     const location = useLocation()
+    const userIsLoading = useUnit(getUserFx.pending)
+    const [popout, setPopout] =
+        useState<SetStateAction<ReactElement | null>>(null)
 
     const { viewWidth } = useAdaptivityConditionalRender()
     const activeStoryStyles = {
@@ -106,8 +112,17 @@ export const Epic = () => {
         )
     })
 
+    useEffect(() => {
+        if (userIsLoading) {
+            setPopout(<ScreenSpinner state="loading" />)
+        } else {
+            setPopout(null)
+        }
+    }, [userIsLoading])
+
     return (
         <SplitLayout
+            popout={popout}
             header={hasHeader && <PanelHeader separator={false} />}
             style={{ justifyContent: "center" }}
         >
@@ -145,6 +160,7 @@ export const Epic = () => {
                     <Games id={Panels.GAMES} />
                     <Meme id={Panels.MEME} />
                     <Rating id={Panels.RATING} />
+                    <Suggest id={Panels.SUGGEST} />
                 </VKUIEpic>
             </SplitCol>
         </SplitLayout>
