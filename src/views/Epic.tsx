@@ -2,6 +2,7 @@ import {
     Icon28GameOutline,
     Icon28NewsfeedOutline,
     Icon28PollSquareOutline,
+    Icon28UserCardOutline,
 } from "@vkontakte/icons"
 import {
     useActiveVkuiLocation,
@@ -27,13 +28,14 @@ import {
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
 import { ReactNode, useEffect, useState } from "react"
-import { Games, Meme, Memes, Rating, Suggest } from "../panels"
+import { Games, Meme, Memes, Profile, Rating, Suggest } from "../panels"
 import { getUserFx, panelNames, Panels, routes } from "../shared"
 import { ITab } from "../types"
+import { Modal } from "../modals"
 
 export const Epic = () => {
     const platform = usePlatform()
-    const { panel: activePanel } = useActiveVkuiLocation()
+    const { panel: activePanel, modal: activeModal } = useActiveVkuiLocation()
     const navigator = useRouteNavigator()
     const location = useLocation()
     const userIsLoading = useUnit(getUserFx.pending)
@@ -81,6 +83,12 @@ export const Epic = () => {
             route: routes.root.rating.rating,
             icon: <Icon28PollSquareOutline />,
         },
+        {
+            title: panelNames[Panels.PROFILE],
+            isActive: checkTabIsActive(routes.root.profile),
+            route: routes.root.profile.profile,
+            icon: <Icon28UserCardOutline />,
+        },
     ]
 
     const desktopTabs = tabs.map((tab) => {
@@ -88,7 +96,10 @@ export const Epic = () => {
             <Cell
                 key={tab.title}
                 disabled={tab.isActive}
-                style={tab.isActive ? activeStoryStyles : undefined}
+                style={{
+                    userSelect: "none",
+                    ...(tab.isActive && activeStoryStyles),
+                }}
                 onClick={() => onStoryChange(tab.route)}
                 before={tab.icon}
             >
@@ -121,6 +132,7 @@ export const Epic = () => {
 
     return (
         <SplitLayout
+            modal={<Modal activeModal={activeModal} />}
             popout={popout}
             header={hasHeader && <PanelHeader separator={false} />}
             style={{ justifyContent: "center" }}
@@ -160,6 +172,7 @@ export const Epic = () => {
                     <Meme id={Panels.MEME} />
                     <Rating id={Panels.RATING} />
                     <Suggest id={Panels.SUGGEST} />
+                    <Profile id={Panels.PROFILE} />
                 </VKUIEpic>
             </SplitCol>
         </SplitLayout>

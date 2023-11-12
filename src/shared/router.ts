@@ -1,5 +1,6 @@
 import {
     createHashRouter,
+    createModal,
     createPanel,
     createRoot,
     createView,
@@ -12,6 +13,7 @@ export enum Panels {
     MEME = "meme",
     RATING = "rating",
     SUGGEST = "suggest",
+    PROFILE = "profile",
 }
 
 export const panelNames: Record<Panels, string> = {
@@ -20,6 +22,11 @@ export const panelNames: Record<Panels, string> = {
     [Panels.MEME]: "О меме",
     [Panels.RATING]: "Рейтинг",
     [Panels.SUGGEST]: "Предложить мем",
+    [Panels.PROFILE]: "Профиль",
+}
+
+export enum Modals {
+    PROFILE_MEME_LIST_ACTIONS = "profileMemeListActions",
 }
 
 export const routes = RoutesConfig.create([
@@ -33,6 +40,15 @@ export const routes = RoutesConfig.create([
         createView(Panels.GAMES, [createPanel(Panels.GAMES, "/games")]),
 
         createView(Panels.RATING, [createPanel(Panels.RATING, "/rating")]),
+
+        createView(Panels.PROFILE, [
+            createPanel(Panels.PROFILE, "/me", [
+                createModal(
+                    Modals.PROFILE_MEME_LIST_ACTIONS,
+                    "profileMemeListActions",
+                ),
+            ]),
+        ]),
     ]),
 ])
 
