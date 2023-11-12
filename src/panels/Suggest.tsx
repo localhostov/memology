@@ -14,7 +14,7 @@ export const Suggest = ({ id }: IPanelProps) => {
                 {panelNames[id]}
             </PanelHeader>
 
-            <Group></Group>
+            <Group />
         </Panel>
     )
 }

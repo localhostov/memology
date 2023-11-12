@@ -25,11 +25,11 @@ import {
     useAdaptivityConditionalRender,
     usePlatform,
 } from "@vkontakte/vkui"
+import { useUnit } from "effector-react"
+import { ReactElement, SetStateAction, useEffect, useState } from "react"
 import { Games, Meme, Memes, Rating, Suggest } from "../panels"
 import { getUserFx, panelNames, Panels, routes } from "../shared"
 import { ITab } from "../types"
-import { ReactElement, SetStateAction, useEffect, useState } from "react"
-import { useUnit } from "effector-react"
 
 export const Epic = () => {
     const platform = usePlatform()

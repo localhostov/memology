@@ -1,10 +1,9 @@
-import { AdaptivityProvider, AppRoot, ConfigProvider } from "@vkontakte/vkui"
-import { RouterProvider } from "@vkontakte/vk-mini-apps-router"
-import { router } from "../shared"
-import { Epic } from "./Epic"
-import { useCallback, useEffect, useState } from "react"
-import { getNamedWindowWidth } from "../utils"
 import "../styles/root.css"
+import { RouterProvider } from "@vkontakte/vk-mini-apps-router"
+import { AdaptivityProvider, AppRoot, ConfigProvider } from "@vkontakte/vkui"
+import { useCallback, useEffect, useState } from "react"
+import { getNamedWindowWidth, router } from "../shared"
+import { Epic } from "./Epic"
 
 export const App = () => {
     const [windowWidth, setWindowWidth] = useState(

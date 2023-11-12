@@ -14,7 +14,7 @@ export const searchMeme = createEvent<string>()
 $memesSearch.on(searchMeme, (_, query) => query)
 
 export const getMemesListFx = createEffect((query: string) =>
-    API.memesList(1, query, 10),
+    API.memesList(query, 1, 10),
 )
 
 $memesList.on(getMemesListFx.doneData, (_, memes) => memes.items)
@@ -34,6 +34,6 @@ sample({
 
 debounce({
     source: $memesSearch,
-    timeout: 200,
+    timeout: 400,
     target: getMemesListFx,
 })

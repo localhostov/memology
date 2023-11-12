@@ -147,7 +147,7 @@ export const Memes = ({ id }: IPanelProps) => {
                     onChange={onChange}
                     after={null}
                     style={{ paddingLeft: 0, paddingRight: 0 }}
-                    placeholder={"Поиск мемов"}
+                    placeholder="Поиск мемов"
                 />
 
                 {isLoading ? (
@@ -161,7 +161,7 @@ export const Memes = ({ id }: IPanelProps) => {
                                 style={{ width: 86, height: 86 }}
                             />
                         }
-                        header={"Ничего не найдено"}
+                        header="Ничего не найдено"
                         action={<Button>Предложить мем</Button>}
                     >
                         Похоже, у нас ещё нет ничего об этом меме. Но вы можете

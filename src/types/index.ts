@@ -1,6 +1,6 @@
+import { PanelPage } from "@vkontakte/vk-mini-apps-router/dist/page-types/PanelPage"
 import { ReactElement } from "react"
 import { Panels } from "../shared"
-import { PanelPage } from "@vkontakte/vk-mini-apps-router/dist/page-types/PanelPage"
 
 export interface IPanelProps {
     id: Panels
