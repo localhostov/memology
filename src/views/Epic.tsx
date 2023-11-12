@@ -28,10 +28,10 @@ import {
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
 import { ReactNode, useEffect, useState } from "react"
+import { Modal } from "../modals"
 import { Games, Meme, Memes, Profile, Rating, Suggest } from "../panels"
 import { getUserFx, panelNames, Panels, routes } from "../shared"
 import { ITab } from "../types"
-import { Modal } from "../modals"
 
 export const Epic = () => {
     const platform = usePlatform()

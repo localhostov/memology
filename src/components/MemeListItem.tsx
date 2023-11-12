@@ -3,10 +3,10 @@ import {
     Icon28BookmarkCircleFillYellow,
     Icon28BookmarkOutline,
 } from "@vkontakte/icons"
-import { MemeItem } from "../shared/proto/meme.ts"
-import styles from "../styles/memeListItem.component.module.css"
-import { ReactNode } from "react"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
+import { ReactNode } from "react"
+import { MemeItem } from "../shared"
+import styles from "../styles/memeListItem.component.module.css"
 
 export const MemeListItem = ({
     item,

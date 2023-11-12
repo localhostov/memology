@@ -1,7 +1,7 @@
+import bridge, { UserInfo } from "@vkontakte/vk-bridge"
 import { createEffect, createEvent, createStore, sample } from "effector"
 import { ReturnApiType } from "../../types"
 import { API } from "../api"
-import bridge, { UserInfo } from "@vkontakte/vk-bridge"
 
 export const $user = createStore<ReturnApiType<typeof API.user> | null>(null)
 
@@ -18,12 +18,10 @@ sample({
 
 /* -- get vk user data from bridge --  */
 
-const getVkUserData = async (): Promise<UserInfo> => {
-    return await bridge.send("VKWebAppGetUserInfo")
-}
-
 export const $vkUserData = createStore<UserInfo | null>(null)
-export const getVkUserDataFx = createEffect(getVkUserData)
+export const getVkUserDataFx = createEffect(() =>
+    bridge.send("VKWebAppGetUserInfo"),
+)
 $vkUserData.on(getVkUserDataFx.doneData, (_, data) => data)
 
 export const getVkUser = createEvent()

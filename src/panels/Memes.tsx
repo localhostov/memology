@@ -18,6 +18,7 @@ import {
 } from "@vkontakte/vkui"
 import { useList, useUnit } from "effector-react"
 import { ChangeEvent, useEffect, useState } from "react"
+import { MemeListItem } from "../components"
 import {
     $memesList,
     $memesSearch,
@@ -29,7 +30,6 @@ import {
 } from "../shared"
 import styles from "../styles/memes.module.css"
 import { IPanelProps } from "../types"
-import { MemeListItem } from "../components"
 
 export const Memes = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
