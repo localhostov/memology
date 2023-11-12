@@ -14,16 +14,15 @@ import {
     Title,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
-import { useState } from "react"
 import { ProfileTabList } from "../components"
-import { $user, $vkUserData, panelNames } from "../shared"
+import { $user, $vkUserData, panelNames, ProfileEffects } from "../shared"
 import styles from "../styles/profile.module.css"
-import { IPanelProps, TListType } from "../types"
+import { IPanelProps } from "../types"
 
 export const Profile = ({ id }: IPanelProps) => {
     const user = useUnit($user)
     const vkUser = useUnit($vkUserData)
-    const [selectedTab, setSelectedTab] = useState<TListType>("like")
+    const selectedTab = useUnit(ProfileEffects.$selectedTab)
 
     return (
         <Panel id={id}>
@@ -45,7 +44,7 @@ export const Profile = ({ id }: IPanelProps) => {
                     <HorizontalScroll arrowSize="m">
                         <TabsItem
                             selected={selectedTab === "like"}
-                            onClick={() => setSelectedTab("like")}
+                            onClick={() => ProfileEffects.selectTab("like")}
                             before={<Icon24ThumbsUpOutline />}
                             status={user?.likesCount || 0}
                         >
@@ -54,7 +53,7 @@ export const Profile = ({ id }: IPanelProps) => {
 
                         <TabsItem
                             selected={selectedTab === "dislike"}
-                            onClick={() => setSelectedTab("dislike")}
+                            onClick={() => ProfileEffects.selectTab("dislike")}
                             before={<Icon24ThumbsDownOutline />}
                             status={user?.dislikesCount || 0}
                         >
@@ -63,7 +62,7 @@ export const Profile = ({ id }: IPanelProps) => {
 
                         <TabsItem
                             selected={selectedTab === "favorite"}
-                            onClick={() => setSelectedTab("favorite")}
+                            onClick={() => ProfileEffects.selectTab("favorite")}
                             before={<Icon24BookmarkOutline />}
                             status={user?.favoritesCount || 0}
                         >

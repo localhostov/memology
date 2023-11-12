@@ -1,5 +1,6 @@
 import wretch from "wretch"
 import QueryStringAddon from "wretch/addons/queryString"
+import { TListType } from "../../types"
 import { MemeListResponse, UserResponse_UserItem } from "../proto"
 
 const api = wretch("https://memology.animaru.app")
@@ -23,6 +24,29 @@ export class API {
                 pageSize,
             })
             .get("/meme/list")
+            .arrayBuffer()
+
+        return MemeListResponse.fromBinary(new Uint8Array(buffer))
+    }
+
+    static async profileMemesList({
+        type,
+        query,
+        page,
+        pageSize,
+    }: {
+        type: TListType
+        query: string
+        page: number
+        pageSize?: number
+    }) {
+        const buffer = await api
+            .query({
+                query,
+                page,
+                pageSize,
+            })
+            .get(`/list/${type}`)
             .arrayBuffer()
 
         return MemeListResponse.fromBinary(new Uint8Array(buffer))
