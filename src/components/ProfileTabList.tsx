@@ -1,6 +1,6 @@
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Search } from "@vkontakte/vkui"
-import { useUnit } from "effector-react"
+import { useList, useUnit } from "effector-react"
 import { useEffect } from "react"
 import { ProfileEffects } from "../shared"
 import styles from "../styles/profile.module.css"
@@ -19,7 +19,6 @@ const searchPlaceholder: Record<TListType, string> = {
 
 export function ProfileTabList({ type }: Props) {
     const navigator = useRouteNavigator()
-    const memes = useUnit(ProfileEffects.$memesList)
     const search = useUnit(ProfileEffects.$memesSearch)
 
     useEffect(() => {
@@ -30,6 +29,10 @@ export function ProfileTabList({ type }: Props) {
         navigator.push(`/me/profileMemeListActions/${type}/${memeId}`)
     }
 
+    const memesList = useList(ProfileEffects.$memesList, (item) => (
+        <MemeListItem key={item.id} item={item} onClick={openModal} />
+    ))
+
     return (
         <>
             <Search
@@ -39,15 +42,7 @@ export function ProfileTabList({ type }: Props) {
                 placeholder={searchPlaceholder[type]}
             />
             <div className={styles.tabContentContainer}>
-                <div className={styles.cardsContainer}>
-                    {memes.map((item) => (
-                        <MemeListItem
-                            key={item.id}
-                            item={item}
-                            onClick={openModal}
-                        />
-                    ))}
-                </div>
+                <div className={styles.cardsContainer}>{memesList}</div>
             </div>
         </>
     )
