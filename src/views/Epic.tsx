@@ -1,6 +1,6 @@
 import {
-    Icon28NewsfeedOutline,
     Icon28GameOutline,
+    Icon28NewsfeedOutline,
     Icon28PollSquareOutline,
 } from "@vkontakte/icons"
 import {
@@ -81,6 +81,7 @@ export const Epic = () => {
     const desktopTabs = tabs.map((tab) => {
         return (
             <Cell
+                key={tab.title}
                 disabled={tab.isActive}
                 style={tab.isActive ? activeStoryStyles : undefined}
                 onClick={() => onStoryChange(tab.route)}
@@ -94,6 +95,7 @@ export const Epic = () => {
     const mobileTabs = tabs.map((tab) => {
         return (
             <TabbarItem
+                key={tab.title}
                 disabled={tab.isActive}
                 onClick={() => onStoryChange(tab.route)}
                 selected={tab.isActive}
