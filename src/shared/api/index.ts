@@ -1,6 +1,6 @@
 import wretch from "wretch"
 import QueryStringAddon from "wretch/addons/queryString"
-import { TListType } from "../../types"
+import { TProfileTabListType } from "../../types"
 import { MemeListResponse, UserResponse_UserItem } from "../proto"
 
 const api = wretch("https://memology.animaru.app")
@@ -35,7 +35,7 @@ export class API {
         page,
         pageSize,
     }: {
-        type: TListType
+        type: TProfileTabListType
         query: string
         page: number
         pageSize?: number

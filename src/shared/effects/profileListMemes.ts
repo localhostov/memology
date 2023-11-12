@@ -6,7 +6,7 @@ import {
     sample,
 } from "effector"
 import { debounce } from "patronum"
-import { ReturnApiType, TListType } from "../../types"
+import { ReturnApiType, TProfileTabListType } from "../../types"
 import { API } from "../api"
 
 export namespace ProfileEffects {
@@ -14,16 +14,16 @@ export namespace ProfileEffects {
         ReturnApiType<typeof API.profileMemesList>["items"]
     >([])
 
-    export const $selectedTab = createStore<TListType>("like")
+    export const $selectedTab = createStore<TProfileTabListType>("like")
 
-    export const selectTab = createEvent<TListType>()
+    export const selectTab = createEvent<TProfileTabListType>()
 
     $selectedTab.on(selectTab, (_, tab) => tab)
 
     $memesList.reset(selectTab)
 
     export const getMemesListFx = createEffect(
-        ({ type, query }: { type: TListType; query: string }) =>
+        ({ type, query }: { type: TProfileTabListType; query: string }) =>
             API.profileMemesList({ type, query, page: 1, pageSize: 20 }),
     )
 
