@@ -6,11 +6,17 @@ export const $memesList = createStore<
     ReturnApiType<typeof API.memesList>["items"]
 >([])
 
-export const getMemesListFx = createEffect(() => API.memesList(1, 10))
+export const $memesSearch = createStore("")
 
-$memesList.on(getMemesListFx.doneData, (current, memes) =>
-    current.concat(memes.items),
+export const searchMeme = createEvent<string>()
+
+$memesSearch.on(searchMeme, (_, query) => query)
+
+export const getMemesListFx = createEffect((query: string) =>
+    API.memesList(1, query, 10),
 )
+
+$memesList.on(getMemesListFx.doneData, (_, memes) => memes.items)
 
 export const fetchMemes = createEvent()
 
@@ -20,5 +26,14 @@ sample({
     },
     clock: fetchMemes,
     filter: ({ memesList }) => memesList.length === 0,
+    target: getMemesListFx,
+})
+
+sample({
+    source: {
+        search: $memesSearch,
+    },
+    fn: ({ search }) => search,
+    clock: searchMeme,
     target: getMemesListFx,
 })

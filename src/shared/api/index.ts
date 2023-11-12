@@ -16,9 +16,10 @@ export class API {
         return UserResponse_UserItem.fromBinary(new Uint8Array(buffer))
     }
 
-    static async memesList(page: number, pageSize?: number) {
+    static async memesList(page: number, query?: string, pageSize?: number) {
         const buffer = await api
             .query({
+                query,
                 page,
                 pageSize,
             })
