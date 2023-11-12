@@ -18,6 +18,7 @@ import {
     $memesList,
     $memesSearch,
     fetchMemes,
+    getMemesListFx,
     panelNames,
     searchMeme,
 } from "../shared"
@@ -29,6 +30,7 @@ export const Memes = ({ id }: IPanelProps) => {
     const platform = usePlatform()
     const memes = useUnit($memesList)
     const search = useUnit($memesSearch)
+    const isLoading = useUnit(getMemesListFx.pending)
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         searchMeme(e.target.value)
@@ -117,11 +119,13 @@ export const Memes = ({ id }: IPanelProps) => {
                     style={searchStyles}
                 />
 
-                {memes.length > 0 ? (
+                {isLoading ? (
+                    <div>Грузит</div>
+                ) : (memes.length > 0 ? (
                     <div className={styles.cardsContainer}>{memesList}</div>
                 ) : (
                     <div>Да чёт нет</div>
-                )}
+                ))}
             </Group>
         </Panel>
     )

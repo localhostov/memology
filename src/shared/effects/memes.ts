@@ -23,9 +23,11 @@ export const fetchMemes = createEvent()
 sample({
     source: {
         memesList: $memesList,
+        search: $memesSearch,
     },
     clock: fetchMemes,
     filter: ({ memesList }) => memesList.length === 0,
+    fn: ({ search }) => search,
     target: getMemesListFx,
 })
 
