@@ -10,7 +10,8 @@
     "lint": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,jsx,tsx}\"",
     "preview": "vite preview",
     "lint:fix": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,jsx,tsx}\" --fix",
-    "proto": "npx protoc --ts_out src/shared/proto --ts_opt eslint_disable --proto_path protos error.proto user.proto meme.proto"
+    "proto": "npx protoc --ts_out src/shared/proto --ts_opt eslint_disable --proto_path protos error.proto user.proto meme.proto",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@protobuf-ts/plugin": "^2.9.1",
@@ -34,6 +35,7 @@
     "eslint": "^8.53.0",
     "eslint-kit": "^10.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "husky": "^8.0.3",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
     "vite": "^4.5.0"
