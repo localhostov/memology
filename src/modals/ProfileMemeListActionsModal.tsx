@@ -1,4 +1,4 @@
-import { Icon24CancelCircleFillRed } from "@vkontakte/icons"
+import { Icon24MoreHorizontal } from "@vkontakte/icons"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Button, ButtonGroup, ModalCard } from "@vkontakte/vkui"
 import { IModalProps } from "../types"
@@ -13,16 +13,31 @@ export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
         )
     }
 
+    const openMeme = () => {
+        navigator.push(`/meme/${params?.memeId}`)
+    }
+
     return (
         <ModalCard
             id={id}
-            icon={
-                <Icon24CancelCircleFillRed style={{ width: 48, height: 48 }} />
-            }
-            header="Удалить мем из списка"
-            subheader="Вы уверены, что хотите удалить этот мем из списка?"
+            icon={<Icon24MoreHorizontal style={{ width: 48, height: 48 }} />}
+            header="Действия"
+            subheader="Выберите, что бы вы хотели сделать с этим мемом"
             actions={
-                <ButtonGroup stretched>
+                <ButtonGroup stretched mode={"vertical"}>
+                    <Button
+                        stretched
+                        size="m"
+                        appearance={"negative"}
+                        onClick={dropFromList}
+                    >
+                        Удалить
+                    </Button>
+
+                    <Button stretched size="m" onClick={openMeme}>
+                        Открыть
+                    </Button>
+
                     <Button
                         stretched
                         mode="secondary"
@@ -30,9 +45,6 @@ export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
                         onClick={() => navigator.hideModal()}
                     >
                         Отмена
-                    </Button>
-                    <Button stretched size="m" onClick={dropFromList}>
-                        Удалить
                     </Button>
                 </ButtonGroup>
             }
