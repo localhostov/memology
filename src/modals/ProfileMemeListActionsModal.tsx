@@ -1,20 +1,16 @@
+import { Icon24CancelCircleFillRed } from "@vkontakte/icons"
+import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Button, ButtonGroup, ModalCard } from "@vkontakte/vkui"
 import { IModalProps } from "../types"
-import { Icon24CancelCircleFillRed } from "@vkontakte/icons"
-import {
-    useRouteNavigator,
-    useSearchParams,
-} from "@vkontakte/vk-mini-apps-router"
 
 export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()
-    const [params] = useSearchParams()
-
+    const params = useParams<"list" | "memeId">()
+    console.log(params)
     const dropFromList = () => {
-        const list = params.get("list")
-        const memeId = params.get("memeId")
-
-        console.log(`user drop meme (${memeId}) from list ${list}`)
+        console.log(
+            `user drop meme (${params?.memeId}) from list ${params?.list}`,
+        )
     }
 
     return (
@@ -23,23 +19,23 @@ export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
             icon={
                 <Icon24CancelCircleFillRed style={{ width: 48, height: 48 }} />
             }
-            header={"Удалить мем из списка"}
-            subheader={"Вы уверены, что хотите удалить этот мем из списка?"}
+            header="Удалить мем из списка"
+            subheader="Вы уверены, что хотите удалить этот мем из списка?"
             actions={
                 <ButtonGroup stretched>
                     <Button
                         stretched
-                        mode={"secondary"}
-                        size={"m"}
+                        mode="secondary"
+                        size="m"
                         onClick={() => navigator.hideModal()}
                     >
                         Отмена
                     </Button>
-                    <Button stretched size={"m"} onClick={dropFromList}>
+                    <Button stretched size="m" onClick={dropFromList}>
                         Удалить
                     </Button>
                 </ButtonGroup>
             }
-        ></ModalCard>
+        />
     )
 }
