@@ -1,31 +1,31 @@
+import { AdaptivityProvider, AppRoot, ConfigProvider } from "@vkontakte/vkui"
 import { RouterProvider } from "@vkontakte/vk-mini-apps-router"
-import {
-    AdaptivityProvider,
-    AppRoot,
-    ConfigProvider,
-    ViewWidth,
-} from "@vkontakte/vkui"
 import { router } from "../shared"
 import { Epic } from "./Epic"
+import { useCallback, useEffect, useState } from "react"
+import { getNamedWindowWidth } from "../utils"
+import "../styles/root.css"
 
 export const App = () => {
-    const getNamedWindowWidth = () => {
-        const width = window.innerWidth
+    const [windowWidth, setWindowWidth] = useState(
+        getNamedWindowWidth(window.innerWidth),
+    )
 
-        if (width > 320 && width < 600) {
-            return ViewWidth.MOBILE
+    const handleWindowResize = useCallback(() => {
+        setWindowWidth(getNamedWindowWidth(window.innerWidth))
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener("resize", handleWindowResize)
+
+        return () => {
+            window.removeEventListener("resize", handleWindowResize)
         }
-        if (width > 600 && width < 1000) {
-            return ViewWidth.TABLET
-        }
-        if (width >= 1000) {
-            return ViewWidth.DESKTOP
-        }
-    }
+    }, [handleWindowResize])
 
     return (
         <ConfigProvider>
-            <AdaptivityProvider viewWidth={getNamedWindowWidth()}>
+            <AdaptivityProvider viewWidth={windowWidth}>
                 <AppRoot>
                     <RouterProvider
                         router={router}
