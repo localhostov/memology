@@ -1,0 +1,10 @@
+.tabContentContainer {
+    padding: 16px;
+}
+
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    user-select: none;
+}

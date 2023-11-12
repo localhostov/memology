@@ -21,4 +21,6 @@ export interface ITab {
     icon: ReactElement
 }
 
-export type TListType = "like" | "dislike" | "favorite"
+export type TRatingTabListType = "weekly" | "eternal"
+
+export type TProfileTabListType = "like" | "dislike" | "favorite"

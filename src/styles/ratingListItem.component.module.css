@@ -1,0 +1,12 @@
+.card {
+    display: flex;
+    column-gap: 16px;
+    border-radius: 16px;
+}
+
+.memeImage {
+    height: 100px;
+    width: 180px;
+    object-fit: cover;
+    border-radius: 16px;
+}
