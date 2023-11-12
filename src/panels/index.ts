@@ -1,5 +1,6 @@
-export * from "./Games"
 export * from "./Meme"
 export * from "./Memes"
+export * from "./Games"
 export * from "./Rating"
 export * from "./Suggest"
+export * from "./Profile"
