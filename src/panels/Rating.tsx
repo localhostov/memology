@@ -6,16 +6,16 @@ import {
     Tabs,
     TabsItem,
 } from "@vkontakte/vkui"
-import { panelNames } from "../shared"
+import { panelNames, RatingEffects } from "../shared"
 import { IPanelProps, TRatingTabListType } from "../types"
-import { ReactElement, useState } from "react"
+import { ReactElement } from "react"
 import { Icon24Globe, Icon24PollOutline } from "@vkontakte/icons"
 import styles from "../styles/rating.module.css"
 import { RatingListItem } from "../components"
+import { useUnit } from "effector-react/compat"
 
 export const Rating = ({ id }: IPanelProps) => {
-    const [selectedTab, setSelectedTab] =
-        useState<TRatingTabListType>("eternal")
+    const selectedTab = useUnit(RatingEffects.$selectedTab)
 
     const tabContent: Record<TRatingTabListType, ReactElement> = {
         eternal: TabContentEternal(),
@@ -31,7 +31,7 @@ export const Rating = ({ id }: IPanelProps) => {
                     <HorizontalScroll arrowSize={"m"}>
                         <TabsItem
                             selected={selectedTab === "eternal"}
-                            onClick={() => setSelectedTab("eternal")}
+                            onClick={() => RatingEffects.selectTab("eternal")}
                             before={<Icon24Globe />}
                         >
                             Постоянный
@@ -39,7 +39,7 @@ export const Rating = ({ id }: IPanelProps) => {
 
                         <TabsItem
                             selected={selectedTab === "weekly"}
-                            onClick={() => setSelectedTab("weekly")}
+                            onClick={() => RatingEffects.selectTab("weekly")}
                             before={<Icon24PollOutline />}
                         >
                             Недельный
@@ -57,8 +57,8 @@ const TabContentEternal = () => {
     return (
         <div className={styles.tabContentContainer}>
             <div className={styles.listContainer}>
-                {mockedEternalRatingList.map((item) => (
-                    <RatingListItem item={item} />
+                {mockedEternalRatingList.map((item, index) => (
+                    <RatingListItem item={item} place={index + 1} />
                 ))}
             </div>
         </div>
@@ -80,26 +80,33 @@ export interface RatingItem {
     image: string
     likes: number
     bookmarks: number
-    inMyBookmarks: boolean
+    inFavorites: boolean
+    favoritesCount: number
+    likesCount: number
 }
 
 const mockedEternalRatingList: RatingItem[] = [
     {
         id: 0,
-        title: "adf",
-        description: "sasdasdfasf",
+        title: "Это название мема",
+        description: "Какое-то короткое описание",
         image: "https://i.ytimg.com/vi/ny8QQ9dKH9k/maxresdefault.jpg",
         likes: 0,
         bookmarks: 0,
-        inMyBookmarks: false,
+        inFavorites: false,
+        favoritesCount: 0,
+        likesCount: 10,
     },
     {
         id: 1,
-        title: "22222",
-        description: "sasdasdfasf",
+        title: "А это ещё одно название какого-то мема, но уже немного более длинное",
+        description:
+            "А здесь по аналогии с названием тоже некое очень длинное описание, которое обязательно должно быть сокращено бла бла бла бла бба",
         image: "https://i.ytimg.com/vi/ny8QQ9dKH9k/maxresdefault.jpg",
         likes: 10,
         bookmarks: 10,
-        inMyBookmarks: true,
+        inFavorites: true,
+        favoritesCount: 1,
+        likesCount: 5,
     },
 ]
