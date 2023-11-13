@@ -1,0 +1,57 @@
+.imageContainer {
+    display: flex;
+    gap: 16px;
+    margin: 16px;
+}
+
+@media screen and (max-width: 490px) {
+    .imageContainer {
+        flex-flow: wrap;
+    }
+}
+
+.image {
+    height: 200px;
+    width: 500px;
+    object-fit: cover;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: 0.3s all ease;
+}
+
+.image:active {
+    scale: 0.95;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.description {
+    color: var(--vkui--color_text_secondary);
+    font-size: 14px;
+}
+
+.imageContainerInfo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.placeInRating {
+    font-style: italic;
+    background: linear-gradient(to right, #5093d0 20%, #3867c0 40%, #3867c0 60%, #5093d0 80%);
+    background-size: 200% auto;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 5s linear infinite;
+    font-weight: 500;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
