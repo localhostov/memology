@@ -1,3 +1,4 @@
+import { Icon24FolderOutline, Icon28SadFaceOutline } from "@vkontakte/icons"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Placeholder, Search, Spinner } from "@vkontakte/vkui"
 import { useList, useUnit } from "effector-react"
@@ -6,7 +7,6 @@ import { ProfileEffects } from "../shared"
 import styles from "../styles/profile.module.css"
 import { TProfileTabListType } from "../types"
 import { MemeListItem } from "./MemeListItem"
-import { Icon28SadFaceOutline } from "@vkontakte/icons"
 
 interface Props {
     type: TProfileTabListType
@@ -16,9 +16,10 @@ const searchPlaceholder: Record<TProfileTabListType, string> = {
     like: "Искать в лайках",
     dislike: "Искать в дизлайках",
     favorite: "Искать в избранных",
+    my: "Искать в моих мемах",
 }
 
-const listName: Record<TProfileTabListType, string> = {
+const listName: Omit<Record<TProfileTabListType, string>, "my"> = {
     like: "лайков",
     dislike: "дизлайков",
     favorite: "избранных",
@@ -29,6 +30,8 @@ export function ProfileTabList({ type }: Props) {
     const memes = useUnit(ProfileEffects.$memesList)
     const search = useUnit(ProfileEffects.$memesSearch)
     const memesIsLoading = useUnit(ProfileEffects.getMemesListFx.pending)
+    const memesListSearchIsEmpty =
+        search.trim().length > 0 && memes.length === 0
 
     useEffect(() => {
         ProfileEffects.fetchMemes()
@@ -58,14 +61,29 @@ export function ProfileTabList({ type }: Props) {
                 ) : (
                     <Placeholder
                         icon={
-                            <Icon28SadFaceOutline
-                                style={{ width: 86, height: 86 }}
-                            />
+                            type === "my" ? (
+                                <Icon24FolderOutline
+                                    style={{ width: 86, height: 86 }}
+                                />
+                            ) : (
+                                <Icon28SadFaceOutline
+                                    style={{ width: 86, height: 86 }}
+                                />
+                            )
                         }
-                        header="Ничего не найдено"
+                        header={
+                            memesListSearchIsEmpty
+                                ? "Ничего не найдено"
+                                : "Список пуст"
+                        }
                     >
-                        Похоже, вы еще не добавили такого мема в список{" "}
-                        {listName[type]}
+                        {type === "my"
+                            ? memesListSearchIsEmpty
+                                ? `Мемы с таким описанием или названием не найдены в этом списке`
+                                : `Похоже, вы еще не предложили нам ни одного мема`
+                            : memesListSearchIsEmpty
+                            ? `Похоже, вы еще не добавили такого мема в список ${listName[type]}`
+                            : `Вы не добавили ни одного мема в список ${listName[type]}`}
                     </Placeholder>
                 )}
             </div>

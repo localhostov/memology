@@ -23,4 +23,4 @@ export interface ITab {
 
 export type TRatingTabListType = "weekly" | "eternal"
 
-export type TProfileTabListType = "like" | "dislike" | "favorite"
+export type TProfileTabListType = "like" | "dislike" | "favorite" | "my"

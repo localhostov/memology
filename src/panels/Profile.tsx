@@ -1,5 +1,6 @@
 import {
     Icon24BookmarkOutline,
+    Icon24FolderSimpleUserOutline,
     Icon24ThumbsDownOutline,
     Icon24ThumbsUpOutline,
 } from "@vkontakte/icons"
@@ -67,6 +68,15 @@ export const Profile = ({ id }: IPanelProps) => {
                             status={user?.favoritesCount || 0}
                         >
                             Избранное
+                        </TabsItem>
+
+                        <TabsItem
+                            selected={selectedTab === "my"}
+                            onClick={() => ProfileEffects.selectTab("my")}
+                            before={<Icon24FolderSimpleUserOutline />}
+                            status={user?.favoritesCount || 0}
+                        >
+                            Мои мемы
                         </TabsItem>
                     </HorizontalScroll>
                 </Tabs>
