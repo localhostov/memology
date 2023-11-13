@@ -1,3 +1,4 @@
+import { Icon24Globe, Icon24PollOutline } from "@vkontakte/icons"
 import {
     Group,
     HorizontalScroll,
@@ -6,13 +7,12 @@ import {
     Tabs,
     TabsItem,
 } from "@vkontakte/vkui"
-import { panelNames, RatingEffects } from "../shared"
-import { IPanelProps, TRatingTabListType } from "../types"
-import { ReactElement } from "react"
-import { Icon24Globe, Icon24PollOutline } from "@vkontakte/icons"
-import styles from "../styles/rating.module.css"
-import { RatingListItem } from "../components"
 import { useUnit } from "effector-react/compat"
+import { ReactElement } from "react"
+import { RatingListItem } from "../../components"
+import { panelNames, RatingEffects } from "../../shared"
+import { IPanelProps, TRatingTabListType } from "../../types"
+import styles from "./rating.module.css"
 
 export const Rating = ({ id }: IPanelProps) => {
     const selectedTab = useUnit(RatingEffects.$selectedTab)
@@ -27,8 +27,8 @@ export const Rating = ({ id }: IPanelProps) => {
             <PanelHeader>{panelNames[id]}</PanelHeader>
 
             <Group>
-                <Tabs mode={"accent"}>
-                    <HorizontalScroll arrowSize={"m"}>
+                <Tabs mode="accent">
+                    <HorizontalScroll arrowSize="m">
                         <TabsItem
                             selected={selectedTab === "eternal"}
                             onClick={() => RatingEffects.selectTab("eternal")}
@@ -58,7 +58,11 @@ const TabContentEternal = () => {
         <div className={styles.tabContentContainer}>
             <div className={styles.listContainer}>
                 {mockedEternalRatingList.map((item, index) => (
-                    <RatingListItem item={item} place={index + 1} />
+                    <RatingListItem
+                        key={item.id}
+                        item={item}
+                        place={index + 1}
+                    />
                 ))}
             </div>
         </div>

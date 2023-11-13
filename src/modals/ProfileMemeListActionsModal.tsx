@@ -24,11 +24,11 @@ export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
             header="Действия"
             subheader="Выберите, что бы вы хотели сделать с этим мемом"
             actions={
-                <ButtonGroup stretched mode={"vertical"}>
+                <ButtonGroup stretched mode="vertical">
                     <Button
                         stretched
                         size="m"
-                        appearance={"negative"}
+                        appearance="negative"
                         onClick={dropFromList}
                     >
                         Удалить

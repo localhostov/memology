@@ -15,10 +15,10 @@ import {
     Title,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
-import { ProfileTabList } from "../components"
-import { $user, $vkUserData, panelNames, ProfileEffects } from "../shared"
-import styles from "../styles/profile.module.css"
-import { IPanelProps } from "../types"
+import { ProfileTabList } from "../../components"
+import { $user, $vkUserData, panelNames, ProfileEffects } from "../../shared"
+import { IPanelProps } from "../../types"
+import styles from "./profile.module.css"
 
 export const Profile = ({ id }: IPanelProps) => {
     const user = useUnit($user)

@@ -3,10 +3,10 @@ import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Placeholder, Search, Spinner } from "@vkontakte/vkui"
 import { useList, useUnit } from "effector-react"
 import { useEffect } from "react"
-import { ProfileEffects } from "../shared"
-import styles from "../styles/profile.module.css"
-import { TProfileTabListType } from "../types"
-import { MemeListItem } from "./MemeListItem"
+import styles from "../../panels/Profile/profile.module.css"
+import { ProfileEffects } from "../../shared"
+import { TProfileTabListType } from "../../types"
+import { MemeListItem } from "../index"
 
 interface Props {
     type: TProfileTabListType

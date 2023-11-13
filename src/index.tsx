@@ -1,4 +1,5 @@
 import "@vkontakte/vkui/dist/vkui.css"
+import "./root.css"
 import { attachReduxDevTools } from "@effector/redux-devtools-adapter"
 import ReactDOM from "react-dom/client"
 import { init } from "./shared"

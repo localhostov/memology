@@ -1,4 +1,3 @@
-import "../styles/root.css"
 import { RouterProvider } from "@vkontakte/vk-mini-apps-router"
 import { AdaptivityProvider, AppRoot, ConfigProvider } from "@vkontakte/vkui"
 import { useCallback, useEffect, useState } from "react"

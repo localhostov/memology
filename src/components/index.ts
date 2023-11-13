@@ -1,3 +1,3 @@
-export * from "./MemeListItem"
-export * from "./ProfileTabList"
-export * from "./RatingListItem"
+export * from "./MemeListItem/MemeListItem"
+export * from "./ProfileTabList/ProfileTabList"
+export * from "./RatingListItem/RatingListItem"

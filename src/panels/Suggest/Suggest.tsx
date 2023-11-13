@@ -1,7 +1,7 @@
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Group, Panel, PanelHeader, PanelHeaderBack } from "@vkontakte/vkui"
-import { panelNames } from "../shared"
-import { IPanelProps } from "../types"
+import { panelNames } from "../../shared"
+import { IPanelProps } from "../../types"
 
 export const Suggest = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()

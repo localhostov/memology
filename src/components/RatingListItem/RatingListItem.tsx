@@ -1,12 +1,12 @@
-import { RatingItem } from "../panels"
-import styles from "../styles/ratingListItem.component.module.css"
-import { Tappable } from "@vkontakte/vkui"
 import {
     Icon28ArrowUpRectangleOutline,
     Icon28BookmarkCircleFillYellow,
     Icon28BookmarkOutline,
 } from "@vkontakte/icons"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
+import { Tappable } from "@vkontakte/vkui"
+import { RatingItem } from "../../panels"
+import styles from "./ratingListItem.module.css"
 
 export const RatingListItem = ({
     item,

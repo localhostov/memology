@@ -1,3 +1,4 @@
+import bridge from "@vkontakte/vk-bridge"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import {
     Avatar,
@@ -7,10 +8,9 @@ import {
     PanelHeaderBack,
     SimpleCell,
 } from "@vkontakte/vkui"
-import { MemeItem, panelNames } from "../shared"
-import { IPanelProps } from "../types"
-import styles from "../styles/meme.module.css"
-import bridge from "@vkontakte/vk-bridge"
+import { MemeItem, panelNames } from "../../shared"
+import { IPanelProps } from "../../types"
+import styles from "./meme.module.css"
 
 export const Meme = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
@@ -50,7 +50,7 @@ export const Meme = ({ id }: IPanelProps) => {
                             <SimpleCell
                                 before={<Avatar size={36} />}
                                 style={{ paddingLeft: 0, borderRadius: 100 }}
-                                subtitle={"Автор мема"}
+                                subtitle="Автор мема"
                             >
                                 Александр Локалхостов
                             </SimpleCell>
