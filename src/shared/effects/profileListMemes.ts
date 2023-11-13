@@ -1,3 +1,4 @@
+import { ReturnApiType, TProfileTabListType } from "@types"
 import {
     combine,
     createEffect,
@@ -6,7 +7,6 @@ import {
     sample,
 } from "effector"
 import { debounce } from "patronum"
-import { ReturnApiType, TProfileTabListType } from "../../types"
 import { API } from "../api"
 
 export namespace ProfileEffects {

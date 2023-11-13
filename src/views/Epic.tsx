@@ -1,3 +1,5 @@
+import { getUserFx, panelNames, Panels, routes } from "@shared"
+import { ITab } from "@types"
 import {
     Icon28GameOutline,
     Icon28NewsfeedOutline,
@@ -30,8 +32,6 @@ import { useUnit } from "effector-react"
 import { ReactNode, useEffect, useState } from "react"
 import { Modal } from "../modals"
 import { Games, Meme, Memes, Profile, Rating, Suggest } from "../panels"
-import { getUserFx, panelNames, Panels, routes } from "../shared"
-import { ITab } from "../types"
 
 export const Epic = () => {
     const platform = usePlatform()

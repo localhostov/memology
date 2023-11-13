@@ -1,7 +1,7 @@
+import { IModalProps } from "@types"
 import { Icon24MoreHorizontal } from "@vkontakte/icons"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Button, ButtonGroup, ModalCard } from "@vkontakte/vkui"
-import { IModalProps } from "../types"
 
 export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()

@@ -1,5 +1,5 @@
+import { TRatingTabListType } from "@types"
 import { createEvent, createStore } from "effector"
-import { TRatingTabListType } from "../../types"
 
 export namespace RatingEffects {
     export const $selectedTab = createStore<TRatingTabListType>("eternal")

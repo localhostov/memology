@@ -1,6 +1,6 @@
+import { ReturnApiType } from "@types"
 import { createEffect, createEvent, createStore, sample } from "effector"
 import { debounce } from "patronum"
-import { ReturnApiType } from "../../types"
 import { API } from "../api"
 
 export const $memesList = createStore<

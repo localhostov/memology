@@ -1,3 +1,6 @@
+import { ProfileTabList } from "@components"
+import { $user, $vkUserData, panelNames, ProfileEffects } from "@shared"
+import { IPanelProps } from "@types"
 import {
     Icon24BookmarkOutline,
     Icon24FolderSimpleUserOutline,
@@ -15,9 +18,6 @@ import {
     Title,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
-import { ProfileTabList } from "../../components"
-import { $user, $vkUserData, panelNames, ProfileEffects } from "../../shared"
-import { IPanelProps } from "../../types"
 import styles from "./profile.module.css"
 
 export const Profile = ({ id }: IPanelProps) => {

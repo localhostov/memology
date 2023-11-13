@@ -1,6 +1,6 @@
+import { Modals, Panels } from "@shared"
 import { PanelPage } from "@vkontakte/vk-mini-apps-router/dist/page-types/PanelPage"
 import { ReactElement } from "react"
-import { Modals, Panels } from "../shared"
 
 export interface IPanelProps {
     id: Panels

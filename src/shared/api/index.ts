@@ -1,7 +1,7 @@
+import { MemeListResponse, UserResponse_UserItem } from "@shared"
+import { TProfileTabListType } from "@types"
 import wretch from "wretch"
 import QueryStringAddon from "wretch/addons/queryString"
-import { TProfileTabListType } from "../../types"
-import { MemeListResponse, UserResponse_UserItem } from "../proto"
 
 const api = wretch("https://memology.animaru.app")
     .headers({

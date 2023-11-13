@@ -1,6 +1,6 @@
+import { ReturnApiType } from "@types"
 import bridge, { UserInfo } from "@vkontakte/vk-bridge"
 import { createEffect, createEvent, createStore, sample } from "effector"
-import { ReturnApiType } from "../../types"
 import { API } from "../api"
 
 export const $user = createStore<ReturnApiType<typeof API.user> | null>(null)

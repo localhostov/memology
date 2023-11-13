@@ -1,3 +1,6 @@
+import { RatingListItem } from "@components"
+import { panelNames, RatingEffects } from "@shared"
+import { IPanelProps, TRatingTabListType } from "@types"
 import { Icon24Globe, Icon24PollOutline } from "@vkontakte/icons"
 import {
     Group,
@@ -7,11 +10,8 @@ import {
     Tabs,
     TabsItem,
 } from "@vkontakte/vkui"
-import { useUnit } from "effector-react/compat"
+import { useUnit } from "effector-react"
 import { ReactElement } from "react"
-import { RatingListItem } from "../../components"
-import { panelNames, RatingEffects } from "../../shared"
-import { IPanelProps, TRatingTabListType } from "../../types"
 import styles from "./rating.module.css"
 
 export const Rating = ({ id }: IPanelProps) => {

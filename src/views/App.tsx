@@ -1,7 +1,7 @@
+import { getNamedWindowWidth, getUser, getVkUser, router } from "@shared"
 import { RouterProvider } from "@vkontakte/vk-mini-apps-router"
 import { AdaptivityProvider, AppRoot, ConfigProvider } from "@vkontakte/vkui"
 import { useCallback, useEffect, useState } from "react"
-import { getNamedWindowWidth, getUser, getVkUser, router } from "../shared"
 import { Epic } from "./Epic"
 
 export const App = () => {
