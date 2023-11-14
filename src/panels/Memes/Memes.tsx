@@ -29,7 +29,7 @@ import {
 } from "@vkontakte/vkui"
 import { useList, useUnit } from "effector-react"
 import { ChangeEvent, useEffect, useState } from "react"
-import styles from "./memes.module.css"
+import styles from "./styles.module.css"
 
 export const Memes = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()

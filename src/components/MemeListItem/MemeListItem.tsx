@@ -6,7 +6,7 @@ import {
 } from "@vkontakte/icons"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { ReactNode } from "react"
-import styles from "./memeListItem.module.css"
+import styles from "./styles.module.css"
 
 export const MemeListItem = ({
     item,

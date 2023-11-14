@@ -6,7 +6,7 @@ import {
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Tappable } from "@vkontakte/vkui"
 import { RatingItem } from "../../panels"
-import styles from "./ratingListItem.module.css"
+import styles from "./styles.module.css"
 
 export const RatingListItem = ({
     item,

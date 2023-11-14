@@ -10,7 +10,7 @@ import {
     PanelHeaderBack,
     SimpleCell,
 } from "@vkontakte/vkui"
-import styles from "./meme.module.css"
+import styles from "./styles.module.css"
 
 export const Meme = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()

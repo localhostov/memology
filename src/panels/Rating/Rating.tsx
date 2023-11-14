@@ -12,7 +12,7 @@ import {
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
 import { ReactElement } from "react"
-import styles from "./rating.module.css"
+import styles from "./styles.module.css"
 
 export const Rating = ({ id }: IPanelProps) => {
     const selectedTab = useUnit(RatingEffects.$selectedTab)

@@ -18,7 +18,7 @@ import {
     Title,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
-import styles from "./profile.module.css"
+import styles from "./styles.module.css"
 
 export const Profile = ({ id }: IPanelProps) => {
     const user = useUnit($user)
