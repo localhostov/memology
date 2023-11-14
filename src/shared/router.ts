@@ -27,13 +27,19 @@ export const panelNames: Record<Panels, string> = {
 
 export enum Modals {
     PROFILE_MEME_LIST_ACTIONS = "profileMemeListActions",
+    CREATE_MEME_COMMENT = "createMemeComment",
 }
 
 export const routes = RoutesConfig.create([
     createRoot("root", [
         createView(Panels.MEMES, [
             createPanel(Panels.MEMES, "/"),
-            createPanel(Panels.MEME, "/meme/:memeId"),
+            createPanel(Panels.MEME, "/meme/:memeId", [
+                createModal(
+                    Modals.CREATE_MEME_COMMENT,
+                    "/meme/:memeId/comment",
+                ),
+            ]),
             createPanel(Panels.SUGGEST, "/suggest"),
         ]),
 
