@@ -1,4 +1,5 @@
-import { Modals, Panels } from "@shared"
+import { CommentsResponse_CommentItem, Modals, Panels } from "@shared"
+import { UserInfo } from "@vkontakte/vk-bridge"
 import { PanelPage } from "@vkontakte/vk-mini-apps-router/dist/page-types/PanelPage"
 import { ReactElement } from "react"
 
@@ -26,3 +27,7 @@ export type TRatingTabListType = "weekly" | "eternal"
 export type TProfileTabListType = "like" | "dislike" | "favorite" | "my"
 
 export type TMemeMarkType = "like" | "dislike"
+
+export type TCommentWithOwner = CommentsResponse_CommentItem & {
+    owner: UserInfo
+}

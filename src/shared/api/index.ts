@@ -1,4 +1,5 @@
 import {
+    CommentsResponse_CommentsListResponse,
     Mark,
     MemeListResponse,
     MemeResponse,
@@ -79,5 +80,22 @@ export class API {
         const res = await api.get(`/meme/${id}/add/${remapper[type]}`).res()
 
         return res.ok
+    }
+
+    static async memeComments(
+        memeId: number,
+        { page, pageSize }: { page: number; pageSize?: number },
+    ) {
+        const buffer = await api
+            .query({
+                page,
+                pageSize,
+            })
+            .get(`/meme/${memeId}/comment/list`)
+            .arrayBuffer()
+
+        return CommentsResponse_CommentsListResponse.fromBinary(
+            new Uint8Array(buffer),
+        )
     }
 }

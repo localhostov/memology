@@ -1,5 +1,6 @@
 import { MemeCommentListItem } from "@components"
 import {
+    $comments,
     $meme,
     $vkUserData,
     addToList,
@@ -27,6 +28,7 @@ import {
     PanelHeaderBack,
     SimpleCell,
 } from "@vkontakte/vkui"
+import { useList } from "effector-react"
 import { useUnit } from "effector-react/compat"
 import { useEffect } from "react"
 import styles from "./styles.module.css"
@@ -46,7 +48,7 @@ export const Meme = ({ id }: IPanelProps) => {
         getCommentsUserDatas()
 
         return unmountMeme
-    }, [params])
+    })
 
     const openImage = () => {
         if (!meme) return
@@ -59,7 +61,7 @@ export const Meme = ({ id }: IPanelProps) => {
         navigator.push(`/meme/${meme?.id}/comment`)
     }
 
-    const commentsList = mockedCommentsList.map((item) => (
+    const commentsList = useList($comments, (item) => (
         <div key={item.id}>
             <MemeCommentListItem item={item} userData={vkUserData} />
         </div>
@@ -131,7 +133,7 @@ export const Meme = ({ id }: IPanelProps) => {
                                         <Icon24ThumbsDownOutline />
                                     )}
                                 </div>
-                                16
+                                {meme.likesCount}
                                 <div
                                     onClick={() => addToList(Mark.LIKE)}
                                     style={{ padding: 0, cursor: "pointer" }}
@@ -192,36 +194,36 @@ export const Meme = ({ id }: IPanelProps) => {
     )
 }
 
-const mockedCommentsList: CommentItem[] = [
-    {
-        id: 0,
-        text: "some comment text",
-        senderId: 1,
-        likes: 10,
-        myMark: null,
-        timestamp: Number(new Date()),
-        userMemeMark: null,
-    },
-    {
-        id: 1,
-        text: "second looooooooooooooooooooooooooooooooooooooooooooooooooooooong comment text, it's really long text bro",
-        senderId: 58755532,
-        likes: 10,
-        myMark: "like",
-        timestamp: 1000,
-        userMemeMark: "like",
-    },
-
-    {
-        id: 2,
-        text: "second loooooooooo oooooooooo  sdf as df adf a df a sdf as df as fd as fda sf as df as df as fd asdf a sfd as f as f asd fa sfdas dfsadfasdf as df asfasdfas dfa sfd asdf ooooooooooooo oooooooooooooooooooooong comment text, it's really long text bro",
-        senderId: 58755532,
-        likes: 10,
-        myMark: "like",
-        timestamp: 1000,
-        userMemeMark: "dislike",
-    },
-]
+// const mockedCommentsList: CommentItem[] = [
+//     {
+//         id: 0,
+//         text: "some comment text",
+//         senderId: 1,
+//         likes: 10,
+//         myMark: null,
+//         timestamp: Number(new Date()),
+//         userMemeMark: null,
+//     },
+//     {
+//         id: 1,
+//         text: "second looooooooooooooooooooooooooooooooooooooooooooooooooooooong comment text, it's really long text bro",
+//         senderId: 58755532,
+//         likes: 10,
+//         myMark: "like",
+//         timestamp: 1000,
+//         userMemeMark: "like",
+//     },
+//
+//     {
+//         id: 2,
+//         text: "second loooooooooo oooooooooo  sdf as df adf a df a sdf as df as fd as fda sf as df as df as fd asdf a sfd as f as f asd fa sfdas dfsadfasdf as df asfasdfas dfa sfd asdf ooooooooooooo oooooooooooooooooooooong comment text, it's really long text bro",
+//         senderId: 58755532,
+//         likes: 10,
+//         myMark: "like",
+//         timestamp: 1000,
+//         userMemeMark: "dislike",
+//     },
+// ]
 
 export interface CommentItem {
     id: number

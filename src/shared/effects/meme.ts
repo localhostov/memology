@@ -1,4 +1,5 @@
 import { Mark, MemeResponse } from "@shared"
+import { TCommentWithOwner } from "@types"
 import bridge, { UserInfo } from "@vkontakte/vk-bridge"
 import { createEffect, createEvent, createStore, sample } from "effector"
 import { API } from "../api"
@@ -50,4 +51,30 @@ sample({
     clock: addToListFx.done,
     fn: ({ meme }) => meme?.id || -1,
     target: getMemeFx,
+})
+
+export const $comments = createStore<TCommentWithOwner[]>([])
+$comments.reset(unmountMeme)
+
+export const getCommentsFx = createEffect(async (id: number) => {
+    const data = await API.memeComments(id, { page: 1, pageSize: 20 })
+
+    return (await Promise.all(
+        data.items.map(async (x) => {
+            //TODO: use vk api user_ids
+            const owner = await bridge.send("VKWebAppGetUserInfo", {
+                user_id: Number(x.vkId),
+            })
+
+            return Object.assign(x, { owner })
+        }),
+    )) as TCommentWithOwner[]
+})
+
+$comments.on(getCommentsFx.doneData, (_, comments) => comments)
+
+sample({
+    clock: $meme,
+    fn: (meme) => meme?.id || -1,
+    target: getCommentsFx,
 })

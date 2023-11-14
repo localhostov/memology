@@ -87,7 +87,7 @@ export interface MemeResponse {
      */
     isFavorites: boolean;
     /**
-     * @generated from protobuf field: uint32 likesCount = 7;
+     * @generated from protobuf field: int32 likesCount = 7;
      */
     likesCount: number;
     /**
@@ -269,7 +269,7 @@ class MemeResponse$Type extends MessageType<MemeResponse> {
             { no: 4, name: "description", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
             { no: 5, name: "favoritesCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 6, name: "isFavorites", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 7, name: "likesCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 7, name: "likesCount", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
             { no: 8, name: "commentsCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 9, name: "ownerId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 10, name: "mark", kind: "enum", opt: true, T: () => ["Mark", Mark] }
@@ -305,8 +305,8 @@ class MemeResponse$Type extends MessageType<MemeResponse> {
                 case /* bool isFavorites */ 6:
                     message.isFavorites = reader.bool();
                     break;
-                case /* uint32 likesCount */ 7:
-                    message.likesCount = reader.uint32();
+                case /* int32 likesCount */ 7:
+                    message.likesCount = reader.int32();
                     break;
                 case /* uint32 commentsCount */ 8:
                     message.commentsCount = reader.uint32();
@@ -347,9 +347,9 @@ class MemeResponse$Type extends MessageType<MemeResponse> {
         /* bool isFavorites = 6; */
         if (message.isFavorites !== false)
             writer.tag(6, WireType.Varint).bool(message.isFavorites);
-        /* uint32 likesCount = 7; */
+        /* int32 likesCount = 7; */
         if (message.likesCount !== 0)
-            writer.tag(7, WireType.Varint).uint32(message.likesCount);
+            writer.tag(7, WireType.Varint).int32(message.likesCount);
         /* uint32 commentsCount = 8; */
         if (message.commentsCount !== 0)
             writer.tag(8, WireType.Varint).uint32(message.commentsCount);

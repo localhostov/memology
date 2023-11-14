@@ -1,5 +1,5 @@
-import { readableDate } from "@shared"
-import { TMemeMarkType } from "@types"
+import { Mark, readableDate } from "@shared"
+import { TCommentWithOwner, TMemeMarkType } from "@types"
 import {
     Icon24ThumbsDown,
     Icon24ThumbsDownOutline,
@@ -8,23 +8,22 @@ import {
 } from "@vkontakte/icons"
 import { UserInfo } from "@vkontakte/vk-bridge"
 import { Avatar, SimpleCell } from "@vkontakte/vkui"
-import { CommentItem } from "../../panels"
 import styles from "./styles.module.css"
 
 export const MemeCommentListItem = ({
     item,
     userData,
 }: {
-    item: CommentItem
+    item: TCommentWithOwner
     userData: UserInfo | null
 }) => {
     const handleUserClick = () => {
-        window.open(`https://vk.com/id${item.senderId}`, "_blank")
+        window.open(`https://vk.com/id${item.vkId}`, "_blank")
     }
 
     const afterIcon = {
-        like: <Icon24ThumbsUp />,
-        dislike: <Icon24ThumbsDown />,
+        [Mark.LIKE]: <Icon24ThumbsUp />,
+        [Mark.DISLIKE]: <Icon24ThumbsDown />,
     }
 
     const handleMark = (mark: TMemeMarkType) => {
@@ -35,10 +34,8 @@ export const MemeCommentListItem = ({
         <div>
             <SimpleCell
                 before={<Avatar size={40} src={userData?.photo_200} />}
-                after={
-                    item.userMemeMark !== null && afterIcon[item.userMemeMark]
-                }
-                subtitle={readableDate(item.timestamp)}
+                after={item.mark !== undefined && afterIcon[item.mark]}
+                subtitle={readableDate(item.createdAt * 1000)}
                 onClick={handleUserClick}
             >
                 {userData?.first_name} {userData?.last_name}
@@ -58,7 +55,7 @@ export const MemeCommentListItem = ({
                         onClick={() => handleMark("dislike")}
                         style={{ padding: 0, cursor: "pointer" }}
                     >
-                        {item.myMark === "dislike" ? (
+                        {item.mark === Mark.DISLIKE ? (
                             <Icon24ThumbsDown />
                         ) : (
                             <Icon24ThumbsDownOutline />
@@ -69,7 +66,7 @@ export const MemeCommentListItem = ({
                         onClick={() => handleMark("like")}
                         style={{ padding: 0, cursor: "pointer" }}
                     >
-                        {item.myMark === "like" ? (
+                        {item.mark === Mark.LIKE ? (
                             <Icon24ThumbsUp />
                         ) : (
                             <Icon24ThumbsUpOutline />
