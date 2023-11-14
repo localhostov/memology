@@ -1,4 +1,9 @@
-import { MemeListResponse, UserResponse_UserItem } from "@shared"
+import {
+    Mark,
+    MemeListResponse,
+    MemeResponse,
+    UserResponse_UserItem,
+} from "@shared"
 import { TProfileTabListType } from "@types"
 import wretch from "wretch"
 import QueryStringAddon from "wretch/addons/queryString"
@@ -50,5 +55,29 @@ export class API {
             .arrayBuffer()
 
         return MemeListResponse.fromBinary(new Uint8Array(buffer))
+    }
+
+    static async meme(id: number) {
+        const buffer = await api.get(`/meme/${id}`).arrayBuffer()
+
+        return MemeResponse.fromBinary(new Uint8Array(buffer))
+    }
+
+    static async addMemeToList({
+        id,
+        type,
+    }: {
+        id: number
+        type: Mark | "favorite"
+    }) {
+        const remapper = {
+            [Mark.LIKE]: "like",
+            [Mark.DISLIKE]: "dislike",
+            favorite: "favorite",
+        }
+
+        const res = await api.get(`/meme/${id}/add/${remapper[type]}`).res()
+
+        return res.ok
     }
 }

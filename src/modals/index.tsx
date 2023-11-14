@@ -1,8 +1,8 @@
 import { Modals } from "@shared"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { ModalRoot } from "@vkontakte/vkui"
-import { ProfileMemeListActionsModal } from "./ProfileMemeListActionsModal/ProfileMemeListActionsModal"
 import { CreateMemeCommentModal } from "./CreateMemeCommentModal/CreateMemeCommentModal"
+import { ProfileMemeListActionsModal } from "./ProfileMemeListActionsModal/ProfileMemeListActionsModal"
 
 export const Modal = ({ activeModal }: { activeModal: string | undefined }) => {
     const navigator = useRouteNavigator()
