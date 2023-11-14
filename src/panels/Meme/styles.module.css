@@ -4,12 +4,6 @@
     margin: 16px;
 }
 
-@media screen and (max-width: 490px) {
-    .imageContainer {
-        flex-flow: wrap;
-    }
-}
-
 .image {
     height: 200px;
     width: 500px;
@@ -32,22 +26,81 @@
     font-size: 14px;
 }
 
-.imageContainerInfo {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
 .placeInRating {
-    font-style: italic;
     background: linear-gradient(to right, #5093d0 20%, #3867c0 40%, #3867c0 60%, #5093d0 80%);
-    background-size: 200% auto;
+    background-size: 200%;
     background-clip: text;
     text-fill-color: transparent;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shine 5s linear infinite;
-    font-weight: 500;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.mainContent {
+    padding: 16px;
+}
+
+.actionsContainer {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.actionsContainer div:not(.verticalDivider) {
+    height: 34px;
+    padding: 0 16px;
+    border-radius: 34px;
+    background: var(--vkui--color_background_secondary);
+    display: flex;
+    column-gap: 8px;
+    align-items: center;
+    user-select: none;
+}
+
+.isFavorites, .favoritesCheck, .favorites {
+    cursor: pointer;
+}
+
+.favoritesCheck {
+    background: #b66a19 !important;
+}
+
+.favorites {
+    background: var(--vkui--color_background_secondary) !important;
+}
+
+.verticalDivider {
+    width: 1px;
+    border-radius: 50%;
+    background: var(--vkui--color_text_primary);
+    height: 50%;
+    margin: 0 4px;
+}
+
+.horizontalDivider {
+    margin: 16px;
+    height: 1px;
+    background: var(--vkui--color_background_secondary_alpha);
+    border-radius: 50%;
+}
+
+.commentListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 32px;
+}
+
+@media screen and (max-width: 490px) {
+    .imageContainer {
+        flex-flow: wrap;
+    }
+
+    .image {
+        height: 300px;
+    }
 }
 
 @keyframes shine {

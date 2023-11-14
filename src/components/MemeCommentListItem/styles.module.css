@@ -1,0 +1,35 @@
+.textContainer {
+    display: flex;
+    column-gap: 16px;
+    padding: 0 16px;
+}
+
+.textLine {
+    width: 2px !important;
+    border-radius: 2px;
+    height: 100%;
+    background: var(--vkui--color_background_secondary);
+}
+
+.text {
+    word-break: break-all;
+}
+
+.markContainer {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 16px;
+
+    height: 34px;
+    padding: 0 16px;
+    border-radius: 34px;
+    background: var(--vkui--color_background_secondary);
+}
+
+.contentContainer {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    align-items: start;
+}
