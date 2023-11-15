@@ -1,0 +1,10 @@
+.usersContainer {
+
+}
+
+.gamesListContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 16px;
+}

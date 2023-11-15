@@ -1,0 +1,47 @@
+.container {
+    height: 100px;
+    padding: 16px;
+    border-radius: 14px;
+    background: var(--vkui--color_background_secondary);
+    user-select: none;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    transition: 0.3s all ease;
+}
+
+.icon {
+    width: 64px;
+    height: auto;
+}
+
+.title {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 15px;
+}
+
+.container:active {
+    scale: 0.95;
+}
+
+.container:hover {
+    background: var(--vkui--color_background_secondary_alpha);
+}
+
+.description {
+    display: none;
+    font-size: 14px;
+    line-height: 14px;
+    padding-top: 4px;
+    font-weight: 300;
+}
+
+.container:hover .description {
+    display: block;
+    transition: 0.3s ease all;
+}
+
+.container:hover .icon {
+    display: none;
+}
