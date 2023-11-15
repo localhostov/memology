@@ -9,7 +9,7 @@ import {
     panelNames,
     unmountMeme,
 } from "@shared"
-import { IPanelProps, TMemeMarkType } from "@types"
+import { IPanelProps } from "@types"
 import {
     Icon24CommentOutline,
     Icon24ThumbsDown,
@@ -36,19 +36,15 @@ import styles from "./styles.module.css"
 export const Meme = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
     const meme = useUnit($meme)
-    // const [commentsUsers, setCommentsUsers] = useState<UserInfo[] | null>(null)
     const ownerVkUrl = `https://vk.com/id${meme?.owner.id}`
     const vkUserData = useUnit($vkUserData) // TODO: drop this line
-    const params = useParams<"memeId">()
-
-    const getCommentsUserDatas = () => {}
+    const { memeId } = useParams<"memeId">()!
 
     useEffect(() => {
-        fetchMeme(params!.memeId!)
-        getCommentsUserDatas()
+        fetchMeme(Number(memeId!))
 
         return unmountMeme
-    })
+    }, [memeId])
 
     const openImage = () => {
         if (!meme) return
@@ -192,45 +188,4 @@ export const Meme = ({ id }: IPanelProps) => {
             )}
         </Panel>
     )
-}
-
-// const mockedCommentsList: CommentItem[] = [
-//     {
-//         id: 0,
-//         text: "some comment text",
-//         senderId: 1,
-//         likes: 10,
-//         myMark: null,
-//         timestamp: Number(new Date()),
-//         userMemeMark: null,
-//     },
-//     {
-//         id: 1,
-//         text: "second looooooooooooooooooooooooooooooooooooooooooooooooooooooong comment text, it's really long text bro",
-//         senderId: 58755532,
-//         likes: 10,
-//         myMark: "like",
-//         timestamp: 1000,
-//         userMemeMark: "like",
-//     },
-//
-//     {
-//         id: 2,
-//         text: "second loooooooooo oooooooooo  sdf as df adf a df a sdf as df as fd as fda sf as df as df as fd asdf a sfd as f as f asd fa sfdas dfsadfasdf as df asfasdfas dfa sfd asdf ooooooooooooo oooooooooooooooooooooong comment text, it's really long text bro",
-//         senderId: 58755532,
-//         likes: 10,
-//         myMark: "like",
-//         timestamp: 1000,
-//         userMemeMark: "dislike",
-//     },
-// ]
-
-export interface CommentItem {
-    id: number
-    text: string
-    senderId: number
-    likes: number
-    myMark: TMemeMarkType | null
-    timestamp: number
-    userMemeMark: TMemeMarkType | null
 }
