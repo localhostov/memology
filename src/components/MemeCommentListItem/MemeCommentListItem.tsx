@@ -6,17 +6,10 @@ import {
     Icon24ThumbsUp,
     Icon24ThumbsUpOutline,
 } from "@vkontakte/icons"
-import { UserInfo } from "@vkontakte/vk-bridge"
 import { Avatar, SimpleCell } from "@vkontakte/vkui"
 import styles from "./styles.module.css"
 
-export const MemeCommentListItem = ({
-    item,
-    userData,
-}: {
-    item: TCommentWithOwner
-    userData: UserInfo | null
-}) => {
+export const MemeCommentListItem = ({ item }: { item: TCommentWithOwner }) => {
     const handleUserClick = () => {
         window.open(`https://vk.com/id${item.vkId}`, "_blank")
     }
@@ -33,12 +26,12 @@ export const MemeCommentListItem = ({
     return (
         <div>
             <SimpleCell
-                before={<Avatar size={40} src={userData?.photo_200} />}
+                before={<Avatar size={40} src={item.owner.photo_200} />}
                 after={item.mark !== undefined && afterIcon[item.mark]}
                 subtitle={readableDate(item.createdAt * 1000)}
                 onClick={handleUserClick}
             >
-                {userData?.first_name} {userData?.last_name}
+                {item.owner.first_name} {item.owner.last_name}
             </SimpleCell>
 
             <div className={styles.contentContainer}>

@@ -59,7 +59,7 @@ export const Meme = ({ id }: IPanelProps) => {
 
     const commentsList = useList($comments, (item) => (
         <div key={item.id}>
-            <MemeCommentListItem item={item} userData={vkUserData} />
+            <MemeCommentListItem item={item} />
         </div>
     ))
 
