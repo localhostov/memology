@@ -1,12 +1,13 @@
 .imageContainer {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
     margin: 16px;
 }
 
 .image {
-    height: 200px;
-    width: 500px;
+    height: 240px;
+    width: 280px;
     object-fit: cover;
     border-radius: 16px;
     cursor: pointer;
@@ -27,7 +28,7 @@
 }
 
 .placeInRating {
-    background: linear-gradient(to right, #5093d0 20%, #3867c0 40%, #3867c0 60%, #5093d0 80%);
+    background: linear-gradient(to right, #ccd050 20%, #d28930 40%, #d28930 60%, #ccd050 80%);
     background-size: 200%;
     background-clip: text;
     text-fill-color: transparent;
@@ -93,13 +94,18 @@
     padding-bottom: 32px;
 }
 
-@media screen and (max-width: 490px) {
-    .imageContainer {
-        flex-flow: wrap;
+.imageContainerContent {
+    flex: 1;
+}
+
+@media screen and (max-width: 600px) {
+    .imageContainerContent {
+        flex-basis: 100%;
     }
 
     .image {
         height: 300px;
+        width: 100%;
     }
 }
 

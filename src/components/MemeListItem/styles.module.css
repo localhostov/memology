@@ -1,5 +1,5 @@
 .card {
-    background: var(--vkui--color_background_secondary_alpha);
+    background: var(--vkui--color_background_secondary);
     border-radius: 10px;
     overflow: hidden;
     cursor: pointer;

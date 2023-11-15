@@ -33,3 +33,9 @@
     row-gap: 16px;
     align-items: start;
 }
+
+.userActions {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+}
