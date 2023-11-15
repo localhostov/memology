@@ -17,7 +17,7 @@ export const Games = ({ id }: IPanelProps) => {
             <PanelHeader>{panelNames[id]}</PanelHeader>
 
             <Group>
-                <Placeholder header={"Выберите игру"}>
+                <Placeholder header="Выберите игру">
                     Чтобы продолжить, выберите режим, в который вы хотели бы
                     поиграть со своими друзьями
                 </Placeholder>

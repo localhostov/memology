@@ -34,7 +34,10 @@ export const Rating = ({ id }: IPanelProps) => {
                     <HorizontalScroll arrowSize="m">
                         <TabsItem
                             selected={selectedTab === "eternal"}
-                            onClick={() => RatingEffects.selectTab("eternal")}
+                            onClick={() =>
+                                selectedTab !== "eternal" &&
+                                RatingEffects.selectTab("eternal")
+                            }
                             before={<Icon24Globe />}
                         >
                             Постоянный
@@ -42,7 +45,10 @@ export const Rating = ({ id }: IPanelProps) => {
 
                         <TabsItem
                             selected={selectedTab === "weekly"}
-                            onClick={() => RatingEffects.selectTab("weekly")}
+                            onClick={() =>
+                                selectedTab !== "weekly" &&
+                                RatingEffects.selectTab("weekly")
+                            }
                             before={<Icon24PollOutline />}
                         >
                             Недельный

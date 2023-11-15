@@ -7,11 +7,11 @@ import {
     Icon24ThumbsUp,
     Icon24ThumbsUpOutline,
 } from "@vkontakte/icons"
+import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Avatar, IconButton, SimpleCell } from "@vkontakte/vkui"
-import styles from "./styles.module.css"
 import { useUnit } from "effector-react/compat"
 import { MouseEvent } from "react"
-import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
+import styles from "./styles.module.css"
 
 export const MemeCommentListItem = ({ item }: { item: TCommentWithOwner }) => {
     const vkUserData = useUnit($vkUserData)

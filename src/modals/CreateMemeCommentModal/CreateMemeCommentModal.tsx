@@ -32,7 +32,7 @@ export const CreateMemeCommentModal = ({ id }: IModalProps) => {
             <div style={{ height: 16 }} />
 
             <Button
-                size={"l"}
+                size="l"
                 mode={text.trim().length > 0 ? "primary" : "secondary"}
                 disabled={text.trim().length === 0}
                 onClick={createComment}

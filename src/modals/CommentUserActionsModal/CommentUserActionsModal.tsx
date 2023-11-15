@@ -14,7 +14,7 @@ export const CommentUserActionsModal = ({ id }: IModalProps) => {
             <SimpleCell
                 before={<Icon24DeleteOutline />}
                 onClick={deleteComment}
-                subtitle={"Удаление происходит без подтверждения"}
+                subtitle="Удаление происходит без подтверждения"
             >
                 Удалить комментарий
             </SimpleCell>
