@@ -1,5 +1,11 @@
 import { ProfileTabList } from "@components"
-import { $user, $vkUserData, panelNames, ProfileEffects } from "@shared"
+import {
+    $user,
+    $vkUserData,
+    getUser,
+    panelNames,
+    ProfileEffects,
+} from "@shared"
 import { IPanelProps } from "@types"
 import {
     Icon24BookmarkOutline,
@@ -18,12 +24,17 @@ import {
     Title,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
+import { useEffect } from "react"
 import styles from "./styles.module.css"
 
 export const Profile = ({ id }: IPanelProps) => {
     const user = useUnit($user)
     const vkUser = useUnit($vkUserData)
     const selectedTab = useUnit(ProfileEffects.$selectedTab)
+
+    useEffect(() => {
+        getUser()
+    }, [])
 
     return (
         <Panel id={id}>
