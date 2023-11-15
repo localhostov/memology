@@ -1,15 +1,15 @@
+import { createComment } from "@shared"
 import { IModalProps } from "@types"
-import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
+import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Button, FormItem, ModalCard, Textarea } from "@vkontakte/vkui"
 import { useState } from "react"
 
 export const CreateMemeCommentModal = ({ id }: IModalProps) => {
-    const params = useParams<"memeId">()
     const navigator = useRouteNavigator()
     const [text, setText] = useState("")
 
-    const createComment = () => {
-        console.log(`user created comment on meme with id ${params?.memeId}`)
+    const createCommentText = () => {
+        createComment(text)
         navigator.hideModal()
     }
 
@@ -35,7 +35,7 @@ export const CreateMemeCommentModal = ({ id }: IModalProps) => {
                 size="l"
                 mode={text.trim().length > 0 ? "primary" : "secondary"}
                 disabled={text.trim().length === 0}
-                onClick={createComment}
+                onClick={createCommentText}
             >
                 Оставить комментарий
             </Button>

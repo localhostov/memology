@@ -27,8 +27,7 @@ import {
     PanelHeaderBack,
     SimpleCell,
 } from "@vkontakte/vkui"
-import { useList } from "effector-react"
-import { useUnit } from "effector-react/compat"
+import { useList, useUnit } from "effector-react"
 import { useEffect } from "react"
 import styles from "./styles.module.css"
 

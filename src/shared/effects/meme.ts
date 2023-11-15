@@ -78,3 +78,35 @@ sample({
     fn: (meme) => meme?.id || -1,
     target: getCommentsFx,
 })
+
+export const createComment = createEvent<string>()
+
+export const createCommentFx = createEffect(API.addComment)
+
+sample({
+    source: {
+        meme: $meme,
+    },
+    clock: createComment,
+    fn: ({ meme }, text) => ({ memeId: meme?.id || -1, text }),
+    target: createCommentFx,
+})
+
+export const deleteComment = createEvent<number>()
+
+export const deleteCommentFx = createEffect(API.deleteComment)
+
+sample({
+    source: {
+        meme: $meme,
+    },
+    clock: deleteComment,
+    fn: ({ meme }, commentId) => ({ memeId: meme?.id || -1, commentId }),
+    target: deleteCommentFx,
+})
+
+sample({
+    clock: [createCommentFx.done, deleteCommentFx.done],
+    fn: ({ params }) => params.memeId,
+    target: getCommentsFx,
+})
