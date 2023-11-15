@@ -31,7 +31,15 @@ import {
 import { useUnit } from "effector-react"
 import { ReactNode, useEffect, useState } from "react"
 import { Modal } from "../modals"
-import { Games, Meme, Memes, Profile, Rating, Suggest } from "../panels"
+import {
+    Games,
+    HistoryGame,
+    Meme,
+    Memes,
+    Profile,
+    Rating,
+    Suggest,
+} from "../panels"
 
 export const Epic = () => {
     const platform = usePlatform()
@@ -173,6 +181,7 @@ export const Epic = () => {
                     <Rating id={Panels.RATING} />
                     <Suggest id={Panels.SUGGEST} />
                     <Profile id={Panels.PROFILE} />
+                    <HistoryGame id={Panels.GAME_HISTORY} />
                 </VKUIEpic>
             </SplitCol>
         </SplitLayout>
