@@ -56,7 +56,10 @@ export const Profile = ({ id }: IPanelProps) => {
                     <HorizontalScroll arrowSize="m">
                         <TabsItem
                             selected={selectedTab === "like"}
-                            onClick={() => ProfileEffects.selectTab("like")}
+                            onClick={() =>
+                                selectedTab !== "like" &&
+                                ProfileEffects.selectTab("like")
+                            }
                             before={<Icon24ThumbsUpOutline />}
                             status={user?.likesCount || 0}
                         >
@@ -65,7 +68,10 @@ export const Profile = ({ id }: IPanelProps) => {
 
                         <TabsItem
                             selected={selectedTab === "dislike"}
-                            onClick={() => ProfileEffects.selectTab("dislike")}
+                            onClick={() =>
+                                selectedTab !== "dislike" &&
+                                ProfileEffects.selectTab("dislike")
+                            }
                             before={<Icon24ThumbsDownOutline />}
                             status={user?.dislikesCount || 0}
                         >
@@ -74,7 +80,10 @@ export const Profile = ({ id }: IPanelProps) => {
 
                         <TabsItem
                             selected={selectedTab === "favorite"}
-                            onClick={() => ProfileEffects.selectTab("favorite")}
+                            onClick={() =>
+                                selectedTab !== "favorite" &&
+                                ProfileEffects.selectTab("favorite")
+                            }
                             before={<Icon24BookmarkOutline />}
                             status={user?.favoritesCount || 0}
                         >
@@ -83,7 +92,10 @@ export const Profile = ({ id }: IPanelProps) => {
 
                         <TabsItem
                             selected={selectedTab === "my"}
-                            onClick={() => ProfileEffects.selectTab("my")}
+                            onClick={() =>
+                                selectedTab !== "my" &&
+                                ProfileEffects.selectTab("my")
+                            }
                             before={<Icon24FolderSimpleUserOutline />}
                             status={user?.favoritesCount || 0}
                         >
