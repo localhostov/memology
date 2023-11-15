@@ -14,6 +14,7 @@ export enum Panels {
     RATING = "rating",
     SUGGEST = "suggest",
     PROFILE = "profile",
+    GAME_HISTORY = "gameHistory",
 }
 
 export const panelNames: Record<Panels, string> = {
@@ -23,11 +24,13 @@ export const panelNames: Record<Panels, string> = {
     [Panels.RATING]: "Рейтинг",
     [Panels.SUGGEST]: "Предложить мем",
     [Panels.PROFILE]: "Профиль",
+    [Panels.GAME_HISTORY]: "История",
 }
 
 export enum Modals {
     PROFILE_MEME_LIST_ACTIONS = "profileMemeListActions",
     CREATE_MEME_COMMENT = "createMemeComment",
+    COMMENT_USER_ACTIONS = "commentUserActions",
 }
 
 export const routes = RoutesConfig.create([
@@ -39,11 +42,18 @@ export const routes = RoutesConfig.create([
                     Modals.CREATE_MEME_COMMENT,
                     "/meme/:memeId/comment",
                 ),
+                createModal(
+                    Modals.COMMENT_USER_ACTIONS,
+                    "/meme/:memeId/comment/:commentId/actions",
+                ),
             ]),
             createPanel(Panels.SUGGEST, "/suggest"),
         ]),
 
-        createView(Panels.GAMES, [createPanel(Panels.GAMES, "/games")]),
+        createView(Panels.GAMES, [
+            createPanel(Panels.GAMES, "/games"),
+            createPanel(Panels.GAME_HISTORY, "/games/history"),
+        ]),
 
         createView(Panels.RATING, [createPanel(Panels.RATING, "/rating")]),
 
