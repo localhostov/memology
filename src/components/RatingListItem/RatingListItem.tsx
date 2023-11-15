@@ -1,3 +1,4 @@
+import { TRatingItem } from "@shared"
 import {
     Icon28ArrowUpRectangleOutline,
     Icon28BookmarkCircleFillYellow,
@@ -5,16 +6,9 @@ import {
 } from "@vkontakte/icons"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Tappable } from "@vkontakte/vkui"
-import { RatingItem } from "../../panels"
 import styles from "./styles.module.css"
 
-export const RatingListItem = ({
-    item,
-    place,
-}: {
-    item: RatingItem
-    place: number
-}) => {
+export const RatingListItem = ({ item }: { item: TRatingItem }) => {
     const navigator = useRouteNavigator()
     const openMeme = () => {
         navigator.push(`/meme/${item.id}`)
@@ -31,7 +25,7 @@ export const RatingListItem = ({
                         alt=""
                     />
 
-                    <div className={styles.place}>{place}</div>
+                    <div className={styles.place}>{item.place}</div>
                 </div>
 
                 <div className={styles.memeInfoContainer}>
@@ -44,7 +38,7 @@ export const RatingListItem = ({
 
                     <div className={styles.memeInfoCounters}>
                         <div>
-                            {item.inFavorites ? (
+                            {item.isFavorites ? (
                                 <Icon28BookmarkCircleFillYellow
                                     style={{ width: 20, height: 20 }}
                                 />

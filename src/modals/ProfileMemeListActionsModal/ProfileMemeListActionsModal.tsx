@@ -6,7 +6,7 @@ import { Button, ButtonGroup, ModalCard } from "@vkontakte/vkui"
 export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()
     const params = useParams<"list" | "memeId">()
-    console.log(params)
+
     const dropFromList = () => {
         console.log(
             `user drop meme (${params?.memeId}) from list ${params?.list}`,

@@ -2,10 +2,11 @@ import {
     CommentsResponse_CommentsListResponse,
     Mark,
     MemeListResponse,
+    MemeRatingResponse,
     MemeResponse,
     UserResponse_UserItem,
 } from "@shared"
-import { TProfileTabListType } from "@types"
+import { TProfileTabListType, TRatingTabListType } from "@types"
 import wretch from "wretch"
 import QueryStringAddon from "wretch/addons/queryString"
 
@@ -97,5 +98,20 @@ export class API {
         return CommentsResponse_CommentsListResponse.fromBinary(
             new Uint8Array(buffer),
         )
+    }
+
+    static async memesRating(
+        type: TRatingTabListType,
+        { page, pageSize }: { page: number; pageSize?: number },
+    ) {
+        const buffer = await api
+            .query({
+                page,
+                pageSize,
+            })
+            .get(`/rating/${type}`)
+            .arrayBuffer()
+
+        return MemeRatingResponse.fromBinary(new Uint8Array(buffer))
     }
 }
