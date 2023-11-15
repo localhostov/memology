@@ -1,15 +1,23 @@
-import { Mark, readableDate } from "@shared"
+import { $vkUserData, Mark, readableDate } from "@shared"
 import { TCommentWithOwner, TMemeMarkType } from "@types"
 import {
+    Icon24MoreHorizontal,
     Icon24ThumbsDown,
     Icon24ThumbsDownOutline,
     Icon24ThumbsUp,
     Icon24ThumbsUpOutline,
 } from "@vkontakte/icons"
-import { Avatar, SimpleCell } from "@vkontakte/vkui"
+import { Avatar, IconButton, SimpleCell } from "@vkontakte/vkui"
 import styles from "./styles.module.css"
+import { useUnit } from "effector-react/compat"
+import { MouseEvent } from "react"
+import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 
 export const MemeCommentListItem = ({ item }: { item: TCommentWithOwner }) => {
+    const vkUserData = useUnit($vkUserData)
+    const navigator = useRouteNavigator()
+    const params = useParams<"memeId">()
+
     const handleUserClick = () => {
         window.open(`https://vk.com/id${item.vkId}`, "_blank")
     }
@@ -23,11 +31,25 @@ export const MemeCommentListItem = ({ item }: { item: TCommentWithOwner }) => {
         console.log(`user change mark to ${mark}`)
     }
 
+    const openUserActions = (event: MouseEvent<HTMLElement>) => {
+        event.stopPropagation()
+        navigator.push(`/meme/${params?.memeId}/comment/${item.id}/actions`)
+    }
+
     return (
         <div>
             <SimpleCell
                 before={<Avatar size={40} src={item.owner.photo_200} />}
-                after={item.mark !== undefined && afterIcon[item.mark]}
+                after={
+                    <div className={styles.userActions}>
+                        {item.mark !== undefined && afterIcon[item.mark]}
+                        {item.owner.id === vkUserData?.id && (
+                            <IconButton onClick={openUserActions}>
+                                <Icon24MoreHorizontal />
+                            </IconButton>
+                        )}
+                    </div>
+                }
                 subtitle={readableDate(item.createdAt * 1000)}
                 onClick={handleUserClick}
             >

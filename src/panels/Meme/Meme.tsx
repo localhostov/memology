@@ -2,7 +2,6 @@ import { MemeCommentListItem } from "@components"
 import {
     $comments,
     $meme,
-    $vkUserData,
     addToList,
     fetchMeme,
     Mark,
@@ -37,7 +36,6 @@ export const Meme = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
     const meme = useUnit($meme)
     const ownerVkUrl = `https://vk.com/id${meme?.owner.id}`
-    const vkUserData = useUnit($vkUserData) // TODO: drop this line
     const { memeId } = useParams<"memeId">()!
 
     useEffect(() => {
@@ -81,7 +79,7 @@ export const Meme = ({ id }: IPanelProps) => {
                             alt=""
                         />
 
-                        <div>
+                        <div className={styles.imageContainerContent}>
                             <div className={styles.placeInRating}>
                                 #1 в недельном рейтинге
                             </div>
