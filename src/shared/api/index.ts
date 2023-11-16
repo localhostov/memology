@@ -114,4 +114,33 @@ export class API {
 
         return MemeRatingResponse.fromBinary(new Uint8Array(buffer))
     }
+
+    static async deleteComment({
+        memeId,
+        commentId,
+    }: {
+        memeId: number
+        commentId: number
+    }) {
+        const res = await api
+            .get(`/meme/${memeId}/comment/${commentId}/delete`)
+            .res()
+
+        return res.ok
+    }
+
+    static async addComment({
+        memeId,
+        text,
+    }: {
+        memeId: number
+        text: string
+    }) {
+        const res = await api
+            .url(`/meme/${memeId}/comment/add`)
+            .post(text)
+            .res()
+
+        return res.ok
+    }
 }

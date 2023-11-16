@@ -78,12 +78,12 @@ export function ProfileTabList({ type }: Props) {
                         }
                     >
                         {type === "my"
-                            ? (memesListSearchIsEmpty
+                            ? memesListSearchIsEmpty
                                 ? `Мемы с таким описанием или названием не найдены в этом списке`
-                                : `Похоже, вы еще не предложили нам ни одного мема`)
-                            : (memesListSearchIsEmpty
+                                : `Похоже, вы еще не предложили нам ни одного мема`
+                            : memesListSearchIsEmpty
                               ? `Похоже, вы еще не добавили такого мема в список ${listName[type]}`
-                              : `Вы не добавили ни одного мема в список ${listName[type]}`)}
+                              : `Вы не добавили ни одного мема в список ${listName[type]}`}
                     </Placeholder>
                 )}
             </div>
