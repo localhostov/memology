@@ -1,0 +1,4 @@
+.container {
+    background: var(--vkui--color_background_secondary);
+    border-radius: 10px;
+}
