@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+message HistoryCommand {
+    string test = 1;
+}
+
+message WebsocketClient {
+    HistoryCommand history = 1;
+}
+
+enum WebsocketEvent {
+    ERROR = 0;
+}
+
+enum WebsocketErrorType {
+    NO_GAME = 0;
+    NO_COMMAND = 1;
+}
+
+message WebsocketError {
+    WebsocketErrorType type = 1;
+    optional string message = 2;
+}
+
+message WebsocketServer {
+    
+}

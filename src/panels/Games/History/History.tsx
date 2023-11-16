@@ -30,15 +30,15 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             <Group>
                 <div className={styles.buttons}>
                     <Button
-                        size={"l"}
+                        size="l"
                         stretched
-                        mode={"secondary"}
+                        mode="secondary"
                         before={<Icon24LinkedOutline />}
                     >
                         Пригласить
                     </Button>
 
-                    <Button size={"l"} stretched before={<Icon24Play />}>
+                    <Button size="l" stretched before={<Icon24Play />}>
                         Начать игру
                     </Button>
                 </div>
