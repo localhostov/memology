@@ -6,9 +6,9 @@ import { ModalCard, SimpleCell } from "@vkontakte/vkui"
 
 export const CommentUserActionsModal = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()
-    const params = useParams<"commentId">()
+    const { commentId } = useParams<"commentId">()!
     const deleteCommentAction = () => {
-        deleteComment(params!.commentId!)
+        deleteComment(Number(commentId))
         navigator.hideModal()
     }
 

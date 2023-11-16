@@ -11,7 +11,9 @@
     "preview": "vite preview",
     "lint:fix": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,jsx,tsx}\" --fix",
     "proto": "npx protoc --ts_out src/shared/proto --ts_opt eslint_disable --proto_path protos error.proto user.proto meme.proto rating.proto comment.proto",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "predeploy": "vite build --base /dist",
+    "deploy": "vk-miniapps-deploy"
   },
   "dependencies": {
     "@protobuf-ts/plugin": "^2.9.1",
