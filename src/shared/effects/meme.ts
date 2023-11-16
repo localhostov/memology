@@ -57,18 +57,18 @@ export const $comments = createStore<TCommentWithOwner[]>([])
 $comments.reset(unmountMeme)
 
 export const getCommentsFx = createEffect(async (id: number) => {
-    const data = await API.memeComments(id, { page: 1, pageSize: 20 })
+    const data = (await API.memeComments(id, { page: 1, pageSize: 20 })).items
+    const result: TCommentWithOwner[] = []
 
-    return (await Promise.all(
-        data.items.map(async (x) => {
-            //TODO: use vk api user_ids
-            const owner = await bridge.send("VKWebAppGetUserInfo", {
-                user_id: Number(x.vkId),
-            })
+    for await (const item of data) {
+        const owner = await bridge.send("VKWebAppGetUserInfo", {
+            user_id: Number(item.vkId),
+        })
 
-            return Object.assign(x, { owner })
-        }),
-    )) as TCommentWithOwner[]
+        result.push(Object.assign(item, { owner }))
+    }
+
+    return result
 })
 
 $comments.on(getCommentsFx.doneData, (_, comments) => comments)
