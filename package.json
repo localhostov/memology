@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@protobuf-ts/plugin": "^2.9.1",
-    "@vkontakte/icons": "^2.77.0",
-    "@vkontakte/vk-bridge": "^2.11.2",
+    "@vkontakte/icons": "^2.78.0",
+    "@vkontakte/vk-bridge": "^2.12.1",
     "@vkontakte/vk-mini-apps-router": "^1.1.1",
     "@vkontakte/vk-miniapps-deploy": "^0.1.6",
     "@vkontakte/vkui": "^5.9.6",
@@ -40,7 +40,7 @@
     "husky": "^8.0.3",
     "prettier": "^3.1.0",
     "typescript": "^5.2.2",
-    "vite": "^4.5.0",
+    "vite": "^5.0.0",
     "vite-tsconfig-paths": "^4.2.1"
   }
 }
