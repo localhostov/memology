@@ -4,6 +4,7 @@ import {
     $meme,
     addToList,
     fetchMeme,
+    getCommentsFx,
     Mark,
     panelNames,
     unmountMeme,
@@ -25,7 +26,9 @@ import {
     Panel,
     PanelHeader,
     PanelHeaderBack,
+    Placeholder,
     SimpleCell,
+    Spinner,
 } from "@vkontakte/vkui"
 import { useList, useUnit } from "effector-react"
 import { useEffect } from "react"
@@ -36,6 +39,8 @@ export const Meme = ({ id }: IPanelProps) => {
     const meme = useUnit($meme)
     const ownerVkUrl = `https://vk.com/id${meme?.owner.id}`
     const { memeId } = useParams<"memeId">()!
+    const commentsIsLoading = useUnit(getCommentsFx.pending)
+    const commentsItemsList = useUnit($comments)
 
     useEffect(() => {
         fetchMeme(Number(memeId!))
@@ -177,9 +182,28 @@ export const Meme = ({ id }: IPanelProps) => {
 
                         <div className={styles.horizontalDivider} />
 
-                        <div className={styles.commentListContainer}>
-                            {commentsList}
-                        </div>
+                        {commentsIsLoading ? (
+                            <Placeholder
+                                icon={<Spinner size={"medium"} />}
+                                header={"Загрузочка..."}
+                            />
+                        ) : commentsItemsList.length === 0 ? (
+                            <Placeholder
+                                icon={
+                                    <Icon24CommentOutline
+                                        style={{ width: 56, height: 56 }}
+                                    />
+                                }
+                                header={"Комментариев нет"}
+                                children={
+                                    "Но вы можете оставить первый комментарий"
+                                }
+                            />
+                        ) : (
+                            <div className={styles.commentListContainer}>
+                                {commentsList}
+                            </div>
+                        )}
                     </div>
                 </Group>
             )}
