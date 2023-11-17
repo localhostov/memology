@@ -184,8 +184,8 @@ export const Meme = ({ id }: IPanelProps) => {
 
                         {commentsIsLoading ? (
                             <Placeholder
-                                icon={<Spinner size={"medium"} />}
-                                header={"Загрузочка..."}
+                                icon={<Spinner size="medium" />}
+                                header="Загрузочка..."
                             />
                         ) : commentsItemsList.length === 0 ? (
                             <Placeholder
@@ -194,10 +194,8 @@ export const Meme = ({ id }: IPanelProps) => {
                                         style={{ width: 56, height: 56 }}
                                     />
                                 }
-                                header={"Комментариев нет"}
-                                children={
-                                    "Но вы можете оставить первый комментарий"
-                                }
+                                header="Комментариев нет"
+                                children="Но вы можете оставить первый комментарий"
                             />
                         ) : (
                             <div className={styles.commentListContainer}>

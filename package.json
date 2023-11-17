@@ -10,7 +10,7 @@
     "lint": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,jsx,tsx}\"",
     "preview": "vite preview",
     "lint:fix": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,jsx,tsx}\" --fix",
-    "proto": "npx protoc --ts_out src/shared/proto --ts_opt eslint_disable --proto_path protos error.proto user.proto meme.proto rating.proto comment.proto",
+    "proto": "npx protoc --ts_out src/shared/proto --ts_opt eslint_disable --proto_path protos error.proto user.proto meme.proto rating.proto comment.proto websocket.proto",
     "prepare": "husky install",
     "predeploy": "vite build",
     "deploy": "vk-miniapps-deploy"
