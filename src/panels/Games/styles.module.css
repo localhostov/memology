@@ -4,3 +4,9 @@
     gap: 8px;
     padding: 16px;
 }
+
+@media screen and (max-width: 600px) {
+    .gamesListContainer {
+        grid-template-columns: 1fr 1fr;
+    }
+}

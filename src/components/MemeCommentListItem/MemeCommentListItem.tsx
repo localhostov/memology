@@ -76,7 +76,7 @@ export const MemeCommentListItem = ({ item }: { item: TCommentWithOwner }) => {
                             <Icon24ThumbsDownOutline />
                         )}
                     </div>
-                    16
+                    0
                     <div
                         onClick={() => handleMark("like")}
                         style={{ padding: 0, cursor: "pointer" }}
