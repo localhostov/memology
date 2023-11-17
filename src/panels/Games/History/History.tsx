@@ -1,5 +1,5 @@
 import { UserInGameListItem } from "@components"
-import { $vkUserData, panelNames } from "@shared"
+import { GamesEffects, panelNames, useWebsocket } from "@shared"
 import { IPanelProps } from "@types"
 import {
     Icon24GearOutline,
@@ -7,17 +7,33 @@ import {
     Icon24Play,
     Icon24Users3Outline,
 } from "@vkontakte/icons"
-import { UserInfo } from "@vkontakte/vk-bridge"
+import bridge, { UserInfo } from "@vkontakte/vk-bridge"
 import { Button, Group, Panel, PanelHeader } from "@vkontakte/vkui"
+import { useList } from "effector-react"
 import { useUnit } from "effector-react/compat"
 import styles from "./styles.module.css"
 
 export const HistoryGame = ({ id }: IPanelProps) => {
-    const vkUserData = useUnit($vkUserData)
+    const users = useUnit(GamesEffects.History.$users)
 
-    const mockedUsersList: UserInfo[] = [vkUserData!, vkUserData!]
+    useWebsocket("history", {
+        lobbyInfo: async (msg) => {
+            //TODO: place in effects
+            const result: UserInfo[] = []
 
-    const usersList = mockedUsersList.map((item) => (
+            for await (const vkId of msg.vkIds) {
+                const owner = await bridge.send("VKWebAppGetUserInfo", {
+                    user_id: vkId,
+                })
+
+                result.push(owner)
+            }
+
+            GamesEffects.History.addUser(result)
+        },
+    })
+
+    const usersList = useList(GamesEffects.History.$users, (item) => (
         <div key={item.id}>
             <UserInGameListItem item={item} />
         </div>
@@ -47,7 +63,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     <div className={styles.usersContainer}>
                         <div className={styles.usersContainerHeader}>
                             <Icon24Users3Outline />
-                            Участников: {mockedUsersList.length}
+                            Участников: {users.length}
                         </div>
 
                         <div className={styles.usersList}>{usersList}</div>
