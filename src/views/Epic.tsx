@@ -1,4 +1,4 @@
-import { getUserFx, panelNames, Panels, routes } from "@shared"
+import { $snackbar, getUserFx, panelNames, Panels, routes } from "@shared"
 import { ITab } from "@types"
 import {
     Icon28GameOutline,
@@ -48,6 +48,7 @@ export const Epic = () => {
     const location = useLocation()
     const userIsLoading = useUnit(getUserFx.pending)
     const [popout, setPopout] = useState<ReactNode | null>(null)
+    const snackbar = useUnit($snackbar)
 
     const { viewWidth } = useAdaptivityConditionalRender()
     const activeStoryStyles = {
@@ -183,6 +184,8 @@ export const Epic = () => {
                     <Profile id={Panels.PROFILE} />
                     <HistoryGame id={Panels.GAME_HISTORY} />
                 </VKUIEpic>
+
+                {snackbar}
             </SplitCol>
         </SplitLayout>
     )
