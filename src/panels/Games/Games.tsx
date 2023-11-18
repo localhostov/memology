@@ -1,7 +1,6 @@
 import { GamesListItem } from "@components"
 import { panelNames, routes } from "@shared"
-import { IPanelProps } from "@types"
-import { PanelPage } from "@vkontakte/vk-mini-apps-router/dist/page-types/PanelPage"
+import { IGameModeItem, IPanelProps } from "@types"
 import { Group, Panel, PanelHeader, Placeholder } from "@vkontakte/vkui"
 import styles from "./styles.module.css"
 
@@ -30,24 +29,12 @@ export const Games = ({ id }: IPanelProps) => {
     )
 }
 
-export enum GameMode {
-    HISTORY = "history",
-}
-
-const gamesList: GameModeItem[] = [
+const gamesList: IGameModeItem[] = [
     {
-        mode: GameMode.HISTORY,
+        mode: "history",
         title: "История",
         description: "Какое-то описание, но не очень длинное",
         icon: "https://www.svgrepo.com/show/404648/paper-document-file-data.svg",
         route: routes.root.games.gameHistory,
     },
 ]
-
-export interface GameModeItem {
-    mode: GameMode
-    title: string
-    description: string
-    icon: string
-    route: PanelPage<string>
-}

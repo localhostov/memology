@@ -15,6 +15,11 @@ export type ReturnApiType<T extends (...args: any[]) => any> = Awaited<
     ReturnType<T>
 >
 
+export interface IGameParticipant {
+    vkData: UserInfo
+    isOwner: boolean
+}
+
 export interface ITab {
     title: string
     isActive: boolean
@@ -22,11 +27,23 @@ export interface ITab {
     icon: ReactElement
 }
 
+export interface IGameModeItem {
+    mode: TGameModeType
+    title: string
+    description: string
+    icon: string
+    route: PanelPage<string>
+}
+
 export type TRatingTabListType = "weekly" | "eternal"
 
 export type TProfileTabListType = "like" | "dislike" | "favorite" | "my"
 
 export type TMemeMarkType = "like" | "dislike"
+
+export type TGameTabType = "participants" | "settings"
+
+export type TGameModeType = "history"
 
 export type TCommentWithOwner = CommentsResponse_CommentItem & {
     owner: UserInfo

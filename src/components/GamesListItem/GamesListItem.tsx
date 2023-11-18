@@ -1,12 +1,12 @@
+import { IGameModeItem } from "@types"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
-import { GameModeItem } from "../../panels"
 import styles from "./styles.module.css"
 
-export const GamesListItem = ({ item }: { item: GameModeItem }) => {
+export const GamesListItem = ({ item }: { item: IGameModeItem }) => {
     const navigator = useRouteNavigator()
 
     const openGame = () => {
-        navigator.push(item.route)
+        navigator.push(`/games/${item.mode}`)
     }
 
     return (
