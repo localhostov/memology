@@ -38,9 +38,19 @@
     "eslint-kit": "^10.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
     "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",
     "typescript": "^5.2.2",
     "vite": "^5.0.0",
     "vite-tsconfig-paths": "^4.2.1"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": ["eslint --fix"]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-commit": "git update-index --again"
+    }
   }
 }
