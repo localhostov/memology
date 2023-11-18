@@ -26,9 +26,18 @@ export interface WebsocketClient {
  */
 export interface WebsocketClient_HistoryCommand {
     /**
-     * @generated from protobuf field: string test = 1;
+     * @generated from protobuf field: WebsocketClient.HistoryCommand.KickUser kickUser = 1;
      */
-    test: string;
+    kickUser?: WebsocketClient_HistoryCommand_KickUser;
+}
+/**
+ * @generated from protobuf message WebsocketClient.HistoryCommand.KickUser
+ */
+export interface WebsocketClient_HistoryCommand_KickUser {
+    /**
+     * @generated from protobuf field: uint32 vkId = 1;
+     */
+    vkId: number;
 }
 /**
  * @generated from protobuf message WebsocketError
@@ -70,6 +79,19 @@ export interface WebsocketServer_HistoryEvents {
     lobbyInfo?: WebsocketServer_HistoryEvents_LobbyInfo;
 }
 /**
+ * @generated from protobuf message WebsocketServer.HistoryEvents.LobbyUser
+ */
+export interface WebsocketServer_HistoryEvents_LobbyUser {
+    /**
+     * @generated from protobuf field: uint32 vkId = 1;
+     */
+    vkId: number;
+    /**
+     * @generated from protobuf field: bool isOwner = 2;
+     */
+    isOwner: boolean;
+}
+/**
  * @generated from protobuf message WebsocketServer.HistoryEvents.UserJoined
  */
 export interface WebsocketServer_HistoryEvents_UserJoined {
@@ -77,6 +99,10 @@ export interface WebsocketServer_HistoryEvents_UserJoined {
      * @generated from protobuf field: uint32 vkId = 1;
      */
     vkId: number;
+    /**
+     * @generated from protobuf field: bool isOwner = 2;
+     */
+    isOwner: boolean;
 }
 /**
  * @generated from protobuf message WebsocketServer.HistoryEvents.UserLeaved
@@ -86,15 +112,19 @@ export interface WebsocketServer_HistoryEvents_UserLeaved {
      * @generated from protobuf field: uint32 vkId = 1;
      */
     vkId: number;
+    /**
+     * @generated from protobuf field: optional uint32 newOwnerVkId = 2;
+     */
+    newOwnerVkId?: number;
 }
 /**
  * @generated from protobuf message WebsocketServer.HistoryEvents.LobbyInfo
  */
 export interface WebsocketServer_HistoryEvents_LobbyInfo {
     /**
-     * @generated from protobuf field: repeated uint32 vkIds = 1;
+     * @generated from protobuf field: repeated WebsocketServer.HistoryEvents.LobbyUser users = 1;
      */
-    vkIds: number[];
+    users: WebsocketServer_HistoryEvents_LobbyUser[];
 }
 /**
  * @generated from protobuf enum WebsocketEvent
@@ -169,11 +199,11 @@ export const WebsocketClient = new WebsocketClient$Type();
 class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_HistoryCommand> {
     constructor() {
         super("WebsocketClient.HistoryCommand", [
-            { no: 1, name: "test", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 1, name: "kickUser", kind: "message", T: () => WebsocketClient_HistoryCommand_KickUser }
         ]);
     }
     create(value?: PartialMessage<WebsocketClient_HistoryCommand>): WebsocketClient_HistoryCommand {
-        const message = { test: "" };
+        const message = {};
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<WebsocketClient_HistoryCommand>(this, message, value);
@@ -184,8 +214,8 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string test */ 1:
-                    message.test = reader.string();
+                case /* WebsocketClient.HistoryCommand.KickUser kickUser */ 1:
+                    message.kickUser = WebsocketClient_HistoryCommand_KickUser.internalBinaryRead(reader, reader.uint32(), options, message.kickUser);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -199,9 +229,9 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
         return message;
     }
     internalBinaryWrite(message: WebsocketClient_HistoryCommand, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string test = 1; */
-        if (message.test !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.test);
+        /* WebsocketClient.HistoryCommand.KickUser kickUser = 1; */
+        if (message.kickUser)
+            WebsocketClient_HistoryCommand_KickUser.internalBinaryWrite(message.kickUser, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -212,6 +242,53 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
  * @generated MessageType for protobuf message WebsocketClient.HistoryCommand
  */
 export const WebsocketClient_HistoryCommand = new WebsocketClient_HistoryCommand$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class WebsocketClient_HistoryCommand_KickUser$Type extends MessageType<WebsocketClient_HistoryCommand_KickUser> {
+    constructor() {
+        super("WebsocketClient.HistoryCommand.KickUser", [
+            { no: 1, name: "vkId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<WebsocketClient_HistoryCommand_KickUser>): WebsocketClient_HistoryCommand_KickUser {
+        const message = { vkId: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketClient_HistoryCommand_KickUser>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketClient_HistoryCommand_KickUser): WebsocketClient_HistoryCommand_KickUser {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint32 vkId */ 1:
+                    message.vkId = reader.uint32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: WebsocketClient_HistoryCommand_KickUser, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint32 vkId = 1; */
+        if (message.vkId !== 0)
+            writer.tag(1, WireType.Varint).uint32(message.vkId);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketClient.HistoryCommand.KickUser
+ */
+export const WebsocketClient_HistoryCommand_KickUser = new WebsocketClient_HistoryCommand_KickUser$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class WebsocketError$Type extends MessageType<WebsocketError> {
     constructor() {
@@ -375,14 +452,69 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
  */
 export const WebsocketServer_HistoryEvents = new WebsocketServer_HistoryEvents$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class WebsocketServer_HistoryEvents_LobbyUser$Type extends MessageType<WebsocketServer_HistoryEvents_LobbyUser> {
+    constructor() {
+        super("WebsocketServer.HistoryEvents.LobbyUser", [
+            { no: 1, name: "vkId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "isOwner", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<WebsocketServer_HistoryEvents_LobbyUser>): WebsocketServer_HistoryEvents_LobbyUser {
+        const message = { vkId: 0, isOwner: false };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketServer_HistoryEvents_LobbyUser>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketServer_HistoryEvents_LobbyUser): WebsocketServer_HistoryEvents_LobbyUser {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint32 vkId */ 1:
+                    message.vkId = reader.uint32();
+                    break;
+                case /* bool isOwner */ 2:
+                    message.isOwner = reader.bool();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: WebsocketServer_HistoryEvents_LobbyUser, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint32 vkId = 1; */
+        if (message.vkId !== 0)
+            writer.tag(1, WireType.Varint).uint32(message.vkId);
+        /* bool isOwner = 2; */
+        if (message.isOwner !== false)
+            writer.tag(2, WireType.Varint).bool(message.isOwner);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.LobbyUser
+ */
+export const WebsocketServer_HistoryEvents_LobbyUser = new WebsocketServer_HistoryEvents_LobbyUser$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class WebsocketServer_HistoryEvents_UserJoined$Type extends MessageType<WebsocketServer_HistoryEvents_UserJoined> {
     constructor() {
         super("WebsocketServer.HistoryEvents.UserJoined", [
-            { no: 1, name: "vkId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+            { no: 1, name: "vkId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "isOwner", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents_UserJoined>): WebsocketServer_HistoryEvents_UserJoined {
-        const message = { vkId: 0 };
+        const message = { vkId: 0, isOwner: false };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<WebsocketServer_HistoryEvents_UserJoined>(this, message, value);
@@ -395,6 +527,9 @@ class WebsocketServer_HistoryEvents_UserJoined$Type extends MessageType<Websocke
             switch (fieldNo) {
                 case /* uint32 vkId */ 1:
                     message.vkId = reader.uint32();
+                    break;
+                case /* bool isOwner */ 2:
+                    message.isOwner = reader.bool();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -411,6 +546,9 @@ class WebsocketServer_HistoryEvents_UserJoined$Type extends MessageType<Websocke
         /* uint32 vkId = 1; */
         if (message.vkId !== 0)
             writer.tag(1, WireType.Varint).uint32(message.vkId);
+        /* bool isOwner = 2; */
+        if (message.isOwner !== false)
+            writer.tag(2, WireType.Varint).bool(message.isOwner);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -425,7 +563,8 @@ export const WebsocketServer_HistoryEvents_UserJoined = new WebsocketServer_Hist
 class WebsocketServer_HistoryEvents_UserLeaved$Type extends MessageType<WebsocketServer_HistoryEvents_UserLeaved> {
     constructor() {
         super("WebsocketServer.HistoryEvents.UserLeaved", [
-            { no: 1, name: "vkId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+            { no: 1, name: "vkId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "newOwnerVkId", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents_UserLeaved>): WebsocketServer_HistoryEvents_UserLeaved {
@@ -443,6 +582,9 @@ class WebsocketServer_HistoryEvents_UserLeaved$Type extends MessageType<Websocke
                 case /* uint32 vkId */ 1:
                     message.vkId = reader.uint32();
                     break;
+                case /* optional uint32 newOwnerVkId */ 2:
+                    message.newOwnerVkId = reader.uint32();
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -458,6 +600,9 @@ class WebsocketServer_HistoryEvents_UserLeaved$Type extends MessageType<Websocke
         /* uint32 vkId = 1; */
         if (message.vkId !== 0)
             writer.tag(1, WireType.Varint).uint32(message.vkId);
+        /* optional uint32 newOwnerVkId = 2; */
+        if (message.newOwnerVkId !== undefined)
+            writer.tag(2, WireType.Varint).uint32(message.newOwnerVkId);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -472,11 +617,11 @@ export const WebsocketServer_HistoryEvents_UserLeaved = new WebsocketServer_Hist
 class WebsocketServer_HistoryEvents_LobbyInfo$Type extends MessageType<WebsocketServer_HistoryEvents_LobbyInfo> {
     constructor() {
         super("WebsocketServer.HistoryEvents.LobbyInfo", [
-            { no: 1, name: "vkIds", kind: "scalar", repeat: 1 /*RepeatType.PACKED*/, T: 13 /*ScalarType.UINT32*/ }
+            { no: 1, name: "users", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => WebsocketServer_HistoryEvents_LobbyUser }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents_LobbyInfo>): WebsocketServer_HistoryEvents_LobbyInfo {
-        const message = { vkIds: [] };
+        const message = { users: [] };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<WebsocketServer_HistoryEvents_LobbyInfo>(this, message, value);
@@ -487,12 +632,8 @@ class WebsocketServer_HistoryEvents_LobbyInfo$Type extends MessageType<Websocket
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* repeated uint32 vkIds */ 1:
-                    if (wireType === WireType.LengthDelimited)
-                        for (let e = reader.int32() + reader.pos; reader.pos < e;)
-                            message.vkIds.push(reader.uint32());
-                    else
-                        message.vkIds.push(reader.uint32());
+                case /* repeated WebsocketServer.HistoryEvents.LobbyUser users */ 1:
+                    message.users.push(WebsocketServer_HistoryEvents_LobbyUser.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -506,13 +647,9 @@ class WebsocketServer_HistoryEvents_LobbyInfo$Type extends MessageType<Websocket
         return message;
     }
     internalBinaryWrite(message: WebsocketServer_HistoryEvents_LobbyInfo, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* repeated uint32 vkIds = 1; */
-        if (message.vkIds.length) {
-            writer.tag(1, WireType.LengthDelimited).fork();
-            for (let i = 0; i < message.vkIds.length; i++)
-                writer.uint32(message.vkIds[i]);
-            writer.join();
-        }
+        /* repeated WebsocketServer.HistoryEvents.LobbyUser users = 1; */
+        for (let i = 0; i < message.users.length; i++)
+            WebsocketServer_HistoryEvents_LobbyUser.internalBinaryWrite(message.users[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

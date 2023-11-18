@@ -1,4 +1,11 @@
-import { CommentsResponse_CommentItem, Modals, Panels } from "@shared"
+import {
+    CommentsResponse_CommentItem,
+    Modals,
+    Panels,
+    WebsocketClient,
+    WebsocketServer,
+    WebsocketServer_HistoryEvents_LobbyUser,
+} from "@shared"
 import { UserInfo } from "@vkontakte/vk-bridge"
 import { PanelPage } from "@vkontakte/vk-mini-apps-router/dist/page-types/PanelPage"
 import { ReactElement } from "react"
@@ -15,9 +22,9 @@ export type ReturnApiType<T extends (...args: any[]) => any> = Awaited<
     ReturnType<T>
 >
 
-export interface IGameParticipant {
+export interface IGameParticipant
+    extends WebsocketServer_HistoryEvents_LobbyUser {
     vkData: UserInfo
-    isOwner: boolean
 }
 
 export interface ITab {
@@ -48,3 +55,10 @@ export type TGameModeType = "history"
 export type TCommentWithOwner = CommentsResponse_CommentItem & {
     owner: UserInfo
 }
+
+export type TSendFunction<T extends keyof WebsocketServer> = <
+    C extends keyof NonNullable<WebsocketClient[T]>,
+>(
+    cmdName: C,
+    data: NonNullable<NonNullable<WebsocketClient[T]>[C]>,
+) => void

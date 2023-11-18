@@ -1,6 +1,11 @@
 import { GameParticipantListItem } from "@components"
 import { GamesEffects, panelNames, setSnackbar, useWebsocket } from "@shared"
-import { IGameParticipant, IPanelProps, TGameTabType } from "@types"
+import {
+    IGameParticipant,
+    IPanelProps,
+    TGameTabType,
+    TSendFunction,
+} from "@types"
 import {
     Icon24GearOutline,
     Icon24LinkedOutline,
@@ -31,20 +36,17 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
     const users = useUnit(GamesEffects.History.$users)
 
-    useWebsocket("history", {
+    const { send } = useWebsocket("history", {
         lobbyInfo: async (msg) => {
             //TODO: place in effects
             const result: IGameParticipant[] = []
 
-            for await (const vkId of msg.vkIds) {
-                const owner = await bridge.send("VKWebAppGetUserInfo", {
-                    user_id: vkId,
+            for await (const user of msg.users) {
+                const vkData = await bridge.send("VKWebAppGetUserInfo", {
+                    user_id: user.vkId,
                 })
 
-                result.push({
-                    vkData: owner,
-                    isOwner: false,
-                })
+                result.push(Object.assign(user, { vkData }))
             }
 
             GamesEffects.History.addUser(result)
@@ -69,7 +71,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     }
 
     const tabContent: Record<TGameTabType, ReactElement> = {
-        participants: ParticipantsTabContent(),
+        participants: ParticipantsTabContent(send),
         settings: SettingsTabContent(),
     }
 
@@ -132,10 +134,10 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     )
 }
 
-const ParticipantsTabContent = () => {
+const ParticipantsTabContent = (send: TSendFunction<"history">) => {
     const usersList = useList(GamesEffects.History.$users, (item) => (
-        <div key={item.vkData.id}>
-            <GameParticipantListItem item={item} />
+        <div key={item.vkId}>
+            <GameParticipantListItem item={item} send={send} />
         </div>
     ))
 
