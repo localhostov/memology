@@ -6,39 +6,13 @@
     flex-wrap: wrap;
 }
 
-.usersContainer {
-    border: 2px dashed var(--vkui--color_background_secondary);
-    padding: 16px;
-    border-radius: 10px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    row-gap: 16px;
-}
-
 .usersList {
     display: flex;
     flex-direction: column;
     row-gap: 4px;
 }
 
-.usersContainerHeader {
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    column-gap: 8px;
-    color: var(--vkui--color_text_secondary);
-}
-
-.settingsContainer {
-    background: var(--vkui--color_background_secondary_alpha);
-    padding: 16px;
-    border-radius: 10px;
-    flex: 1;
-}
-
 .buttons {
     display: flex;
     gap: 8px;
-    padding: 16px;
 }

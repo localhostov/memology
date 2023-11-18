@@ -1,82 +1,150 @@
-import { UserInGameListItem } from "@components"
-import { GamesEffects, panelNames, useWebsocket } from "@shared"
-import { IPanelProps } from "@types"
+import { GameParticipantListItem } from "@components"
+import { GamesEffects, panelNames, setSnackbar, useWebsocket } from "@shared"
+import { IGameParticipant, IPanelProps, TGameTabType } from "@types"
 import {
     Icon24GearOutline,
     Icon24LinkedOutline,
     Icon24Play,
-    Icon24Users3Outline,
+    Icon24UsersOutline,
 } from "@vkontakte/icons"
-import bridge, { UserInfo } from "@vkontakte/vk-bridge"
-import { Button, Group, Panel, PanelHeader } from "@vkontakte/vkui"
-import { useList } from "effector-react"
+import bridge from "@vkontakte/vk-bridge"
+import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
+import {
+    Button,
+    Group,
+    HorizontalScroll,
+    Panel,
+    PanelHeader,
+    PanelHeaderBack,
+    Snackbar,
+    Tabs,
+    TabsItem,
+} from "@vkontakte/vkui"
 import { useUnit } from "effector-react/compat"
+import { ReactElement, useState } from "react"
 import styles from "./styles.module.css"
 
 export const HistoryGame = ({ id }: IPanelProps) => {
+    const navigator = useRouteNavigator()
+    const [activeTab, setActiveTab] = useState<TGameTabType>("participants")
+
     const users = useUnit(GamesEffects.History.$users)
 
     useWebsocket("history", {
         lobbyInfo: async (msg) => {
             //TODO: place in effects
-            const result: UserInfo[] = []
+            const result: IGameParticipant[] = []
 
             for await (const vkId of msg.vkIds) {
                 const owner = await bridge.send("VKWebAppGetUserInfo", {
                     user_id: vkId,
                 })
 
-                result.push(owner)
+                result.push({
+                    vkData: owner,
+                    isOwner: false,
+                })
             }
 
             GamesEffects.History.addUser(result)
         },
     })
 
-    const usersList = useList(GamesEffects.History.$users, (item) => (
-        <div key={item.id}>
-            <UserInGameListItem item={item} />
-        </div>
-    ))
+    const copyInviteLink = () => {
+        setSnackbar(
+            <Snackbar
+                onClose={() => setSnackbar(null)}
+                before={
+                    <Icon24LinkedOutline fill="var(--vkui--color_icon_positive)" />
+                }
+            >
+                Ссылка-приглашение скопирована
+            </Snackbar>,
+        )
+    }
+
+    const startGame = () => {
+        console.log("user started game")
+    }
+
+    const tabContent: Record<TGameTabType, ReactElement> = {
+        participants: ParticipantsTabContent(users),
+        settings: SettingsTabContent(),
+    }
 
     return (
         <Panel id={id}>
-            <PanelHeader>{panelNames[id]}</PanelHeader>
+            <PanelHeader
+                before={<PanelHeaderBack onClick={() => navigator.back()} />}
+            >
+                {panelNames[id]}
+            </PanelHeader>
 
             <Group>
-                <div className={styles.buttons}>
-                    <Button
-                        size="l"
-                        stretched
-                        mode="secondary"
-                        before={<Icon24LinkedOutline />}
-                    >
-                        Пригласить
-                    </Button>
+                <Tabs>
+                    <HorizontalScroll arrowSize="m">
+                        <TabsItem
+                            before={<Icon24UsersOutline />}
+                            selected={activeTab === "participants"}
+                            onClick={() => setActiveTab("participants")}
+                            status={users.length}
+                        >
+                            Участники
+                        </TabsItem>
 
-                    <Button size="l" stretched before={<Icon24Play />}>
-                        Начать игру
-                    </Button>
-                </div>
+                        <TabsItem
+                            before={<Icon24GearOutline />}
+                            selected={activeTab === "settings"}
+                            onClick={() => setActiveTab("settings")}
+                        >
+                            Настройки
+                        </TabsItem>
+                    </HorizontalScroll>
+                </Tabs>
 
                 <div className={styles.container}>
-                    <div className={styles.usersContainer}>
-                        <div className={styles.usersContainerHeader}>
-                            <Icon24Users3Outline />
-                            Участников: {users.length}
-                        </div>
+                    <div className={styles.buttons}>
+                        <Button
+                            size="l"
+                            stretched
+                            mode="secondary"
+                            before={<Icon24LinkedOutline />}
+                            onClick={copyInviteLink}
+                        >
+                            Пригласить
+                        </Button>
 
-                        <div className={styles.usersList}>{usersList}</div>
+                        <Button
+                            size="l"
+                            stretched
+                            before={<Icon24Play />}
+                            onClick={startGame}
+                        >
+                            Начать игру
+                        </Button>
                     </div>
 
-                    <div className={styles.settingsContainer}>
-                        <div className={styles.usersContainerHeader}>
-                            <Icon24GearOutline />
-                            Настройки
-                        </div>
-                    </div>
+                    <div>{tabContent[activeTab]}</div>
                 </div>
             </Group>
         </Panel>
     )
+}
+
+const ParticipantsTabContent = (users: IGameParticipant[]) => {
+    const usersList = users.map((item) => (
+        <div key={item.vkData.id}>
+            <GameParticipantListItem item={item} />
+        </div>
+    ))
+
+    return (
+        <div>
+            <div className={styles.usersList}>{usersList}</div>
+        </div>
+    )
+}
+
+const SettingsTabContent = () => {
+    return <div>когда-нибудь здесь будут настройки</div>
 }
