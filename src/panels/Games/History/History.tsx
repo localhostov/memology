@@ -20,6 +20,7 @@ import {
     Tabs,
     TabsItem,
 } from "@vkontakte/vkui"
+import { useList } from "effector-react"
 import { useUnit } from "effector-react/compat"
 import { ReactElement, useState } from "react"
 import styles from "./styles.module.css"
@@ -68,7 +69,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     }
 
     const tabContent: Record<TGameTabType, ReactElement> = {
-        participants: ParticipantsTabContent(users),
+        participants: ParticipantsTabContent(),
         settings: SettingsTabContent(),
     }
 
@@ -131,8 +132,8 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     )
 }
 
-const ParticipantsTabContent = (users: IGameParticipant[]) => {
-    const usersList = users.map((item) => (
+const ParticipantsTabContent = () => {
+    const usersList = useList(GamesEffects.History.$users, (item) => (
         <div key={item.vkData.id}>
             <GameParticipantListItem item={item} />
         </div>
