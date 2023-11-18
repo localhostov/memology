@@ -1,6 +1,6 @@
+export * from "./GameParticipantListItem/GameParticipantListItem"
 export * from "./GamesListItem/GamesListItem"
 export * from "./MemeCommentListItem/MemeCommentListItem"
 export * from "./MemeListItem/MemeListItem"
 export * from "./ProfileTabList/ProfileTabList"
 export * from "./RatingListItem/RatingListItem"
-export * from "./UserInGameListItem/UserInGameListItem"
