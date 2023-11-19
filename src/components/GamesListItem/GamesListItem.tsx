@@ -6,7 +6,7 @@ export const GamesListItem = ({ item }: { item: IGameModeItem }) => {
     const navigator = useRouteNavigator()
 
     const openGame = () => {
-        navigator.push(`/games/${item.mode}`)
+        navigator.push(`/games/preview/${item.mode}`)
     }
 
     return (

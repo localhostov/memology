@@ -3,6 +3,7 @@ import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { ModalRoot } from "@vkontakte/vkui"
 import { CommentUserActionsModal } from "./CommentUserActionsModal/CommentUserActionsModal"
 import { CreateMemeCommentModal } from "./CreateMemeCommentModal/CreateMemeCommentModal"
+import { GameInfoPreviewModal } from "./GamePreviewModal/GameInfoPreviewModal"
 import { ProfileMemeListActionsModal } from "./ProfileMemeListActionsModal/ProfileMemeListActionsModal"
 
 export const Modal = ({ activeModal }: { activeModal: string | undefined }) => {
@@ -19,6 +20,7 @@ export const Modal = ({ activeModal }: { activeModal: string | undefined }) => {
             />
             <CreateMemeCommentModal id={Modals.CREATE_MEME_COMMENT} />
             <CommentUserActionsModal id={Modals.COMMENT_USER_ACTIONS} />
+            <GameInfoPreviewModal id={Modals.GAME_INFO_PREVIEW} />
         </ModalRoot>
     )
 }

@@ -31,6 +31,7 @@ export enum Modals {
     PROFILE_MEME_LIST_ACTIONS = "profileMemeListActions",
     CREATE_MEME_COMMENT = "createMemeComment",
     COMMENT_USER_ACTIONS = "commentUserActions",
+    GAME_INFO_PREVIEW = "gameInfoPreview",
 }
 
 export const routes = RoutesConfig.create([
@@ -51,7 +52,9 @@ export const routes = RoutesConfig.create([
         ]),
 
         createView(Panels.GAMES, [
-            createPanel(Panels.GAMES, "/games"),
+            createPanel(Panels.GAMES, "/games", [
+                createModal(Modals.GAME_INFO_PREVIEW, "/games/preview/:mode"),
+            ]),
             createPanel(Panels.GAME_HISTORY, "/games/history"),
         ]),
 
