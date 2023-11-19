@@ -73,7 +73,7 @@ export const Meme = ({ id }: IPanelProps) => {
                 {panelNames[id]}
             </PanelHeader>
 
-            {meme && (
+            {meme ? (
                 <Group>
                     <div className={styles.imageContainer}>
                         <img
@@ -203,6 +203,13 @@ export const Meme = ({ id }: IPanelProps) => {
                             </div>
                         )}
                     </div>
+                </Group>
+            ) : (
+                <Group>
+                    <Placeholder
+                        icon={<Spinner size="large" />}
+                        header="Загрузочка..."
+                    />
                 </Group>
             )}
         </Panel>
