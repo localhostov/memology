@@ -1,0 +1,59 @@
+.imageContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 16px;
+}
+
+.image {
+    height: 240px;
+    width: 280px;
+    object-fit: cover;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: 0.3s all ease;
+}
+
+.pickBlock {
+    background: var(--vkui--color_background_secondary);
+    height: 240px;
+    width: 280px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: 0.3s all ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    border: 2px dashed var(--vkui--color_background_secondary_alpha);
+}
+
+.pickBlock * {
+    text-align: center;
+}
+
+.image:active, .pickBlock:active {
+    scale: 0.95;
+}
+
+.imageContainerContent {
+    flex: 1;
+}
+
+@media screen and (max-width: 600px) {
+    .imageContainerContent {
+        flex-basis: 100%;
+    }
+
+    .image {
+        height: 300px;
+        width: 100%;
+    }
+}
+
+.dragActive {
+    border: 2px dashed var(--vkui--color_accent_blue);
+    border-radius: 16px;
+}
