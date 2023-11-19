@@ -1,3 +1,4 @@
+export * from "./GameLobby/GameLobby"
 export * from "./GameParticipantListItem/GameParticipantListItem"
 export * from "./GamesListItem/GamesListItem"
 export * from "./MemeCommentListItem/MemeCommentListItem"
