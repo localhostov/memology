@@ -145,6 +145,6 @@ export class API {
     }
 
     static async createRoom(type: TGameModeType) {
-        return api.url(`game/${type}/create`).get().text()
+        return api.url(`/game/${type}/create`).get().text()
     }
 }
