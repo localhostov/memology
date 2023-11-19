@@ -6,7 +6,7 @@ import {
     MemeResponse,
     UserResponse_UserItem,
 } from "@shared"
-import { TProfileTabListType, TRatingTabListType } from "@types"
+import { TGameModeType, TProfileTabListType, TRatingTabListType } from "@types"
 import wretch from "wretch"
 import QueryStringAddon from "wretch/addons/queryString"
 
@@ -142,5 +142,9 @@ export class API {
             .res()
 
         return res.ok
+    }
+
+    static async createRoom(type: TGameModeType) {
+        return api.url(`game/${type}/create`).get().text()
     }
 }

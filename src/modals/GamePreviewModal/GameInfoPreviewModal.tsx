@@ -1,6 +1,7 @@
 import { IModalProps, TGameModeType } from "@types"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Button, ModalPage, Title } from "@vkontakte/vkui"
+import { API } from "../../shared/api"
 import styles from "./styles.module.css"
 
 export const GameInfoPreviewModal = ({ id }: IModalProps) => {
@@ -8,7 +9,11 @@ export const GameInfoPreviewModal = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()
     const currentGame = gameMode[(params?.mode || "history") as TGameModeType]
 
-    const createLobby = () => {
+    const createLobby = async () => {
+        const roomId = await API.createRoom(
+            (params?.mode || "history") as TGameModeType,
+        )
+
         navigator.push(currentGame.route)
     }
 
