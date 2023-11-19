@@ -16,3 +16,17 @@
     display: flex;
     gap: 8px;
 }
+
+.topElementsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.meWriteInputContainer {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 8px;
+    padding: 16px;
+}

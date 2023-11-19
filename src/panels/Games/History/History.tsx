@@ -1,153 +1,146 @@
-import { GameParticipantListItem } from "@components"
-import { GamesEffects, panelNames, setSnackbar, useWebsocket } from "@shared"
+import { GameLobby } from "@components"
+import { changeEpicVisibility, Modals, panelNames } from "@shared"
+import { IPanelProps } from "@types"
 import {
-    IGameParticipant,
-    IPanelProps,
-    TGameTabType,
-    TSendFunction,
-} from "@types"
-import {
-    Icon24GearOutline,
-    Icon24LinkedOutline,
+    Icon20CheckAlt,
+    Icon20ChecksOutline,
     Icon24Play,
-    Icon24UsersOutline,
+    Icon28PencilSquare,
 } from "@vkontakte/icons"
-import bridge from "@vkontakte/vk-bridge"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import {
     Button,
     Group,
-    HorizontalScroll,
+    Input,
     Panel,
     PanelHeader,
     PanelHeaderBack,
-    Snackbar,
-    Tabs,
-    TabsItem,
+    Placeholder,
+    UsersStack,
 } from "@vkontakte/vkui"
-import { useList } from "effector-react"
-import { useUnit } from "effector-react/compat"
-import { ReactElement, useState } from "react"
+import { ReactElement, useEffect, useState } from "react"
 import styles from "./styles.module.css"
+
+type TGameStepType = "meWrite" | "readyResult"
 
 export const HistoryGame = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
-    const [activeTab, setActiveTab] = useState<TGameTabType>("participants")
+    const [gameIsStarted, setGameIsStarted] = useState(false)
+    const [gameStep, setGameStep] = useState<TGameStepType>("meWrite")
+    const [counter, setCounter] = useState(1)
+    const [meWriteValue, setMeWriteValue] = useState("")
 
-    const users = useUnit(GamesEffects.History.$users)
+    useEffect(() => {
+        changeEpicVisibility(false)
 
-    const { send } = useWebsocket("history", {
-        lobbyInfo: async (msg) => {
-            //TODO: place in effects
-            const result: IGameParticipant[] = []
+        return () => {
+            changeEpicVisibility(true)
+        }
+    }, [])
 
-            for await (const user of msg.users) {
-                const vkData = await bridge.send("VKWebAppGetUserInfo", {
-                    user_id: user.vkId,
-                })
+    const startGame = () => {
+        setGameIsStarted(true)
+    }
 
-                result.push(Object.assign(user, { vkData }))
-            }
+    const GameStepMeWrite = () => {
+        return (
+            <div>
+                <div className={styles.topElementsContainer}>
+                    <div>{counter}/1</div>
+                    <div>12 секунд</div>
+                </div>
 
-            GamesEffects.History.addUser(result)
-        },
-    })
+                <Placeholder
+                    icon={
+                        <Icon28PencilSquare style={{ width: 56, height: 56 }} />
+                    }
+                    header="Напишите предложение"
+                    style={{ paddingBottom: 0 }}
+                />
 
-    const copyInviteLink = () => {
-        setSnackbar(
-            <Snackbar
-                onClose={() => setSnackbar(null)}
-                before={
-                    <Icon24LinkedOutline fill="var(--vkui--color_icon_positive)" />
-                }
-            >
-                Ссылка-приглашение скопирована
-            </Snackbar>,
+                <div className={styles.meWriteInputContainer}>
+                    <Input
+                        style={{ flex: 1 }}
+                        type="text"
+                        value={meWriteValue}
+                        placeholder="Писать сюда если что"
+                        onChange={(e) => setMeWriteValue(e.target.value)}
+                    />
+
+                    <Button
+                        before={<Icon20CheckAlt />}
+                        onClick={() => setGameStep("readyResult")}
+                    >
+                        Готово
+                    </Button>
+                </div>
+            </div>
         )
     }
 
-    const startGame = () => {
-        console.log("user started game")
+    const GameStepShowResult = () => {
+        const photo = "https://i.playground.ru/e/tRXuCJPpLW_bZJ1IdfZknw.jpeg"
+        return (
+            <div>
+                <Placeholder
+                    icon={
+                        <Icon20ChecksOutline
+                            style={{ width: 56, height: 56 }}
+                        />
+                    }
+                    header="Просмотр результата"
+                    action={
+                        <div>
+                            <UsersStack
+                                photos={[photo, photo, photo, photo, photo]}
+                                size="l"
+                                direction="column"
+                            >
+                                12 участников
+                            </UsersStack>
+
+                            <div style={{ height: 16 }} />
+
+                            <Button before={<Icon24Play />}>Начать</Button>
+                        </div>
+                    }
+                >
+                    Нажмите на кнопку ниже, чтобы начать просмотр результата
+                </Placeholder>
+            </div>
+        )
     }
 
-    const tabContent: Record<TGameTabType, ReactElement> = {
-        participants: ParticipantsTabContent(send),
-        settings: SettingsTabContent(),
+    const currentGameStep: Record<TGameStepType, ReactElement> = {
+        meWrite: GameStepMeWrite(),
+        readyResult: GameStepShowResult(),
     }
 
     return (
         <Panel id={id}>
             <PanelHeader
-                before={<PanelHeaderBack onClick={() => navigator.back()} />}
+                before={
+                    <PanelHeaderBack
+                        onClick={() =>
+                            navigator.showModal(
+                                Modals.EXIT_FROM_GAME_CONFIRMATION,
+                            )
+                        }
+                    />
+                }
             >
                 {panelNames[id]}
             </PanelHeader>
 
             <Group>
-                <Tabs>
-                    <HorizontalScroll arrowSize="m">
-                        <TabsItem
-                            before={<Icon24UsersOutline />}
-                            selected={activeTab === "participants"}
-                            onClick={() => setActiveTab("participants")}
-                            status={users.length}
-                        >
-                            Участники
-                        </TabsItem>
-
-                        <TabsItem
-                            before={<Icon24GearOutline />}
-                            selected={activeTab === "settings"}
-                            onClick={() => setActiveTab("settings")}
-                        >
-                            Настройки
-                        </TabsItem>
-                    </HorizontalScroll>
-                </Tabs>
-
-                <div className={styles.container}>
-                    <div className={styles.buttons}>
-                        <Button
-                            size="l"
-                            stretched
-                            mode="secondary"
-                            before={<Icon24LinkedOutline />}
-                            onClick={copyInviteLink}
-                        >
-                            Пригласить
-                        </Button>
-
-                        <Button
-                            size="l"
-                            stretched
-                            before={<Icon24Play />}
-                            onClick={startGame}
-                        >
-                            Начать игру
-                        </Button>
+                {gameIsStarted ? (
+                    <div className={styles.container}>
+                        {currentGameStep[gameStep]}
                     </div>
-
-                    <div>{tabContent[activeTab]}</div>
-                </div>
+                ) : (
+                    <GameLobby onStartGame={startGame} />
+                )}
             </Group>
         </Panel>
     )
-}
-
-const ParticipantsTabContent = (send: TSendFunction<"history">) => {
-    const usersList = useList(GamesEffects.History.$users, (item) => (
-        <div key={item.vkId}>
-            <GameParticipantListItem item={item} send={send} />
-        </div>
-    ))
-
-    return (
-        <div>
-            <div className={styles.usersList}>{usersList}</div>
-        </div>
-    )
-}
-
-const SettingsTabContent = () => {
-    return <div>когда-нибудь здесь будут настройки</div>
 }
