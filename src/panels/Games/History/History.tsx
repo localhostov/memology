@@ -1,12 +1,21 @@
 import { GameLobby } from "@components"
-import { changeEpicVisibility, Modals, panelNames } from "@shared"
-import { IPanelProps } from "@types"
+import {
+    changeEpicVisibility,
+    GamesEffects,
+    Modals,
+    panelNames,
+    setSnackbar,
+    useWebsocket,
+} from "@shared"
+import { IGameParticipant, IPanelProps } from "@types"
 import {
     Icon20CheckAlt,
     Icon20ChecksOutline,
+    Icon24LinkedOutline,
     Icon24Play,
     Icon28PencilSquare,
 } from "@vkontakte/icons"
+import bridge from "@vkontakte/vk-bridge"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import {
     Button,
@@ -16,8 +25,10 @@ import {
     PanelHeader,
     PanelHeaderBack,
     Placeholder,
+    Snackbar,
     UsersStack,
 } from "@vkontakte/vkui"
+import { useUnit } from "effector-react"
 import { ReactElement, useEffect, useState } from "react"
 import styles from "./styles.module.css"
 
@@ -25,10 +36,41 @@ type TGameStepType = "meWrite" | "readyResult"
 
 export const HistoryGame = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
-    const [gameIsStarted, setGameIsStarted] = useState(false)
+    const isStarted = useUnit(GamesEffects.History.$isStarted)
+    const users = useUnit(GamesEffects.History.$users)
     const [gameStep, setGameStep] = useState<TGameStepType>("meWrite")
-    const [counter, setCounter] = useState(1)
-    const [meWriteValue, setMeWriteValue] = useState("")
+
+    const { send } = useWebsocket("history", {
+        lobbyInfo: async (msg) => {
+            // TODO: place in effects
+            const result: IGameParticipant[] = []
+
+            for await (const user of msg.users) {
+                const vkData = await bridge.send("VKWebAppGetUserInfo", {
+                    user_id: user.vkId,
+                })
+
+                result.push(Object.assign(user, { vkData }))
+            }
+
+            GamesEffects.History.addUser(result)
+        },
+        showSnackbar: (msg) =>
+            setSnackbar(
+                <Snackbar
+                    onClose={() => setSnackbar(null)}
+                    before={
+                        <Icon24LinkedOutline fill="var(--vkui--color_icon_positive)" />
+                    }
+                >
+                    {msg.message}
+                </Snackbar>,
+            ),
+        startLobby: () => GamesEffects.History.setStart(true),
+        timerTick: ({ time }) => GamesEffects.History.setTime(time),
+        nextStep: () => GamesEffects.History.nextStep(),
+        finishGame: () => setGameStep("readyResult"),
+    })
 
     useEffect(() => {
         changeEpicVisibility(false)
@@ -38,16 +80,18 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         }
     }, [])
 
-    const startGame = () => {
-        setGameIsStarted(true)
-    }
-
     const GameStepMeWrite = () => {
+        const time = useUnit(GamesEffects.History.$time)
+        const step = useUnit(GamesEffects.History.$historyStep)
+        const [meWriteValue, setMeWriteValue] = useState("")
+
         return (
             <div>
                 <div className={styles.topElementsContainer}>
-                    <div>{counter}/1</div>
-                    <div>12 секунд</div>
+                    <div>
+                        {step}/{users.length}
+                    </div>
+                    <div>{time} секунд</div>
                 </div>
 
                 <Placeholder
@@ -69,7 +113,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
                     <Button
                         before={<Icon20CheckAlt />}
-                        onClick={() => setGameStep("readyResult")}
+                        onClick={() => send("sendText", { text: meWriteValue })}
                     >
                         Готово
                     </Button>
@@ -133,12 +177,12 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             </PanelHeader>
 
             <Group>
-                {gameIsStarted ? (
+                {isStarted ? (
                     <div className={styles.container}>
                         {currentGameStep[gameStep]}
                     </div>
                 ) : (
-                    <GameLobby onStartGame={startGame} />
+                    <GameLobby send={send} />
                 )}
             </Group>
         </Panel>

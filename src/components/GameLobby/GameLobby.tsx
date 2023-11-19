@@ -20,26 +20,9 @@ import { ReactElement, useState } from "react"
 import { GameParticipantListItem } from "../GameParticipantListItem/GameParticipantListItem"
 import styles from "./styles.module.css"
 
-export const GameLobby = ({ onStartGame }: { onStartGame: () => void }) => {
+export const GameLobby = ({ send }: { send: TSendFunction<"history"> }) => {
     const [activeTab, setActiveTab] = useState<TGameTabType>("participants")
     const users = useUnit(GamesEffects.History.$users)
-
-    const { send } = useWebsocket("history", {
-        lobbyInfo: async (msg) => {
-            // TODO: place in effects
-            const result: IGameParticipant[] = []
-
-            for await (const user of msg.users) {
-                const vkData = await bridge.send("VKWebAppGetUserInfo", {
-                    user_id: user.vkId,
-                })
-
-                result.push(Object.assign(user, { vkData }))
-            }
-
-            GamesEffects.History.addUser(result)
-        },
-    })
 
     const copyInviteLink = () => {
         setSnackbar(
@@ -57,6 +40,11 @@ export const GameLobby = ({ onStartGame }: { onStartGame: () => void }) => {
     const tabContent: Record<TGameTabType, ReactElement> = {
         participants: ParticipantsTabContent(send),
         settings: SettingsTabContent(),
+    }
+
+    function onStartGame() {
+        console.log("start")
+        send("startGame", {})
     }
 
     return (

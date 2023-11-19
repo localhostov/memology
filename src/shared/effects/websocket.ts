@@ -21,7 +21,7 @@ export const connectSocketFx = createEffect(
 
         ws.addEventListener("message", (msg: MessageEvent<ArrayBuffer>) => {
             const data = WebsocketServer.fromBinary(new Uint8Array(msg.data))
-            console.log(data)
+            console.log(data[game])
             handler(data)
         })
 
@@ -31,7 +31,10 @@ export const connectSocketFx = createEffect(
 
 export const connectWs = createEvent<IConnectWs>()
 
-export const closeWsConnectionFx = createEffect((ws: WebSocket) => ws.close())
+export const closeWsConnectionFx = createEffect((ws: WebSocket) => {
+    ws.close()
+    console.log("disconnneeect")
+})
 export const disconnectWs = createEvent()
 
 $ws.on(connectSocketFx.doneData, (_, ws) => ws)

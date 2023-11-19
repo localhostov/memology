@@ -25,7 +25,7 @@ export function useWebsocket<T extends keyof WebsocketServer>(
     const send = <C extends keyof NonNullable<WebsocketClient[T]>>(
         cmdName: C,
         data: NonNullable<NonNullable<WebsocketClient[T]>[C]>,
-    ) =>
+    ) => {
         ws?.send(
             WebsocketClient.toBinary({
                 [game]: {
@@ -33,6 +33,7 @@ export function useWebsocket<T extends keyof WebsocketServer>(
                 },
             }),
         )
+    }
 
     const handler = (msg: WebsocketServer) => {
         const gameData = msg[game]!
