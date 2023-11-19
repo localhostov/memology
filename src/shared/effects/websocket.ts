@@ -4,27 +4,30 @@ import { WebsocketClient, WebsocketServer } from "../proto"
 export interface IConnectWs {
     game: keyof WebsocketClient
     handler: (msg: WebsocketServer) => unknown
+    roomId: string
 }
 
 export const $ws = createStore<WebSocket | null>(null)
 
-export const connectSocketFx = createEffect(({ game, handler }: IConnectWs) => {
-    console.log(game)
-    const ws = new WebSocket(
-        `wss://memology.animaru.app/${game}/${"2"}?vk-params=${encodeURIComponent(
-            window.location.search.slice(1),
-        )}`,
-    )
-    ws.binaryType = "arraybuffer"
+export const connectSocketFx = createEffect(
+    ({ game, handler, roomId }: IConnectWs) => {
+        console.log(game)
+        const ws = new WebSocket(
+            `wss://memology.animaru.app/${game}/${roomId}?vk-params=${encodeURIComponent(
+                window.location.search.slice(1),
+            )}`,
+        )
+        ws.binaryType = "arraybuffer"
 
-    ws.addEventListener("message", (msg: MessageEvent<ArrayBuffer>) => {
-        const data = WebsocketServer.fromBinary(new Uint8Array(msg.data))
-        console.log(data)
-        handler(data)
-    })
+        ws.addEventListener("message", (msg: MessageEvent<ArrayBuffer>) => {
+            const data = WebsocketServer.fromBinary(new Uint8Array(msg.data))
+            console.log(data)
+            handler(data)
+        })
 
-    return ws
-})
+        return ws
+    },
+)
 
 export const connectWs = createEvent<IConnectWs>()
 

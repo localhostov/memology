@@ -22,7 +22,7 @@ export const ExitFromGameConfirmation = ({ id }: IModalProps) => {
                     </Button>
 
                     <Button
-                        onClick={() => navigator.back(2)}
+                        onClick={() => navigator.back(3)}
                         stretched
                         size="l"
                         appearance="negative"

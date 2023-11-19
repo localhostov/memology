@@ -6,6 +6,7 @@ import {
     WebsocketServer,
 } from "@shared"
 import { TSendFunction } from "@types"
+import { useParams } from "@vkontakte/vk-mini-apps-router"
 import { useUnit } from "effector-react"
 import { useEffect } from "react"
 
@@ -18,6 +19,7 @@ export function useWebsocket<T extends keyof WebsocketServer>(
         ) => void
     },
 ): { send: TSendFunction<T> } {
+    const { roomId } = useParams<"roomId">()!
     const ws = useUnit($ws)
 
     const send = <C extends keyof NonNullable<WebsocketClient[T]>>(
@@ -46,7 +48,7 @@ export function useWebsocket<T extends keyof WebsocketServer>(
     }
 
     useEffect(() => {
-        connectWs({ game, handler })
+        connectWs({ game, handler, roomId: roomId! })
 
         return disconnectWs
     }, [])
