@@ -1,6 +1,9 @@
+import { setSnackbar } from "@shared"
 import { IModalProps, TGameModeType } from "@types"
+import { Icon24CancelOutline } from "@vkontakte/icons"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
-import { Button, ModalPage, Title } from "@vkontakte/vkui"
+import { Button, ModalPage, Snackbar, Title } from "@vkontakte/vkui"
+import { useState } from "react"
 import { API } from "../../shared/api"
 import styles from "./styles.module.css"
 
@@ -8,13 +11,28 @@ export const GameInfoPreviewModal = ({ id }: IModalProps) => {
     const params = useParams<"mode">()
     const navigator = useRouteNavigator()
     const currentGame = gameMode[(params?.mode || "history") as TGameModeType]
+    const [loading, setLoading] = useState(false)
 
     const createLobby = async () => {
-        const roomId = await API.createRoom(
-            (params?.mode || "history") as TGameModeType,
-        )
+        setLoading(true)
 
-        navigator.push(currentGame.route)
+        API.createRoom((params?.mode || "history") as TGameModeType)
+            .then((roomId) => {
+                navigator.push(`${currentGame.route}/${roomId}`)
+            })
+            .catch(() => {
+                setSnackbar(
+                    <Snackbar
+                        onClose={() => setSnackbar(null)}
+                        before={
+                            <Icon24CancelOutline fill="var(--vkui--color_icon_positive)" />
+                        }
+                    >
+                        Произошла какая-то ошибка при создании лобби
+                    </Snackbar>,
+                )
+            })
+            .finally(() => setLoading(false))
     }
 
     return (
@@ -27,7 +45,12 @@ export const GameInfoPreviewModal = ({ id }: IModalProps) => {
 
                 <div style={{ height: 16 }} />
 
-                <Button stretched size="l" onClick={createLobby}>
+                <Button
+                    stretched
+                    size="l"
+                    onClick={createLobby}
+                    loading={loading}
+                >
                     Создать лобби
                 </Button>
             </div>
