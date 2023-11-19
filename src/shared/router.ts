@@ -32,6 +32,7 @@ export enum Modals {
     CREATE_MEME_COMMENT = "createMemeComment",
     COMMENT_USER_ACTIONS = "commentUserActions",
     GAME_INFO_PREVIEW = "gameInfoPreview",
+    EXIT_FROM_GAME_CONFIRMATION = "exitFromGameConfirmation",
 }
 
 export const routes = RoutesConfig.create([
@@ -55,7 +56,9 @@ export const routes = RoutesConfig.create([
             createPanel(Panels.GAMES, "/games", [
                 createModal(Modals.GAME_INFO_PREVIEW, "/games/preview/:mode"),
             ]),
-            createPanel(Panels.GAME_HISTORY, "/games/history"),
+            createPanel(Panels.GAME_HISTORY, "/games/history/:roomId", [
+                createModal(Modals.EXIT_FROM_GAME_CONFIRMATION, "exit"),
+            ]),
         ]),
 
         createView(Panels.RATING, [createPanel(Panels.RATING, "/rating")]),
