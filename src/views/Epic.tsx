@@ -1,4 +1,11 @@
-import { $snackbar, getUserFx, panelNames, Panels, routes } from "@shared"
+import {
+    $epicIsShowed,
+    $snackbar,
+    getUserFx,
+    panelNames,
+    Panels,
+    routes,
+} from "@shared"
 import { ITab } from "@types"
 import {
     Icon28GameOutline,
@@ -49,6 +56,7 @@ export const Epic = () => {
     const userIsLoading = useUnit(getUserFx.pending)
     const [popout, setPopout] = useState<ReactNode | null>(null)
     const snackbar = useUnit($snackbar)
+    const epicIsShowed = useUnit($epicIsShowed)
 
     const { viewWidth } = useAdaptivityConditionalRender()
     const activeStoryStyles = {
@@ -146,7 +154,7 @@ export const Epic = () => {
             header={hasHeader && <PanelHeader separator={false} />}
             style={{ justifyContent: "center" }}
         >
-            {viewWidth.tabletPlus && (
+            {viewWidth.tabletPlus && epicIsShowed && (
                 <SplitCol
                     className={viewWidth.tabletPlus.className}
                     fixed
@@ -169,7 +177,8 @@ export const Epic = () => {
                 <VKUIEpic
                     activeStory={activePanel ?? Panels.MEMES}
                     tabbar={
-                        viewWidth.tabletMinus && (
+                        viewWidth.tabletMinus &&
+                        epicIsShowed && (
                             <Tabbar className={viewWidth.tabletMinus.className}>
                                 {mobileTabs}
                             </Tabbar>
