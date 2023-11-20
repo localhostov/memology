@@ -30,3 +30,46 @@
     gap: 8px;
     padding: 16px;
 }
+
+.progressContainer {
+    width: 60px;
+}
+
+.readyUsersCount {
+    background: var(--vkui--color_background_secondary);
+    padding: 1px 8px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-weight: 600;
+}
+
+.partableDividerContainer {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+}
+
+.dividerPart {
+    height: 1px;
+    background: var(--vkui--color_background_secondary_alpha);
+    flex: 1;
+}
+
+.partableDividerText {
+    color: var(--vkui--color_text_secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.albumContainer {
+    direction: rtl;
+    padding: 0 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

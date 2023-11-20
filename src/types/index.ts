@@ -62,3 +62,5 @@ export type TSendFunction<T extends keyof WebsocketServer> = <
     cmdName: C,
     data: NonNullable<NonNullable<WebsocketClient[T]>[C]>,
 ) => void
+
+export type TGameHistoryStepType = "meWrite" | "readyResult" | "showResult"

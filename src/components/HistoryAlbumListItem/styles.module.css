@@ -1,0 +1,89 @@
+.container {
+    display: flex;
+    gap: 16px;
+}
+
+.username {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.bubble {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 16px 0 16px 16px;
+    direction: ltr;
+}
+
+/* loader */
+
+.loading {
+    position: relative;
+    left: -9999px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #9880ff;
+    color: #9880ff;
+    box-shadow: 9999px 0 0 0 #9880ff;
+    animation: loading 1s infinite linear;
+    animation-delay: 0.1s;
+}
+.loading::before, .loading::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 0;
+}
+.loading::before {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #9880ff;
+    color: #9880ff;
+    animation: loading-before 1s infinite linear;
+    animation-delay: 0s;
+}
+.loading::after {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #9880ff;
+    color: #9880ff;
+    animation: loading-after 1s infinite linear;
+    animation-delay: 0.2s;
+}
+
+@keyframes loading {
+    0% {
+        box-shadow: 9999px -15px 0 0 rgba(152, 128, 255, 0);
+    }
+    25%, 50%, 75% {
+        box-shadow: 9999px 0 0 0 #9880ff;
+    }
+    100% {
+        box-shadow: 9999px 15px 0 0 rgba(152, 128, 255, 0);
+    }
+}
+@keyframes loading-before {
+    0% {
+        box-shadow: 9984px -15px 0 0 rgba(152, 128, 255, 0);
+    }
+    25%, 50%, 75% {
+        box-shadow: 9984px 0 0 0 #9880ff;
+    }
+    100% {
+        box-shadow: 9984px 15px 0 0 rgba(152, 128, 255, 0);
+    }
+}
+@keyframes loading-after {
+    0% {
+        box-shadow: 10014px -15px 0 0 rgba(152, 128, 255, 0);
+    }
+    25%, 50%, 75% {
+        box-shadow: 10014px 0 0 0 #9880ff;
+    }
+    100% {
+        box-shadow: 10014px 15px 0 0 rgba(152, 128, 255, 0);
+    }
+}
