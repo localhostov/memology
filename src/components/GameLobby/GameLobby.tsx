@@ -16,8 +16,7 @@ import {
     Tabs,
     TabsItem,
 } from "@vkontakte/vkui"
-import { useList } from "effector-react"
-import { useUnit } from "effector-react/compat"
+import { useList, useUnit } from "effector-react"
 import { ReactElement, useState } from "react"
 import { GameParticipantListItem } from "../GameParticipantListItem/GameParticipantListItem"
 import styles from "./styles.module.css"

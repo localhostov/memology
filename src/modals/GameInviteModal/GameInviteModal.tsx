@@ -9,7 +9,7 @@ import {
     ModalCard,
     SimpleCell,
 } from "@vkontakte/vkui"
-import { useUnit } from "effector-react/compat"
+import { useUnit } from "effector-react"
 
 export const GameInviteModal = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()

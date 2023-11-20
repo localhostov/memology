@@ -9,7 +9,7 @@ import {
 } from "@vkontakte/icons"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Avatar, IconButton, SimpleCell } from "@vkontakte/vkui"
-import { useUnit } from "effector-react/compat"
+import { useUnit } from "effector-react"
 import { MouseEvent } from "react"
 import styles from "./styles.module.css"
 
