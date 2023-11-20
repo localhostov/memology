@@ -69,6 +69,14 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     {msg.message}
                 </Snackbar>,
             ),
+        userJoined: async (msg) => {
+            const vkData = await bridge.send("VKWebAppGetUserInfo", {
+                user_id: msg.vkId,
+            })
+
+            GamesEffects.History.addUser([Object.assign(msg, { vkData })])
+        },
+        userLeaved: (msg) => GamesEffects.History.deleteUser(msg),
         startLobby: () => GamesEffects.History.setStart(true),
         timerTick: ({ time }) => GamesEffects.History.setTime(time),
         nextStep: () => GamesEffects.History.nextStep(),

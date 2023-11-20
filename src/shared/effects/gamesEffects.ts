@@ -3,6 +3,7 @@ import bridge from "@vkontakte/vk-bridge"
 import { createEffect, createEvent, createStore, sample } from "effector"
 import { API } from "../api"
 import { APIError, isAPIError } from "../api/APIError"
+import { WebsocketServer_HistoryEvents_UserLeaved } from "../proto"
 import { disconnectWs } from "./websocket"
 
 interface IGetLobbyParams {
@@ -44,6 +45,19 @@ export namespace GamesEffects {
 
         $users.on(addUser, (current, users) => current.concat(users))
 
+        export const deleteUser =
+            createEvent<WebsocketServer_HistoryEvents_UserLeaved>()
+        $users.on(deleteUser, (current, deleteItem) => {
+            const itemIndex = current.findIndex(
+                (x) => x.vkId === deleteItem.vkId,
+            )
+
+            if (itemIndex === -1) return current
+
+            current.splice(itemIndex, 1)
+            //TODO: fix array copy
+            return [...current]
+        })
         export const $isStarted = createStore<boolean>(false)
         export const setStart = createEvent<boolean>()
 
