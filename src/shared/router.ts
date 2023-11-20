@@ -33,6 +33,7 @@ export enum Modals {
     COMMENT_USER_ACTIONS = "commentUserActions",
     GAME_INFO_PREVIEW = "gameInfoPreview",
     EXIT_FROM_GAME_CONFIRMATION = "exitFromGameConfirmation",
+    GAME_INVITE = "gameInvite",
 }
 
 export const routes = RoutesConfig.create([
@@ -55,6 +56,7 @@ export const routes = RoutesConfig.create([
         createView(Panels.GAMES, [
             createPanel(Panels.GAMES, "/games", [
                 createModal(Modals.GAME_INFO_PREVIEW, "/games/preview/:mode"),
+                createModal(Modals.GAME_INVITE, "/games/:mode/invite/:gameId"),
             ]),
             createPanel(Panels.GAME_HISTORY, "/games/history/:roomId", [
                 createModal(Modals.EXIT_FROM_GAME_CONFIRMATION, "exit"),
