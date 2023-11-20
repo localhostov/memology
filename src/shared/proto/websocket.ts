@@ -119,6 +119,10 @@ export interface WebsocketServer_HistoryEvents {
      * @generated from protobuf field: WebsocketServer.HistoryEvents.FinishGame finishGame = 8;
      */
     finishGame?: WebsocketServer_HistoryEvents_FinishGame;
+    /**
+     * @generated from protobuf field: WebsocketServer.HistoryEvents.GameGif gameGif = 9;
+     */
+    gameGif?: WebsocketServer_HistoryEvents_GameGif;
 }
 /**
  * @generated from protobuf message WebsocketServer.HistoryEvents.LobbyUser
@@ -200,6 +204,15 @@ export interface WebsocketServer_HistoryEvents_NextStep {
  * @generated from protobuf message WebsocketServer.HistoryEvents.FinishGame
  */
 export interface WebsocketServer_HistoryEvents_FinishGame {
+}
+/**
+ * @generated from protobuf message WebsocketServer.HistoryEvents.GameGif
+ */
+export interface WebsocketServer_HistoryEvents_GameGif {
+    /**
+     * @generated from protobuf field: bytes buffer = 1;
+     */
+    buffer: Uint8Array;
 }
 /**
  * @generated from protobuf enum WebsocketEvent
@@ -563,7 +576,8 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
             { no: 5, name: "startLobby", kind: "message", T: () => WebsocketServer_HistoryEvents_StartLobby },
             { no: 6, name: "timerTick", kind: "message", T: () => WebsocketServer_HistoryEvents_TimerTick },
             { no: 7, name: "nextStep", kind: "message", T: () => WebsocketServer_HistoryEvents_NextStep },
-            { no: 8, name: "finishGame", kind: "message", T: () => WebsocketServer_HistoryEvents_FinishGame }
+            { no: 8, name: "finishGame", kind: "message", T: () => WebsocketServer_HistoryEvents_FinishGame },
+            { no: 9, name: "gameGif", kind: "message", T: () => WebsocketServer_HistoryEvents_GameGif }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents>): WebsocketServer_HistoryEvents {
@@ -602,6 +616,9 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
                 case /* WebsocketServer.HistoryEvents.FinishGame finishGame */ 8:
                     message.finishGame = WebsocketServer_HistoryEvents_FinishGame.internalBinaryRead(reader, reader.uint32(), options, message.finishGame);
                     break;
+                case /* WebsocketServer.HistoryEvents.GameGif gameGif */ 9:
+                    message.gameGif = WebsocketServer_HistoryEvents_GameGif.internalBinaryRead(reader, reader.uint32(), options, message.gameGif);
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -638,6 +655,9 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
         /* WebsocketServer.HistoryEvents.FinishGame finishGame = 8; */
         if (message.finishGame)
             WebsocketServer_HistoryEvents_FinishGame.internalBinaryWrite(message.finishGame, writer.tag(8, WireType.LengthDelimited).fork(), options).join();
+        /* WebsocketServer.HistoryEvents.GameGif gameGif = 9; */
+        if (message.gameGif)
+            WebsocketServer_HistoryEvents_GameGif.internalBinaryWrite(message.gameGif, writer.tag(9, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1029,3 +1049,50 @@ class WebsocketServer_HistoryEvents_FinishGame$Type extends MessageType<Websocke
  * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.FinishGame
  */
 export const WebsocketServer_HistoryEvents_FinishGame = new WebsocketServer_HistoryEvents_FinishGame$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketServer_HistoryEvents_GameGif> {
+    constructor() {
+        super("WebsocketServer.HistoryEvents.GameGif", [
+            { no: 1, name: "buffer", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
+        ]);
+    }
+    create(value?: PartialMessage<WebsocketServer_HistoryEvents_GameGif>): WebsocketServer_HistoryEvents_GameGif {
+        const message = { buffer: new Uint8Array(0) };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketServer_HistoryEvents_GameGif>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketServer_HistoryEvents_GameGif): WebsocketServer_HistoryEvents_GameGif {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bytes buffer */ 1:
+                    message.buffer = reader.bytes();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: WebsocketServer_HistoryEvents_GameGif, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bytes buffer = 1; */
+        if (message.buffer.length)
+            writer.tag(1, WireType.LengthDelimited).bytes(message.buffer);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.GameGif
+ */
+export const WebsocketServer_HistoryEvents_GameGif = new WebsocketServer_HistoryEvents_GameGif$Type();

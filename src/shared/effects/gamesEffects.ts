@@ -1,5 +1,5 @@
 import { IGameParticipant } from "@types"
-import { createEvent, createStore } from "effector"
+import { createEffect, createEvent, createStore, sample } from "effector"
 import { disconnectWs } from "./websocket"
 
 export namespace GamesEffects {
@@ -24,5 +24,17 @@ export namespace GamesEffects {
         export const $historyStep = createStore<number>(1)
         export const nextStep = createEvent()
         $historyStep.on(nextStep, (step) => step + 1)
+
+        export const $gifContent = createStore<string | null>(null)
+        export const getContentLinkFx = createEffect((buffer: Uint8Array) =>
+            URL.createObjectURL(new Blob([buffer], { type: "image/gif" })),
+        )
+        $gifContent.on(getContentLinkFx.doneData, (_, link) => link)
+        export const setGifBuffer = createEvent<Uint8Array>()
+
+        sample({
+            clock: setGifBuffer,
+            target: getContentLinkFx,
+        })
     }
 }

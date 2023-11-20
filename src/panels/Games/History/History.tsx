@@ -13,6 +13,7 @@ import {
     Icon20ChecksOutline,
     Icon24LinkedOutline,
     Icon24Play,
+    Icon28DownloadOutline,
     Icon28PencilSquare,
 } from "@vkontakte/icons"
 import bridge from "@vkontakte/vk-bridge"
@@ -38,6 +39,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
     const isStarted = useUnit(GamesEffects.History.$isStarted)
     const users = useUnit(GamesEffects.History.$users)
+    const gifContent = useUnit(GamesEffects.History.$gifContent)
     const [gameStep, setGameStep] = useState<TGameStepType>("meWrite")
 
     const { send } = useWebsocket("history", {
@@ -70,6 +72,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         timerTick: ({ time }) => GamesEffects.History.setTime(time),
         nextStep: () => GamesEffects.History.nextStep(),
         finishGame: () => setGameStep("readyResult"),
+        gameGif: ({ buffer }) => GamesEffects.History.setGifBuffer(buffer),
     })
 
     useEffect(() => {
@@ -77,6 +80,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
         return () => {
             changeEpicVisibility(true)
+            if (gifContent) URL.revokeObjectURL(gifContent)
         }
     }, [])
 
@@ -123,6 +127,8 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     }
 
     const GameStepShowResult = () => {
+        const gifContent = useUnit(GamesEffects.History.$gifContent)
+
         const photo = "https://i.playground.ru/e/tRXuCJPpLW_bZJ1IdfZknw.jpeg"
         return (
             <div>
@@ -151,6 +157,21 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                 >
                     Нажмите на кнопку ниже, чтобы начать просмотр результата
                 </Placeholder>
+                {gifContent && (
+                    <>
+                        <img src={gifContent} width={500} height={500} alt="" />
+                        <a href={gifContent} download="t.gif">
+                            <Button
+                                size="l"
+                                appearance="accent"
+                                mode="tertiary"
+                                before={<Icon28DownloadOutline />}
+                            >
+                                Скачать
+                            </Button>
+                        </a>
+                    </>
+                )}
             </div>
         )
     }
