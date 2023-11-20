@@ -1,4 +1,9 @@
-import { IGameParticipant, ReturnApiType, TGameModeType } from "@types"
+import {
+    IGameParticipant,
+    ReturnApiType,
+    TGameHistoryStepType,
+    TGameModeType,
+} from "@types"
 import bridge from "@vkontakte/vk-bridge"
 import { createEffect, createEvent, createStore, sample } from "effector"
 import { API } from "../api"
@@ -80,6 +85,12 @@ export namespace GamesEffects {
         )
         $gifContent.on(getContentLinkFx.doneData, (_, link) => link)
         export const setGifBuffer = createEvent<Uint8Array>()
+
+        export const $gameStep = createStore<TGameHistoryStepType>("meWrite")
+
+        export const setGameStep = createEvent<TGameHistoryStepType>()
+
+        $gameStep.on(setGameStep, (_, currentStep) => currentStep)
 
         sample({
             clock: setGifBuffer,
