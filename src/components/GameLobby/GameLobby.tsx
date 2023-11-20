@@ -67,7 +67,7 @@ export const GameLobby = ({ send }: { send: TSendFunction<"history"> }) => {
         settings: SettingsTabContent(),
     }
 
-    function onStartGame() {
+    const onStartGame = () => {
         console.log("start")
         send("startGame", {})
     }

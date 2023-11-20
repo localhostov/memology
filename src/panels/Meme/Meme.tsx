@@ -8,6 +8,7 @@ import {
     Mark,
     panelNames,
     unmountMeme,
+    useSafeBack,
 } from "@shared"
 import { IPanelProps } from "@types"
 import {
@@ -41,6 +42,7 @@ export const Meme = ({ id }: IPanelProps) => {
     const { memeId } = useParams<"memeId">()!
     const commentsIsLoading = useUnit(getCommentsFx.pending)
     const commentsItemsList = useUnit($comments)
+    const safeBack = useSafeBack()
 
     useEffect(() => {
         fetchMeme(Number(memeId!))
@@ -68,7 +70,7 @@ export const Meme = ({ id }: IPanelProps) => {
     return (
         <Panel id={id}>
             <PanelHeader
-                before={<PanelHeaderBack onClick={() => navigator.back()} />}
+                before={<PanelHeaderBack onClick={() => safeBack.back()} />}
             >
                 {panelNames[id]}
             </PanelHeader>
