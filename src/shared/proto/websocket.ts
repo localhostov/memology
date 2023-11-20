@@ -215,6 +215,19 @@ export interface WebsocketServer_HistoryEvents_GameGif {
     buffer: Uint8Array;
 }
 /**
+ * @generated from protobuf message GetRoomInfoResponse
+ */
+export interface GetRoomInfoResponse {
+    /**
+     * @generated from protobuf field: string roomId = 1;
+     */
+    roomId: string;
+    /**
+     * @generated from protobuf field: uint32 ownerVkId = 2;
+     */
+    ownerVkId: number;
+}
+/**
  * @generated from protobuf enum WebsocketEvent
  */
 export enum WebsocketEvent {
@@ -1096,3 +1109,57 @@ class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketSe
  * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.GameGif
  */
 export const WebsocketServer_HistoryEvents_GameGif = new WebsocketServer_HistoryEvents_GameGif$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetRoomInfoResponse$Type extends MessageType<GetRoomInfoResponse> {
+    constructor() {
+        super("GetRoomInfoResponse", [
+            { no: 1, name: "roomId", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "ownerVkId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<GetRoomInfoResponse>): GetRoomInfoResponse {
+        const message = { roomId: "", ownerVkId: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<GetRoomInfoResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetRoomInfoResponse): GetRoomInfoResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string roomId */ 1:
+                    message.roomId = reader.string();
+                    break;
+                case /* uint32 ownerVkId */ 2:
+                    message.ownerVkId = reader.uint32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetRoomInfoResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string roomId = 1; */
+        if (message.roomId !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.roomId);
+        /* uint32 ownerVkId = 2; */
+        if (message.ownerVkId !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.ownerVkId);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message GetRoomInfoResponse
+ */
+export const GetRoomInfoResponse = new GetRoomInfoResponse$Type();

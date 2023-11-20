@@ -1,5 +1,6 @@
 import {
     CommentsResponse_CommentsListResponse,
+    GetRoomInfoResponse,
     Mark,
     MemeListResponse,
     MemeRatingResponse,
@@ -9,12 +10,16 @@ import {
 import { TGameModeType, TProfileTabListType, TRatingTabListType } from "@types"
 import wretch from "wretch"
 import QueryStringAddon from "wretch/addons/queryString"
+import { APIError } from "./APIError"
 
 const api = wretch("https://memology.animaru.app")
     .headers({
         "vk-params": window.location.search.slice(1),
     })
     .addon(QueryStringAddon)
+    .catcherFallback(async (error) => {
+        throw new APIError(error.text!)
+    })
 
 export class API {
     static async user() {
@@ -146,5 +151,11 @@ export class API {
 
     static async createRoom(type: TGameModeType) {
         return api.url(`/game/${type}/create`).get().text()
+    }
+
+    static async getRoom(type: TGameModeType, roomId: string) {
+        const buffer = await api.get(`/game/${type}/${roomId}`).arrayBuffer()
+
+        return GetRoomInfoResponse.fromBinary(new Uint8Array(buffer))
     }
 }

@@ -71,7 +71,11 @@ export enum ErrorCode {
     /**
      * @generated from protobuf enum value: NO_AUTH = 4;
      */
-    NO_AUTH = 4
+    NO_AUTH = 4,
+    /**
+     * @generated from protobuf enum value: GAME_STARTED = 5;
+     */
+    GAME_STARTED = 5
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class ErrorItem$Type extends MessageType<ErrorItem> {
