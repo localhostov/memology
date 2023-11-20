@@ -1,12 +1,14 @@
-import { GamesEffects, setSnackbar, useWebsocket } from "@shared"
-import { IGameParticipant, TGameTabType, TSendFunction } from "@types"
+import { APP_ID, GamesEffects, setSnackbar } from "@shared"
+import { TGameTabType, TSendFunction } from "@types"
 import {
+    Icon24CancelOutline,
     Icon24GearOutline,
     Icon24LinkedOutline,
     Icon24Play,
     Icon24UsersOutline,
 } from "@vkontakte/icons"
 import bridge from "@vkontakte/vk-bridge"
+import { useParams } from "@vkontakte/vk-mini-apps-router"
 import {
     Button,
     HorizontalScroll,
@@ -21,20 +23,44 @@ import { GameParticipantListItem } from "../GameParticipantListItem/GameParticip
 import styles from "./styles.module.css"
 
 export const GameLobby = ({ send }: { send: TSendFunction<"history"> }) => {
-    const [activeTab, setActiveTab] = useState<TGameTabType>("participants")
     const users = useUnit(GamesEffects.History.$users)
+    const [activeTab, setActiveTab] = useState<TGameTabType>("participants")
+    const [copyLinkIsLoading, setCopyLinkIsLoading] = useState(false)
+    const params = useParams<"roomId">()
 
     const copyInviteLink = () => {
-        setSnackbar(
-            <Snackbar
-                onClose={() => setSnackbar(null)}
-                before={
-                    <Icon24LinkedOutline fill="var(--vkui--color_icon_positive)" />
-                }
-            >
-                Ссылка-приглашение скопирована
-            </Snackbar>,
-        )
+        setCopyLinkIsLoading(true)
+        const link = `https://vk.com/app${APP_ID}#/games/history/invite/${params?.roomId}`
+
+        bridge
+            .send("VKWebAppCopyText", {
+                text: link,
+            })
+            .then(() => {
+                setSnackbar(
+                    <Snackbar
+                        onClose={() => setSnackbar(null)}
+                        before={
+                            <Icon24LinkedOutline fill="var(--vkui--color_icon_positive)" />
+                        }
+                    >
+                        Ссылка-приглашение скопирована
+                    </Snackbar>,
+                )
+            })
+            .catch(() => {
+                setSnackbar(
+                    <Snackbar
+                        onClose={() => setSnackbar(null)}
+                        before={
+                            <Icon24CancelOutline fill="var(--vkui--color_icon_negative)" />
+                        }
+                    >
+                        Произошла ошибка при копировании ссылки
+                    </Snackbar>,
+                )
+            })
+            .finally(() => setCopyLinkIsLoading(false))
     }
 
     const tabContent: Record<TGameTabType, ReactElement> = {
@@ -78,6 +104,7 @@ export const GameLobby = ({ send }: { send: TSendFunction<"history"> }) => {
                         mode="secondary"
                         before={<Icon24LinkedOutline />}
                         onClick={copyInviteLink}
+                        loading={copyLinkIsLoading}
                     >
                         Пригласить
                     </Button>

@@ -51,6 +51,11 @@
         height: 300px;
         width: 100%;
     }
+
+    .pickBlock {
+        height: 300px;
+        width: 100%;
+    }
 }
 
 .dragActive {

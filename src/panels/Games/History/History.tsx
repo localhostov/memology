@@ -30,7 +30,7 @@ import {
     UsersStack,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
-import { ReactElement, useEffect, useState } from "react"
+import { ReactElement, useEffect, useRef, useState } from "react"
 import styles from "./styles.module.css"
 
 type TGameStepType = "meWrite" | "readyResult"
@@ -41,6 +41,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const users = useUnit(GamesEffects.History.$users)
     const gifContent = useUnit(GamesEffects.History.$gifContent)
     const [gameStep, setGameStep] = useState<TGameStepType>("meWrite")
+    const unblock = useRef<() => void>()
 
     const { send } = useWebsocket("history", {
         lobbyInfo: async (msg) => {
@@ -83,6 +84,19 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             if (gifContent) URL.revokeObjectURL(gifContent)
         }
     }, [])
+
+    useEffect(() => {
+        unblock.current = navigator.block(() => false)
+    }, [navigator])
+
+    const goBack = () => {
+        const unblockFn = unblock.current
+
+        if (unblockFn) {
+            unblockFn()
+            navigator.showModal(Modals.EXIT_FROM_GAME_CONFIRMATION)
+        }
+    }
 
     const GameStepMeWrite = () => {
         const time = useUnit(GamesEffects.History.$time)
@@ -183,17 +197,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
     return (
         <Panel id={id}>
-            <PanelHeader
-                before={
-                    <PanelHeaderBack
-                        onClick={() =>
-                            navigator.showModal(
-                                Modals.EXIT_FROM_GAME_CONFIRMATION,
-                            )
-                        }
-                    />
-                }
-            >
+            <PanelHeader before={<PanelHeaderBack onClick={goBack} />}>
                 {panelNames[id]}
             </PanelHeader>
 

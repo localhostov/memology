@@ -39,11 +39,11 @@ export const GameParticipantListItem = ({
                 <div>
                     {item.isOwner ? (
                         <Icon24CrownOutline />
-                    ) : (currentVkUserData?.id === item.vkId ? (
+                    ) : currentVkUserData?.id === item.vkId && item.isOwner ? (
                         <IconButton onClick={(e) => kickUser(e)}>
                             <Icon24CancelOutline />
                         </IconButton>
-                    ) : null)}
+                    ) : null}
                 </div>
             }
         >
