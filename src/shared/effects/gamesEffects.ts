@@ -70,9 +70,10 @@ export namespace GamesEffects {
         $time.on(setStart, (_, isStarted) => (isStarted ? 15 : null))
 
         export const $historyStep = createStore<number>(1)
-        export const nextStep = createEvent()
+        export const $previousContext = createStore<string | null>(null)
+        export const nextStep = createEvent<string>()
         $historyStep.on(nextStep, (step) => step + 1)
-
+        $previousContext.on(nextStep, (_, ctx) => ctx)
         export const $gifContent = createStore<string | null>(null)
         export const getContentLinkFx = createEffect((buffer: Uint8Array) =>
             URL.createObjectURL(new Blob([buffer], { type: "image/gif" })),

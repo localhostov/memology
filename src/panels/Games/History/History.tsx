@@ -79,7 +79,8 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         userLeaved: (msg) => GamesEffects.History.deleteUser(msg),
         startLobby: () => GamesEffects.History.setStart(true),
         timerTick: ({ time }) => GamesEffects.History.setTime(time),
-        nextStep: () => GamesEffects.History.nextStep(),
+        nextStep: ({ previousContext }) =>
+            GamesEffects.History.nextStep(previousContext),
         finishGame: () => setGameStep("readyResult"),
         gameGif: ({ buffer }) => GamesEffects.History.setGifBuffer(buffer),
     })
@@ -109,6 +110,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const GameStepMeWrite = () => {
         const time = useUnit(GamesEffects.History.$time)
         const step = useUnit(GamesEffects.History.$historyStep)
+        const previousContext = useUnit(GamesEffects.History.$previousContext)
         const [meWriteValue, setMeWriteValue] = useState("")
 
         return (
@@ -127,7 +129,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     header="Напишите предложение"
                     style={{ paddingBottom: 0 }}
                 />
-
+                {previousContext && <p>{previousContext}</p>}
                 <div className={styles.meWriteInputContainer}>
                     <Input
                         style={{ flex: 1 }}
