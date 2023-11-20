@@ -75,7 +75,9 @@ export namespace GamesEffects {
         $time.on(setStart, (_, isStarted) => (isStarted ? 15 : null))
 
         export const $historyStep = createStore<number>(1)
+        $historyStep.reset(disconnectWs)
         export const $previousContext = createStore<string | null>(null)
+        $previousContext.reset(disconnectWs)
         export const nextStep = createEvent<string>()
         $historyStep.on(nextStep, (step) => step + 1)
         $previousContext.on(nextStep, (_, ctx) => ctx)
