@@ -13,7 +13,7 @@ export namespace GameInfoEffects {
         async (data: GameInfoFetch) => {
             const { ownerVkId } = await API.getRoom(data.mode, data.roomId)
 
-            return await bridge.send("VKWebAppGetUserInfo", {
+            return bridge.send("VKWebAppGetUserInfo", {
                 user_id: ownerVkId,
             })
         },

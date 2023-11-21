@@ -60,6 +60,11 @@ export namespace GamesEffects {
             if (itemIndex === -1) return current
 
             current.splice(itemIndex, 1)
+            if (deleteItem.newOwnerVkId)
+                current.find(
+                    (x) => x.vkId === deleteItem.newOwnerVkId,
+                )!.isOwner = true
+
             //TODO: fix array copy
             return [...current]
         })
@@ -76,8 +81,16 @@ export namespace GamesEffects {
 
         export const $historyStep = createStore<number>(1)
         $historyStep.reset(disconnectWs)
+        export const $readyCounter = createStore(0)
+        export const setReadyCount = createEvent<number>()
+        $readyCounter.on(setReadyCount, (_, count) => count)
+        $readyCounter.reset($historyStep)
+        export const $isReady = createStore(false)
+        export const setIsReady = createEvent()
+        $isReady.on(setIsReady, (isReady) => !isReady)
+        $isReady.reset($historyStep)
         export const $previousContext = createStore<string | null>(null)
-        $previousContext.reset(disconnectWs)
+        $previousContext.reset($historyStep)
         export const nextStep = createEvent<string>()
         $historyStep.on(nextStep, (step) => step + 1)
         $previousContext.on(nextStep, (_, ctx) => ctx)
@@ -94,7 +107,7 @@ export namespace GamesEffects {
         export const setGameStep = createEvent<TGameHistoryStepType>()
 
         $gameStep.on(setGameStep, (_, currentStep) => currentStep)
-        $gameStep.reset(disconnectWs)
+        $gameStep.reset($historyStep)
         sample({
             clock: setGifBuffer,
             target: getContentLinkFx,

@@ -94,6 +94,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             GamesEffects.History.nextStep(previousContext),
         finishGame: () => GamesEffects.History.setGameStep("readyResult"),
         gameGif: ({ buffer }) => GamesEffects.History.setGifBuffer(buffer),
+        readyCounter: (num) => GamesEffects.History.setReadyCount(num),
     })
 
     useEffect(() => {
@@ -112,21 +113,21 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const GameStepMeWrite = () => {
         const time = useUnit(GamesEffects.History.$time)
         const step = useUnit(GamesEffects.History.$historyStep)
+        const readyCount = useUnit(GamesEffects.History.$readyCounter)
         const previousContext = useUnit(GamesEffects.History.$previousContext)
         const [meWriteValue, setMeWriteValue] = useState("")
-        const [lockedForEdit, setLockedForEdit] = useState(false)
+        const isReady = useUnit(GamesEffects.History.$isReady)
 
         const progressPercent = ((time || 0) * 100) / 15
 
         const ready = () => {
-            setLockedForEdit((prev) => !prev)
+            GamesEffects.History.setIsReady()
 
             send("sendText", { text: meWriteValue })
         }
 
         useEffect(() => {
             if (previousContext) {
-                setLockedForEdit(false)
                 setMeWriteValue("")
             }
         }, [previousContext])
@@ -140,7 +141,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                         </div>
                         <div className={styles.readyUsersCount}>
                             <Icon16CheckDoubleOutline />
-                            {step}/{users.length}
+                            {readyCount}/{users.length}
                         </div>
                     </center>
 
@@ -188,7 +189,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     <Input
                         style={{ flex: 1 }}
                         type="text"
-                        disabled={lockedForEdit}
+                        disabled={isReady}
                         value={meWriteValue}
                         placeholder="Писать сюда если что"
                         onChange={(e) => setMeWriteValue(e.target.value)}
@@ -197,9 +198,9 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     <Button
                         onClick={ready}
                         size="l"
-                        mode={lockedForEdit ? "secondary" : "primary"}
+                        mode={isReady ? "secondary" : "primary"}
                     >
-                        {lockedForEdit ? "Изменить" : "Готово"}
+                        {isReady ? "Изменить" : "Готово"}
                     </Button>
                 </div>
             </div>

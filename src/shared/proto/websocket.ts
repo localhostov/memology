@@ -37,6 +37,10 @@ export interface WebsocketClient_HistoryCommand {
      * @generated from protobuf field: WebsocketClient.HistoryCommand.SendText sendText = 3;
      */
     sendText?: WebsocketClient_HistoryCommand_SendText;
+    /**
+     * @generated from protobuf field: WebsocketClient.HistoryCommand.SetReady setReady = 4;
+     */
+    setReady?: WebsocketClient_HistoryCommand_SetReady;
 }
 /**
  * @generated from protobuf message WebsocketClient.HistoryCommand.KickUser
@@ -56,6 +60,15 @@ export interface WebsocketClient_HistoryCommand_StartGame {
  * @generated from protobuf message WebsocketClient.HistoryCommand.SendText
  */
 export interface WebsocketClient_HistoryCommand_SendText {
+    /**
+     * @generated from protobuf field: string text = 1;
+     */
+    text: string;
+}
+/**
+ * @generated from protobuf message WebsocketClient.HistoryCommand.SetReady
+ */
+export interface WebsocketClient_HistoryCommand_SetReady {
     /**
      * @generated from protobuf field: string text = 1;
      */
@@ -123,6 +136,10 @@ export interface WebsocketServer_HistoryEvents {
      * @generated from protobuf field: WebsocketServer.HistoryEvents.GameGif gameGif = 9;
      */
     gameGif?: WebsocketServer_HistoryEvents_GameGif;
+    /**
+     * @generated from protobuf field: optional uint32 readyCounter = 10;
+     */
+    readyCounter?: number;
 }
 /**
  * @generated from protobuf message WebsocketServer.HistoryEvents.LobbyUser
@@ -353,7 +370,8 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
         super("WebsocketClient.HistoryCommand", [
             { no: 1, name: "kickUser", kind: "message", T: () => WebsocketClient_HistoryCommand_KickUser },
             { no: 2, name: "startGame", kind: "message", T: () => WebsocketClient_HistoryCommand_StartGame },
-            { no: 3, name: "sendText", kind: "message", T: () => WebsocketClient_HistoryCommand_SendText }
+            { no: 3, name: "sendText", kind: "message", T: () => WebsocketClient_HistoryCommand_SendText },
+            { no: 4, name: "setReady", kind: "message", T: () => WebsocketClient_HistoryCommand_SetReady }
         ]);
     }
     create(value?: PartialMessage<WebsocketClient_HistoryCommand>): WebsocketClient_HistoryCommand {
@@ -377,6 +395,9 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
                 case /* WebsocketClient.HistoryCommand.SendText sendText */ 3:
                     message.sendText = WebsocketClient_HistoryCommand_SendText.internalBinaryRead(reader, reader.uint32(), options, message.sendText);
                     break;
+                case /* WebsocketClient.HistoryCommand.SetReady setReady */ 4:
+                    message.setReady = WebsocketClient_HistoryCommand_SetReady.internalBinaryRead(reader, reader.uint32(), options, message.setReady);
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -398,6 +419,9 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
         /* WebsocketClient.HistoryCommand.SendText sendText = 3; */
         if (message.sendText)
             WebsocketClient_HistoryCommand_SendText.internalBinaryWrite(message.sendText, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        /* WebsocketClient.HistoryCommand.SetReady setReady = 4; */
+        if (message.setReady)
+            WebsocketClient_HistoryCommand_SetReady.internalBinaryWrite(message.setReady, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -529,6 +553,53 @@ class WebsocketClient_HistoryCommand_SendText$Type extends MessageType<Websocket
  */
 export const WebsocketClient_HistoryCommand_SendText = new WebsocketClient_HistoryCommand_SendText$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class WebsocketClient_HistoryCommand_SetReady$Type extends MessageType<WebsocketClient_HistoryCommand_SetReady> {
+    constructor() {
+        super("WebsocketClient.HistoryCommand.SetReady", [
+            { no: 1, name: "text", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<WebsocketClient_HistoryCommand_SetReady>): WebsocketClient_HistoryCommand_SetReady {
+        const message = { text: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketClient_HistoryCommand_SetReady>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketClient_HistoryCommand_SetReady): WebsocketClient_HistoryCommand_SetReady {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string text */ 1:
+                    message.text = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: WebsocketClient_HistoryCommand_SetReady, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string text = 1; */
+        if (message.text !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.text);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketClient.HistoryCommand.SetReady
+ */
+export const WebsocketClient_HistoryCommand_SetReady = new WebsocketClient_HistoryCommand_SetReady$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class WebsocketError$Type extends MessageType<WebsocketError> {
     constructor() {
         super("WebsocketError", [
@@ -641,7 +712,8 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
             { no: 6, name: "timerTick", kind: "message", T: () => WebsocketServer_HistoryEvents_TimerTick },
             { no: 7, name: "nextStep", kind: "message", T: () => WebsocketServer_HistoryEvents_NextStep },
             { no: 8, name: "finishGame", kind: "message", T: () => WebsocketServer_HistoryEvents_FinishGame },
-            { no: 9, name: "gameGif", kind: "message", T: () => WebsocketServer_HistoryEvents_GameGif }
+            { no: 9, name: "gameGif", kind: "message", T: () => WebsocketServer_HistoryEvents_GameGif },
+            { no: 10, name: "readyCounter", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents>): WebsocketServer_HistoryEvents {
@@ -683,6 +755,9 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
                 case /* WebsocketServer.HistoryEvents.GameGif gameGif */ 9:
                     message.gameGif = WebsocketServer_HistoryEvents_GameGif.internalBinaryRead(reader, reader.uint32(), options, message.gameGif);
                     break;
+                case /* optional uint32 readyCounter */ 10:
+                    message.readyCounter = reader.uint32();
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -722,6 +797,9 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
         /* WebsocketServer.HistoryEvents.GameGif gameGif = 9; */
         if (message.gameGif)
             WebsocketServer_HistoryEvents_GameGif.internalBinaryWrite(message.gameGif, writer.tag(9, WireType.LengthDelimited).fork(), options).join();
+        /* optional uint32 readyCounter = 10; */
+        if (message.readyCounter !== undefined)
+            writer.tag(10, WireType.Varint).uint32(message.readyCounter);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
