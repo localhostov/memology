@@ -18,6 +18,7 @@ export function useWebsocket<T extends keyof WebsocketServer>(
             send: TSendFunction<T>,
         ) => void
     },
+    { onClose }: { onClose: () => unknown } = { onClose: console.log },
 ): { send: TSendFunction<T> } {
     const { roomId } = useParams<"roomId">()!
     const ws = useUnit($ws)
@@ -49,7 +50,7 @@ export function useWebsocket<T extends keyof WebsocketServer>(
     }
 
     useEffect(() => {
-        connectWs({ game, handler, roomId: roomId! })
+        connectWs({ game, handler, roomId: roomId!, onClose })
 
         return disconnectWs
     }, [])

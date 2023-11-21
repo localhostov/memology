@@ -4,13 +4,14 @@ import { WebsocketClient, WebsocketServer } from "../proto"
 export interface IConnectWs {
     game: keyof WebsocketClient
     handler: (msg: WebsocketServer) => unknown
+    onClose: () => unknown
     roomId: string
 }
 
 export const $ws = createStore<WebSocket | null>(null)
 
 export const connectSocketFx = createEffect(
-    ({ game, handler, roomId }: IConnectWs) => {
+    ({ game, handler, roomId, onClose }: IConnectWs) => {
         console.log(game)
         const ws = new WebSocket(
             `wss://memology.animaru.app/${game}/${roomId}?vk-params=${encodeURIComponent(
@@ -23,6 +24,10 @@ export const connectSocketFx = createEffect(
             const data = WebsocketServer.fromBinary(new Uint8Array(msg.data))
             console.log(data[game])
             handler(data)
+        })
+        ws.addEventListener("close", (event) => {
+            console.log("disc", event)
+            onClose()
         })
 
         return ws

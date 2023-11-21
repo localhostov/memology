@@ -6,6 +6,7 @@ import {
     GamesEffects,
     Modals,
     panelNames,
+    routes,
     setSnackbar,
     useWebsocket,
 } from "@shared"
@@ -48,54 +49,67 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const vkUserData = useUnit($vkUserData)
     const unblock = useRef<() => void>()
 
-    const { send } = useWebsocket("history", {
-        lobbyInfo: async (msg) => {
-            // TODO: place in effects
-            const result: IGameParticipant[] = []
+    const { send } = useWebsocket(
+        "history",
+        {
+            lobbyInfo: async (msg) => {
+                // TODO: place in effects
+                const result: IGameParticipant[] = []
 
-            for await (const user of msg.users) {
-                const vkData = await bridge.send("VKWebAppGetUserInfo", {
-                    user_id: user.vkId,
-                })
+                for await (const user of msg.users) {
+                    const vkData = await bridge.send("VKWebAppGetUserInfo", {
+                        user_id: user.vkId,
+                    })
 
-                result.push(Object.assign(user, { vkData }))
-            }
+                    result.push(Object.assign(user, { vkData }))
+                }
 
-            GamesEffects.History.addUser(result)
-        },
-        showSnackbar: (msg) =>
-            setSnackbar(
-                <Snackbar onClose={() => setSnackbar(null)}>
-                    {msg.message}
-                </Snackbar>,
-            ),
-        userJoined: async (msg) => {
-            const vkData = await bridge.send("VKWebAppGetUserInfo", {
-                user_id: msg.vkId,
-            })
-
-            GamesEffects.History.addUser([Object.assign(msg, { vkData })])
-        },
-        userLeaved: (msg) => {
-            GamesEffects.History.deleteUser(msg)
-
-            if (msg.vkId === vkUserData?.id) {
-                navigator.replace("/games")
+                GamesEffects.History.addUser(result)
+            },
+            showSnackbar: (msg) =>
                 setSnackbar(
                     <Snackbar onClose={() => setSnackbar(null)}>
-                        Вы были исключены из этой комнаты
+                        {msg.message}
+                    </Snackbar>,
+                ),
+            userJoined: async (msg) => {
+                const vkData = await bridge.send("VKWebAppGetUserInfo", {
+                    user_id: msg.vkId,
+                })
+
+                GamesEffects.History.addUser([Object.assign(msg, { vkData })])
+            },
+            userLeaved: (msg) => {
+                GamesEffects.History.deleteUser(msg)
+
+                if (msg.vkId === vkUserData?.id) {
+                    navigator.replace("/games")
+                    setSnackbar(
+                        <Snackbar onClose={() => setSnackbar(null)}>
+                            Вы были исключены из этой комнаты
+                        </Snackbar>,
+                    )
+                }
+            },
+            startLobby: () => GamesEffects.History.setStart(true),
+            timerTick: ({ time }) => GamesEffects.History.setTime(time),
+            nextStep: ({ previousContext }) =>
+                GamesEffects.History.nextStep(previousContext),
+            finishGame: () => GamesEffects.History.setGameStep("readyResult"),
+            gameGif: ({ buffer }) => GamesEffects.History.setGifBuffer(buffer),
+            readyCounter: (num) => GamesEffects.History.setReadyCount(num),
+        },
+        {
+            onClose: () => {
+                navigator.push(routes.root.games.games)
+                setSnackbar(
+                    <Snackbar onClose={() => setSnackbar(null)}>
+                        Это лобби игры «История» более не доступно
                     </Snackbar>,
                 )
-            }
+            },
         },
-        startLobby: () => GamesEffects.History.setStart(true),
-        timerTick: ({ time }) => GamesEffects.History.setTime(time),
-        nextStep: ({ previousContext }) =>
-            GamesEffects.History.nextStep(previousContext),
-        finishGame: () => GamesEffects.History.setGameStep("readyResult"),
-        gameGif: ({ buffer }) => GamesEffects.History.setGifBuffer(buffer),
-        readyCounter: (num) => GamesEffects.History.setReadyCount(num),
-    })
+    )
 
     useEffect(() => {
         changeEpicVisibility(false)
