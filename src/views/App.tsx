@@ -1,35 +1,33 @@
-import { getNamedWindowWidth, getUser, getVkUser, router } from "@shared"
+import { router, transformVKBridgeAdaptivity } from "@shared"
+import bridge, {
+    parseURLSearchParamsForGetLaunchParams,
+} from "@vkontakte/vk-bridge"
+import {
+    useAdaptivity,
+    useAppearance,
+    useInsets,
+} from "@vkontakte/vk-bridge-react"
 import { RouterProvider } from "@vkontakte/vk-mini-apps-router"
 import { AdaptivityProvider, AppRoot, ConfigProvider } from "@vkontakte/vkui"
-import { useCallback, useEffect, useState } from "react"
 import { Epic } from "./Epic"
 
 export const App = () => {
-    const [windowWidth, setWindowWidth] = useState(
-        getNamedWindowWidth(window.innerWidth),
+    const vkBridgeAppearance = useAppearance()!
+    const vkBridgeAdaptivityProps = transformVKBridgeAdaptivity(useAdaptivity())
+    const vkBridgeInsets = useInsets()!
+    const { vk_platform } = parseURLSearchParamsForGetLaunchParams(
+        window.location.search,
     )
 
-    const handleWindowResize = useCallback(() => {
-        setWindowWidth(getNamedWindowWidth(window.innerWidth))
-    }, [])
-
-    useEffect(() => {
-        getUser()
-        getVkUser()
-    }, [])
-
-    useEffect(() => {
-        window.addEventListener("resize", handleWindowResize)
-
-        return () => {
-            window.removeEventListener("resize", handleWindowResize)
-        }
-    }, [handleWindowResize])
-
     return (
-        <ConfigProvider>
-            <AdaptivityProvider viewWidth={windowWidth}>
-                <AppRoot>
+        <ConfigProvider
+            appearance={vkBridgeAppearance}
+            platform={vk_platform === "desktop_web" ? "vkcom" : undefined}
+            isWebView={bridge.isWebView()}
+            hasCustomPanelHeaderAfter={true}
+        >
+            <AdaptivityProvider {...vkBridgeAdaptivityProps}>
+                <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
                     <RouterProvider
                         router={router}
                         notFound={<p>Ничегошеньки!</p>}

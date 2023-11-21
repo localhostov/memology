@@ -135,6 +135,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         const progressPercent = ((time || 0) * 100) / 15
 
         const ready = () => {
+            if (meWriteValue.length === 0) return
             GamesEffects.History.setIsReady()
 
             send("sendText", { text: meWriteValue })

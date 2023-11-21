@@ -19,6 +19,7 @@
     "@protobuf-ts/plugin": "^2.9.1",
     "@vkontakte/icons": "^2.80.0",
     "@vkontakte/vk-bridge": "^2.12.2",
+    "@vkontakte/vk-bridge-react": "^1.0.1",
     "@vkontakte/vk-mini-apps-router": "^1.3.0",
     "@vkontakte/vk-miniapps-deploy": "^0.1.6",
     "@vkontakte/vkui": "^5.9.6",

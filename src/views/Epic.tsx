@@ -14,6 +14,10 @@ import {
     Icon28UserCardOutline,
 } from "@vkontakte/icons"
 import {
+    EGetLaunchParamsResponsePlatforms,
+    parseURLSearchParamsForGetLaunchParams,
+} from "@vkontakte/vk-bridge"
+import {
     useActiveVkuiLocation,
     useRouteNavigator,
 } from "@vkontakte/vk-mini-apps-router"
@@ -26,14 +30,12 @@ import {
     Group,
     Panel,
     PanelHeader,
-    Platform,
     ScreenSpinner,
     SplitCol,
     SplitLayout,
     Tabbar,
     TabbarItem,
     useAdaptivityConditionalRender,
-    usePlatform,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
 import { ReactNode, useEffect, useState } from "react"
@@ -49,7 +51,9 @@ import {
 } from "../panels"
 
 export const Epic = () => {
-    const platform = usePlatform()
+    const { vk_platform } = parseURLSearchParamsForGetLaunchParams(
+        window.location.search,
+    )
     const { panel: activePanel, modal: activeModal } = useActiveVkuiLocation()
     const navigator = useRouteNavigator()
     const location = useLocation()
@@ -59,6 +63,7 @@ export const Epic = () => {
     const epicIsShowed = useUnit($epicIsShowed)
 
     const { viewWidth } = useAdaptivityConditionalRender()
+
     const activeStoryStyles = {
         backgroundColor: "var(--vkui--color_background_secondary)",
         borderRadius: 8,
@@ -72,7 +77,8 @@ export const Epic = () => {
             .then(() => console.log(`change tab to ${panel.path}`))
     }
 
-    const hasHeader = platform !== Platform.VKCOM
+    const hasHeader =
+        vk_platform! !== EGetLaunchParamsResponsePlatforms.DESKTOP_WEB
 
     const checkTabIsActive = (view: ViewConfig<string>) => {
         return view
