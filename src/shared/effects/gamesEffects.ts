@@ -81,6 +81,7 @@ export namespace GamesEffects {
         export const nextStep = createEvent<string>()
         $historyStep.on(nextStep, (step) => step + 1)
         $previousContext.on(nextStep, (_, ctx) => ctx)
+
         export const $gifContent = createStore<string | null>(null)
         export const getContentLinkFx = createEffect((buffer: Uint8Array) =>
             URL.createObjectURL(new Blob([buffer], { type: "image/gif" })),
@@ -93,7 +94,7 @@ export namespace GamesEffects {
         export const setGameStep = createEvent<TGameHistoryStepType>()
 
         $gameStep.on(setGameStep, (_, currentStep) => currentStep)
-
+        $gameStep.reset(disconnectWs)
         sample({
             clock: setGifBuffer,
             target: getContentLinkFx,

@@ -208,6 +208,53 @@ export interface WebsocketServer_HistoryEvents_NextStep {
  * @generated from protobuf message WebsocketServer.HistoryEvents.FinishGame
  */
 export interface WebsocketServer_HistoryEvents_FinishGame {
+    /**
+     * @generated from protobuf field: repeated WebsocketServer.HistoryEvents.FinishGame.Dialog dialogs = 1;
+     */
+    dialogs: WebsocketServer_HistoryEvents_FinishGame_Dialog[];
+}
+/**
+ * @generated from protobuf message WebsocketServer.HistoryEvents.FinishGame.Msg
+ */
+export interface WebsocketServer_HistoryEvents_FinishGame_Msg {
+    /**
+     * @generated from protobuf field: string text = 1;
+     */
+    text: string;
+    /**
+     * @generated from protobuf field: WebsocketServer.HistoryEvents.FinishGame.Msg.VKData owner = 2;
+     */
+    owner?: WebsocketServer_HistoryEvents_FinishGame_Msg_VKData;
+}
+/**
+ * @generated from protobuf message WebsocketServer.HistoryEvents.FinishGame.Msg.VKData
+ */
+export interface WebsocketServer_HistoryEvents_FinishGame_Msg_VKData {
+    /**
+     * @generated from protobuf field: uint32 id = 1;
+     */
+    id: number;
+    /**
+     * @generated from protobuf field: string name = 2;
+     */
+    name: string;
+    /**
+     * @generated from protobuf field: string photo = 3;
+     */
+    photo: string;
+}
+/**
+ * @generated from protobuf message WebsocketServer.HistoryEvents.FinishGame.Dialog
+ */
+export interface WebsocketServer_HistoryEvents_FinishGame_Dialog {
+    /**
+     * @generated from protobuf field: uint32 id = 1;
+     */
+    id: number;
+    /**
+     * @generated from protobuf field: repeated WebsocketServer.HistoryEvents.FinishGame.Msg msgs = 2;
+     */
+    msgs: WebsocketServer_HistoryEvents_FinishGame_Msg[];
 }
 /**
  * @generated from protobuf message WebsocketServer.HistoryEvents.GameGif
@@ -1064,19 +1111,40 @@ export const WebsocketServer_HistoryEvents_NextStep = new WebsocketServer_Histor
 // @generated message type with reflection information, may provide speed optimized methods
 class WebsocketServer_HistoryEvents_FinishGame$Type extends MessageType<WebsocketServer_HistoryEvents_FinishGame> {
     constructor() {
-        super("WebsocketServer.HistoryEvents.FinishGame", []);
+        super("WebsocketServer.HistoryEvents.FinishGame", [
+            { no: 1, name: "dialogs", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => WebsocketServer_HistoryEvents_FinishGame_Dialog }
+        ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents_FinishGame>): WebsocketServer_HistoryEvents_FinishGame {
-        const message = {};
+        const message = { dialogs: [] };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<WebsocketServer_HistoryEvents_FinishGame>(this, message, value);
         return message;
     }
     internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketServer_HistoryEvents_FinishGame): WebsocketServer_HistoryEvents_FinishGame {
-        return target ?? this.create();
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated WebsocketServer.HistoryEvents.FinishGame.Dialog dialogs */ 1:
+                    message.dialogs.push(WebsocketServer_HistoryEvents_FinishGame_Dialog.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
     }
     internalBinaryWrite(message: WebsocketServer_HistoryEvents_FinishGame, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated WebsocketServer.HistoryEvents.FinishGame.Dialog dialogs = 1; */
+        for (let i = 0; i < message.dialogs.length; i++)
+            WebsocketServer_HistoryEvents_FinishGame_Dialog.internalBinaryWrite(message.dialogs[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1087,6 +1155,175 @@ class WebsocketServer_HistoryEvents_FinishGame$Type extends MessageType<Websocke
  * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.FinishGame
  */
 export const WebsocketServer_HistoryEvents_FinishGame = new WebsocketServer_HistoryEvents_FinishGame$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class WebsocketServer_HistoryEvents_FinishGame_Msg$Type extends MessageType<WebsocketServer_HistoryEvents_FinishGame_Msg> {
+    constructor() {
+        super("WebsocketServer.HistoryEvents.FinishGame.Msg", [
+            { no: 1, name: "text", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "owner", kind: "message", T: () => WebsocketServer_HistoryEvents_FinishGame_Msg_VKData }
+        ]);
+    }
+    create(value?: PartialMessage<WebsocketServer_HistoryEvents_FinishGame_Msg>): WebsocketServer_HistoryEvents_FinishGame_Msg {
+        const message = { text: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketServer_HistoryEvents_FinishGame_Msg>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketServer_HistoryEvents_FinishGame_Msg): WebsocketServer_HistoryEvents_FinishGame_Msg {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string text */ 1:
+                    message.text = reader.string();
+                    break;
+                case /* WebsocketServer.HistoryEvents.FinishGame.Msg.VKData owner */ 2:
+                    message.owner = WebsocketServer_HistoryEvents_FinishGame_Msg_VKData.internalBinaryRead(reader, reader.uint32(), options, message.owner);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: WebsocketServer_HistoryEvents_FinishGame_Msg, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string text = 1; */
+        if (message.text !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.text);
+        /* WebsocketServer.HistoryEvents.FinishGame.Msg.VKData owner = 2; */
+        if (message.owner)
+            WebsocketServer_HistoryEvents_FinishGame_Msg_VKData.internalBinaryWrite(message.owner, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.FinishGame.Msg
+ */
+export const WebsocketServer_HistoryEvents_FinishGame_Msg = new WebsocketServer_HistoryEvents_FinishGame_Msg$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class WebsocketServer_HistoryEvents_FinishGame_Msg_VKData$Type extends MessageType<WebsocketServer_HistoryEvents_FinishGame_Msg_VKData> {
+    constructor() {
+        super("WebsocketServer.HistoryEvents.FinishGame.Msg.VKData", [
+            { no: 1, name: "id", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "photo", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<WebsocketServer_HistoryEvents_FinishGame_Msg_VKData>): WebsocketServer_HistoryEvents_FinishGame_Msg_VKData {
+        const message = { id: 0, name: "", photo: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketServer_HistoryEvents_FinishGame_Msg_VKData>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketServer_HistoryEvents_FinishGame_Msg_VKData): WebsocketServer_HistoryEvents_FinishGame_Msg_VKData {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint32 id */ 1:
+                    message.id = reader.uint32();
+                    break;
+                case /* string name */ 2:
+                    message.name = reader.string();
+                    break;
+                case /* string photo */ 3:
+                    message.photo = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: WebsocketServer_HistoryEvents_FinishGame_Msg_VKData, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint32 id = 1; */
+        if (message.id !== 0)
+            writer.tag(1, WireType.Varint).uint32(message.id);
+        /* string name = 2; */
+        if (message.name !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.name);
+        /* string photo = 3; */
+        if (message.photo !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.photo);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.FinishGame.Msg.VKData
+ */
+export const WebsocketServer_HistoryEvents_FinishGame_Msg_VKData = new WebsocketServer_HistoryEvents_FinishGame_Msg_VKData$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class WebsocketServer_HistoryEvents_FinishGame_Dialog$Type extends MessageType<WebsocketServer_HistoryEvents_FinishGame_Dialog> {
+    constructor() {
+        super("WebsocketServer.HistoryEvents.FinishGame.Dialog", [
+            { no: 1, name: "id", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "msgs", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => WebsocketServer_HistoryEvents_FinishGame_Msg }
+        ]);
+    }
+    create(value?: PartialMessage<WebsocketServer_HistoryEvents_FinishGame_Dialog>): WebsocketServer_HistoryEvents_FinishGame_Dialog {
+        const message = { id: 0, msgs: [] };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketServer_HistoryEvents_FinishGame_Dialog>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketServer_HistoryEvents_FinishGame_Dialog): WebsocketServer_HistoryEvents_FinishGame_Dialog {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint32 id */ 1:
+                    message.id = reader.uint32();
+                    break;
+                case /* repeated WebsocketServer.HistoryEvents.FinishGame.Msg msgs */ 2:
+                    message.msgs.push(WebsocketServer_HistoryEvents_FinishGame_Msg.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: WebsocketServer_HistoryEvents_FinishGame_Dialog, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint32 id = 1; */
+        if (message.id !== 0)
+            writer.tag(1, WireType.Varint).uint32(message.id);
+        /* repeated WebsocketServer.HistoryEvents.FinishGame.Msg msgs = 2; */
+        for (let i = 0; i < message.msgs.length; i++)
+            WebsocketServer_HistoryEvents_FinishGame_Msg.internalBinaryWrite(message.msgs[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.FinishGame.Dialog
+ */
+export const WebsocketServer_HistoryEvents_FinishGame_Dialog = new WebsocketServer_HistoryEvents_FinishGame_Dialog$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketServer_HistoryEvents_GameGif> {
     constructor() {

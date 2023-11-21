@@ -162,7 +162,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     }
 
     const GameStepReadyResult = () => {
-        // const gifContent = useUnit(GamesEffects.History.$gifContent)
+        const gifContent = useUnit(GamesEffects.History.$gifContent)
 
         const photo = "https://i.playground.ru/e/tRXuCJPpLW_bZJ1IdfZknw.jpeg"
 
@@ -202,20 +202,20 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                 >
                     Нажмите на кнопку ниже, чтобы начать просмотр результата
                 </Placeholder>
-                {/*{gifContent && (*/}
-                {/*    <>*/}
-                {/*        <img src={gifContent} width={500} height={500} alt="" />*/}
-                {/*        <a href={gifContent} download="t.gif">*/}
-                {/*            <Button*/}
-                {/*                size="l"*/}
-                {/*                appearance="accent"*/}
-                {/*                mode="tertiary"*/}
-                {/*            >*/}
-                {/*                Скачать*/}
-                {/*            </Button>*/}
-                {/*        </a>*/}
-                {/*    </>*/}
-                {/*)}*/}
+                {gifContent && (
+                    <>
+                        <img src={gifContent} width={500} height={500} alt="" />
+                        <a href={gifContent} download="t.gif">
+                            <Button
+                                size="l"
+                                appearance="accent"
+                                mode="tertiary"
+                            >
+                                Скачать
+                            </Button>
+                        </a>
+                    </>
+                )}
             </div>
         )
     }
