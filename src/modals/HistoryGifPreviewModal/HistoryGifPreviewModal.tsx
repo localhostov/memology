@@ -8,11 +8,13 @@ export const HistoryGifPreviewModal = ({ id }: IModalProps) => {
     const gifContent = useUnit(GamesEffects.History.$gifContent)!
 
     const downloadGif = () => {
-        downloadFile(gifContent, "history.gif")
-        bridge.send("VKWebAppDownloadFile", {
-            url: gifContent.split("blob:")[1],
-            filename: "history.gif",
-        })
+        try {
+            downloadFile(gifContent, "history.gif")
+            bridge.send("VKWebAppDownloadFile", {
+                url: gifContent.split("blob:")[1],
+                filename: "history.gif",
+            })
+        } catch (error) {}
     }
 
     return (
