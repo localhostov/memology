@@ -38,7 +38,7 @@ export interface IGameModeItem {
     mode: TGameModeType
     title: string
     description: string
-    icon: string
+    icon: ReactElement
     route: PanelPage<string>
 }
 

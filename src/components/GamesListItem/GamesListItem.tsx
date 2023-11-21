@@ -10,12 +10,10 @@ export const GamesListItem = ({ item }: { item: IGameModeItem }) => {
     }
 
     return (
-        <center>
-            <div className={styles.container} onClick={openGame}>
-                <img src={item.icon} alt="" className={styles.icon} />
-                <div className={styles.title}>{item.title}</div>
-                <div className={styles.description}>{item.description}</div>
-            </div>
-        </center>
+        <div className={styles.container} onClick={openGame}>
+            <div className={styles.icon}>{item.icon}</div>
+            <div className={styles.title}>{item.title}</div>
+            <div className={styles.description}>{item.description}</div>
+        </div>
     )
 }

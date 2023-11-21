@@ -6,13 +6,13 @@
     user-select: none;
     cursor: pointer;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
     position: relative;
-    transition: 0.3s all ease;
-}
-
-.icon {
-    width: 64px;
-    height: auto;
+    transition: 0.5s all ease;
 }
 
 .title {
@@ -26,22 +26,29 @@
 }
 
 .container:hover {
-    background: var(--vkui--color_background_secondary_alpha);
+    background: rgba(156, 99, 255, 0.5);
 }
 
 .description {
-    display: none;
+    position: absolute;
+    bottom: -100%;
     font-size: 14px;
     line-height: 14px;
     padding-top: 4px;
     font-weight: 300;
+    transition: 0.3s ease all;
 }
 
 .container:hover .description {
-    display: block;
+    position: relative;
+    bottom: 0;
+}
+
+.icon {
     transition: 0.3s ease all;
 }
 
 .container:hover .icon {
-    display: none;
+    opacity: 0;
+    height: 0;
 }

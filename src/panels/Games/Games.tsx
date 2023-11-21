@@ -1,6 +1,7 @@
 import { GamesListItem } from "@components"
 import { panelNames, routes } from "@shared"
 import { IGameModeItem, IPanelProps } from "@types"
+import { Icon28PencilSquare } from "@vkontakte/icons"
 import { Group, Panel, PanelHeader, Placeholder } from "@vkontakte/vkui"
 import styles from "./styles.module.css"
 
@@ -34,7 +35,7 @@ const gamesList: IGameModeItem[] = [
         mode: "history",
         title: "История",
         description: "Какое-то описание, но не очень длинное",
-        icon: "https://www.svgrepo.com/show/404648/paper-document-file-data.svg",
+        icon: <Icon28PencilSquare style={{ height: 36, width: 36 }} />,
         route: routes.root.games.gameHistory,
     },
 ]

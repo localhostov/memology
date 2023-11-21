@@ -6,6 +6,10 @@
 .username {
     font-size: 14px;
     font-weight: 600;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
 }
 
 .bubble {
