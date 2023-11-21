@@ -1,69 +1,107 @@
-import { $vkUserData } from "@shared"
+import { GameInfoEffects } from "@shared"
 import { IModalProps, TGameModeType } from "@types"
-import { Icon24GameOutline } from "@vkontakte/icons"
+import { Icon24GameOutline, Icon56CancelCircleOutline } from "@vkontakte/icons"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import {
     Avatar,
     Button,
     ButtonGroup,
     ModalCard,
+    Placeholder,
     SimpleCell,
+    Spinner,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
+import { useEffect } from "react"
 
 export const GameInviteModal = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()
     const params = useParams<"mode" | "gameId">()
-    const vkData = useUnit($vkUserData) // TODO: drop this line
+    const loading = useUnit(GameInfoEffects.getGameInviteDataFx.pending)
+    const error = useUnit(GameInfoEffects.$gameInfoError)
+    const ownerData = useUnit(GameInfoEffects.$gameInfo)
 
     const gameMode = {
         history: "история",
     }[(params?.mode || "history") as TGameModeType]
 
-    const accept = () => {
-        // TODO: game validation code
+    useEffect(() => {
+        if (params?.mode && params.gameId) {
+            GameInfoEffects.fetchGameInfo({
+                roomId: params.gameId,
+                mode: params.mode as TGameModeType,
+            })
+        }
+    }, [])
 
-        navigator.push(`/games/${params?.mode}/${params?.gameId}`)
+    const accept = () => {
+        if (params?.mode && params.gameId) {
+            navigator.push(`/games/${params.mode}/${params.gameId}`)
+        }
     }
 
     return (
-        <ModalCard
-            id={id}
-            header="Приглашение в игру"
-            subheader={`Тебя приглашают в игру ${gameMode}`}
-            icon={<Icon24GameOutline style={{ width: 56, height: 56 }} />}
-            actions={
-                <div
-                    style={{
-                        flex: 1,
-                        gap: 16,
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
+        <ModalCard id={id}>
+            {loading ? (
+                <Spinner size="large" style={{ padding: "40px 0" }} />
+            ) : error ? (
+                <Placeholder
+                    header="Ой, ошибочка"
+                    icon={
+                        <Icon56CancelCircleOutline
+                            style={{ width: 56, height: 56 }}
+                        />
+                    }
+                    style={{ paddingTop: 0, paddingBottom: 0 }}
                 >
-                    <SimpleCell
-                        before={<Avatar size={40} src={vkData?.photo_200} />}
-                        subtitle="Создатель комнаты"
-                        style={{ paddingLeft: 0 }}
+                    {error.message}
+                </Placeholder>
+            ) : (
+                <>
+                    <Placeholder
+                        header="Приглашение в игру"
+                        icon={
+                            <Icon24GameOutline
+                                style={{ width: 56, height: 56 }}
+                            />
+                        }
+                        style={{ paddingTop: 0, paddingBottom: 0 }}
                     >
-                        Александр Локалхостов
-                    </SimpleCell>
-                    <ButtonGroup gap="s" mode="horizontal" stretched>
-                        <Button
-                            onClick={() => navigator.hideModal()}
-                            stretched
-                            size="l"
-                            appearance="negative"
-                        >
-                            Отклонить
-                        </Button>
+                        Тебя приглашают в игру {gameMode}
+                    </Placeholder>
 
-                        <Button onClick={accept} stretched size="l">
-                            Принять
-                        </Button>
-                    </ButtonGroup>
-                </div>
-            }
-        />
+                    <div style={{ height: 16 }} />
+
+                    <div>
+                        <SimpleCell
+                            before={
+                                <Avatar size={40} src={ownerData?.photo_200} />
+                            }
+                            subtitle="Создатель комнаты"
+                            style={{ paddingLeft: 0 }}
+                        >
+                            {ownerData?.first_name} {ownerData?.last_name}
+                        </SimpleCell>
+
+                        <div style={{ height: 16 }} />
+
+                        <ButtonGroup gap="s" mode="horizontal" stretched>
+                            <Button
+                                onClick={() => navigator.hideModal()}
+                                stretched
+                                size="l"
+                                appearance="negative"
+                            >
+                                Отклонить
+                            </Button>
+
+                            <Button onClick={accept} stretched size="l">
+                                Принять
+                            </Button>
+                        </ButtonGroup>
+                    </div>
+                </>
+            )}
+        </ModalCard>
     )
 }
