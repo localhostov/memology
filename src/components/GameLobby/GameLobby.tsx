@@ -1,7 +1,6 @@
-import { APP_ID, GamesEffects, setSnackbar } from "@shared"
-import { TGameTabType, TSendFunction } from "@types"
+import { $vkUserData, APP_ID, GamesEffects } from "@shared"
+import { TGameModeType, TGameTabType, TSendFunction } from "@types"
 import {
-    Icon24CancelOutline,
     Icon24GearOutline,
     Icon24LinkedOutline,
     Icon24Play,
@@ -9,57 +8,23 @@ import {
 } from "@vkontakte/icons"
 import bridge from "@vkontakte/vk-bridge"
 import { useParams } from "@vkontakte/vk-mini-apps-router"
-import {
-    Button,
-    HorizontalScroll,
-    Snackbar,
-    Tabs,
-    TabsItem,
-} from "@vkontakte/vkui"
+import { Button, HorizontalScroll, Tabs, TabsItem } from "@vkontakte/vkui"
 import { useList, useUnit } from "effector-react"
 import { ReactElement, useState } from "react"
 import { GameParticipantListItem } from "../GameParticipantListItem/GameParticipantListItem"
 import styles from "./styles.module.css"
 
-export const GameLobby = ({ send }: { send: TSendFunction<"history"> }) => {
+export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
     const users = useUnit(GamesEffects.History.$users)
+    const vkUserData = useUnit($vkUserData)
     const [activeTab, setActiveTab] = useState<TGameTabType>("participants")
-    const [copyLinkIsLoading, setCopyLinkIsLoading] = useState(false)
     const params = useParams<"roomId">()
+    const gameOwner = users.find((user) => user.isOwner)
 
     const copyInviteLink = () => {
-        setCopyLinkIsLoading(true)
         const link = `https://vk.com/app${APP_ID}#/games/history/invite/${params?.roomId}`
 
-        bridge
-            .send("VKWebAppCopyText", {
-                text: link,
-            })
-            .then(() => {
-                setSnackbar(
-                    <Snackbar
-                        onClose={() => setSnackbar(null)}
-                        before={
-                            <Icon24LinkedOutline fill="var(--vkui--color_icon_positive)" />
-                        }
-                    >
-                        Ссылка-приглашение скопирована
-                    </Snackbar>,
-                )
-            })
-            .catch(() => {
-                setSnackbar(
-                    <Snackbar
-                        onClose={() => setSnackbar(null)}
-                        before={
-                            <Icon24CancelOutline fill="var(--vkui--color_icon_negative)" />
-                        }
-                    >
-                        Произошла ошибка при копировании ссылки
-                    </Snackbar>,
-                )
-            })
-            .finally(() => setCopyLinkIsLoading(false))
+        bridge.send("VKWebAppShare", { link })
     }
 
     const tabContent: Record<TGameTabType, ReactElement> = {
@@ -103,19 +68,20 @@ export const GameLobby = ({ send }: { send: TSendFunction<"history"> }) => {
                         mode="secondary"
                         before={<Icon24LinkedOutline />}
                         onClick={copyInviteLink}
-                        loading={copyLinkIsLoading}
                     >
                         Пригласить
                     </Button>
 
-                    <Button
-                        size="l"
-                        stretched
-                        before={<Icon24Play />}
-                        onClick={onStartGame}
-                    >
-                        Начать игру
-                    </Button>
+                    {vkUserData?.id === gameOwner?.vkId && (
+                        <Button
+                            size="l"
+                            stretched
+                            before={<Icon24Play />}
+                            onClick={onStartGame}
+                        >
+                            Начать игру
+                        </Button>
+                    )}
                 </div>
 
                 <div>{tabContent[activeTab]}</div>
@@ -124,7 +90,7 @@ export const GameLobby = ({ send }: { send: TSendFunction<"history"> }) => {
     )
 }
 
-const ParticipantsTabContent = (send: TSendFunction<"history">) => {
+const ParticipantsTabContent = (send: TSendFunction<TGameModeType>) => {
     const usersList = useList(GamesEffects.History.$users, (item) => (
         <div key={item.vkId}>
             <GameParticipantListItem item={item} send={send} />
