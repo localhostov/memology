@@ -1,5 +1,6 @@
 export * from "./bridge"
 export * from "./epic"
+export * from "./gameInvite"
 export * from "./gamesEffects"
 export * from "./meme"
 export * from "./memes"
