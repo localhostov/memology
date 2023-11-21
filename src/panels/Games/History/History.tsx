@@ -1,6 +1,8 @@
 import { GameLobby, HistoryAlbumListItem } from "@components"
 import {
+    $vkUserData,
     changeEpicVisibility,
+    declOfNum,
     GamesEffects,
     Modals,
     panelNames,
@@ -10,7 +12,6 @@ import {
 import { IGameParticipant, IPanelProps, TGameHistoryStepType } from "@types"
 import {
     Icon16CheckDoubleOutline,
-    Icon20CheckAlt,
     Icon20ChecksOutline,
     Icon24Add,
     Icon24AdvertisingOutline,
@@ -44,6 +45,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const users = useUnit(GamesEffects.History.$users)
     const gifContent = useUnit(GamesEffects.History.$gifContent)
     const gameStep = useUnit(GamesEffects.History.$gameStep)
+    const vkUserData = useUnit($vkUserData)
     const unblock = useRef<() => void>()
 
     const { send } = useWebsocket("history", {
@@ -74,7 +76,18 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
             GamesEffects.History.addUser([Object.assign(msg, { vkData })])
         },
-        userLeaved: (msg) => GamesEffects.History.deleteUser(msg),
+        userLeaved: (msg) => {
+            GamesEffects.History.deleteUser(msg)
+
+            if (msg.vkId === vkUserData?.id) {
+                navigator.replace("/games")
+                setSnackbar(
+                    <Snackbar onClose={() => setSnackbar(null)}>
+                        Вы были исключены из этой комнаты
+                    </Snackbar>,
+                )
+            }
+        },
         startLobby: () => GamesEffects.History.setStart(true),
         timerTick: ({ time }) => GamesEffects.History.setTime(time),
         nextStep: ({ previousContext }) =>
@@ -101,8 +114,22 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         const step = useUnit(GamesEffects.History.$historyStep)
         const previousContext = useUnit(GamesEffects.History.$previousContext)
         const [meWriteValue, setMeWriteValue] = useState("")
+        const [lockedForEdit, setLockedForEdit] = useState(false)
 
         const progressPercent = ((time || 0) * 100) / 15
+
+        const ready = () => {
+            setLockedForEdit((prev) => !prev)
+
+            send("sendText", { text: meWriteValue })
+        }
+
+        useEffect(() => {
+            if (previousContext) {
+                setLockedForEdit(false)
+                setMeWriteValue("")
+            }
+        }, [previousContext])
 
         return (
             <div>
@@ -125,6 +152,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                             style={{
                                 borderRadius: 100,
                                 height: 6,
+                                overflow: "hidden",
                             }}
                             appearance={
                                 progressPercent > 50 ? "positive" : "negative"
@@ -137,24 +165,41 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     icon={
                         <Icon28PencilSquare style={{ width: 56, height: 56 }} />
                     }
-                    header="Напишите предложение"
+                    header={
+                        previousContext
+                            ? "Продолжите эту историю"
+                            : "Начните писать историю"
+                    }
                     style={{ paddingBottom: 0 }}
                 />
-                {previousContext && <p>{previousContext}</p>}
+
+                {previousContext && (
+                    <>
+                        <div style={{ height: 16 }} />
+                        <div className={styles.previousContextContainer}>
+                            <div className={styles.previousContextBubble}>
+                                {previousContext}
+                            </div>
+                        </div>
+                    </>
+                )}
+
                 <div className={styles.meWriteInputContainer}>
                     <Input
                         style={{ flex: 1 }}
                         type="text"
+                        disabled={lockedForEdit}
                         value={meWriteValue}
                         placeholder="Писать сюда если что"
                         onChange={(e) => setMeWriteValue(e.target.value)}
                     />
 
                     <Button
-                        before={<Icon20CheckAlt />}
-                        onClick={() => send("sendText", { text: meWriteValue })}
+                        onClick={ready}
+                        size="l"
+                        mode={lockedForEdit ? "secondary" : "primary"}
                     >
-                        Готово
+                        {lockedForEdit ? "Изменить" : "Готово"}
                     </Button>
                 </div>
             </div>
@@ -162,10 +207,6 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     }
 
     const GameStepReadyResult = () => {
-        const gifContent = useUnit(GamesEffects.History.$gifContent)
-
-        const photo = "https://i.playground.ru/e/tRXuCJPpLW_bZJ1IdfZknw.jpeg"
-
         const showGameResult = () => {
             GamesEffects.History.setGameStep("showResult")
         }
@@ -182,11 +223,15 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     action={
                         <div>
                             <UsersStack
-                                photos={[photo, photo, photo, photo, photo]}
+                                photos={users.map((it) => it.vkData.photo_200)}
                                 size="l"
                                 direction="column"
                             >
-                                12 участников
+                                {declOfNum(
+                                    users.length,
+                                    ["участник", "участника", "участников"],
+                                    true,
+                                )}
                             </UsersStack>
 
                             <div style={{ height: 16 }} />
@@ -202,20 +247,6 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                 >
                     Нажмите на кнопку ниже, чтобы начать просмотр результата
                 </Placeholder>
-                {gifContent && (
-                    <>
-                        <img src={gifContent} width={500} height={500} alt="" />
-                        <a href={gifContent} download="t.gif">
-                            <Button
-                                size="l"
-                                appearance="accent"
-                                mode="tertiary"
-                            >
-                                Скачать
-                            </Button>
-                        </a>
-                    </>
-                )}
             </div>
         )
     }
@@ -228,7 +259,15 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         ))
 
         const downloadGIF = () => {
-            console.log("download gif")
+            if (gifContent) {
+                navigator.showModal(Modals.HISTORY_GIF_PREVIEW)
+            } else {
+                setSnackbar(
+                    <Snackbar onClose={() => setSnackbar(null)}>
+                        GIF-файл ещё не был создан, подождите
+                    </Snackbar>,
+                )
+            }
         }
 
         const shareOnWall = () => {
