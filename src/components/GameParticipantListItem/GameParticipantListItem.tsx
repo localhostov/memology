@@ -2,18 +2,20 @@ import { $vkUserData } from "@shared"
 import { IGameParticipant, TSendFunction } from "@types"
 import { Icon24CancelOutline, Icon24CrownOutline } from "@vkontakte/icons"
 import { Avatar, IconButton, SimpleCell } from "@vkontakte/vkui"
-import { useUnit } from "effector-react"
+import { useUnit } from "effector-react/compat"
 import { MouseEvent } from "react"
 import styles from "./styles.module.css"
 
 export const GameParticipantListItem = ({
     item,
     send,
+    ownerId,
 }: {
     item: IGameParticipant
     send: TSendFunction<"history">
+    ownerId: number | undefined
 }) => {
-    const currentVkUserData = useUnit($vkUserData)
+    const currentVkUser = useUnit($vkUserData)
 
     const openUser = () => {
         const vkUrl = `https://vk.com/id${item.vkData.id}`
@@ -26,8 +28,6 @@ export const GameParticipantListItem = ({
         send("kickUser", {
             vkId: item.vkId,
         })
-
-        console.log(`user with id ${item.vkData.id} kicked`)
     }
 
     return (
@@ -39,7 +39,7 @@ export const GameParticipantListItem = ({
                 <div>
                     {item.isOwner ? (
                         <Icon24CrownOutline />
-                    ) : currentVkUserData?.id === item.vkId && item.isOwner ? (
+                    ) : ownerId === currentVkUser?.id ? (
                         <IconButton onClick={(e) => kickUser(e)}>
                             <Icon24CancelOutline />
                         </IconButton>
