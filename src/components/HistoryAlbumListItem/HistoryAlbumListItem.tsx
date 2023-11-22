@@ -1,53 +1,52 @@
-import { $vkUserData } from "@shared"
-import bridge, { UserInfo } from "@vkontakte/vk-bridge"
+import {
+    $vkUserData,
+    WebsocketServer_HistoryEvents_FinishGame_Msg,
+} from "@shared"
 import { Avatar } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
 import { useEffect, useState } from "react"
-import { IAlbumItem } from "../../panels"
 import styles from "./styles.module.css"
 
-export const HistoryAlbumListItem = ({ item }: { item: IAlbumItem }) => {
+export const HistoryAlbumListItem = ({
+    item,
+}: {
+    item: WebsocketServer_HistoryEvents_FinishGame_Msg
+}) => {
     const vkUserData = useUnit($vkUserData)
-    const [userData, setUserData] = useState<UserInfo | null>(null)
-    const isLoading = false
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        bridge
-            .send("VKWebAppGetUserInfo", {
-                user_id: item.vkId,
-            })
-            .then((data) => setUserData(data))
+        const timer = setTimeout(() => {
+            setIsLoading(false)
+        }, 1500)
+
+        return () => clearInterval(timer)
     }, [])
 
     return (
         <div className={styles.container}>
-            <Avatar size={40} src={userData?.photo_200} />
+            <Avatar size={40} src={item.owner?.photo} />
             <div>
                 <div className={styles.username}>
-                    {userData?.first_name} {userData?.last_name}
+                    {item.owner?.name}
+                    <div style={{ height: 8 }} />
                 </div>
-
-                <div style={{ height: 8 }} />
 
                 <div
                     className={styles.bubble}
                     style={{
                         background: isLoading
                             ? "none"
-                            : vkUserData?.id === item.vkId
+                            : vkUserData?.id === item.owner?.id
                               ? "var(--vkui--color_accent_blue)"
                               : "var(--vkui--color_background_secondary)",
                         color:
-                            vkUserData?.id === item.vkId
+                            vkUserData?.id === item.owner?.id
                                 ? "white"
                                 : "--vkui--color_text_primary",
                     }}
                 >
-                    {isLoading ? (
-                        <div className={styles.loading} />
-                    ) : (
-                        item.phrase
-                    )}
+                    {isLoading ? <div className={styles.loading} /> : item.text}
                 </div>
             </div>
         </div>

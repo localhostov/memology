@@ -1,0 +1,7 @@
+.albumContainer {
+    direction: rtl;
+    padding: 0 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

@@ -68,14 +68,6 @@
     font-size: 13px;
 }
 
-.albumContainer {
-    direction: rtl;
-    padding: 0 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
 .previousContextContainer {
     padding: 0 16px;
     display: flex;

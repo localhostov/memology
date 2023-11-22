@@ -1,4 +1,4 @@
-import { GameLobby, HistoryAlbumListItem } from "@components"
+import { GameLobby, HistoryChat } from "@components"
 import {
     $vkUserData,
     changeEpicVisibility,
@@ -6,7 +6,6 @@ import {
     GamesEffects,
     Modals,
     panelNames,
-    routes,
     setSnackbar,
     useWebsocket,
 } from "@shared"
@@ -16,6 +15,7 @@ import {
     Icon20ChecksOutline,
     Icon24Add,
     Icon24AdvertisingOutline,
+    Icon24ArrowRightOutline,
     Icon24Play,
     Icon24StoryReplyOutline,
     Icon28GifOutline,
@@ -48,6 +48,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const gameStep = useUnit(GamesEffects.History.$gameStep)
     const vkUserData = useUnit($vkUserData)
     const unblock = useRef<() => void>()
+    const [currentChatRoot, setCurrentChatRoot] = useState(0)
 
     const { send } = useWebsocket(
         "history",
@@ -95,16 +96,19 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             timerTick: ({ time }) => GamesEffects.History.setTime(time),
             nextStep: ({ previousContext }) =>
                 GamesEffects.History.nextStep(previousContext),
-            finishGame: () => GamesEffects.History.setGameStep("readyResult"),
+            finishGame: (msg) => {
+                GamesEffects.History.setMessages(msg.dialogs)
+                GamesEffects.History.setGameStep("readyResult")
+            },
             gameGif: ({ buffer }) => GamesEffects.History.setGifBuffer(buffer),
             readyCounter: (num) => GamesEffects.History.setReadyCount(num),
         },
         {
             onClose: () => {
-                navigator.push(routes.root.games.games)
+                navigator.replace("/games")
                 setSnackbar(
                     <Snackbar onClose={() => setSnackbar(null)}>
-                        Это лобби игры «История» более не доступно
+                        Лобби игры «История» больше не доступно
                     </Snackbar>,
                 )
             },
@@ -113,6 +117,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
     useEffect(() => {
         changeEpicVisibility(false)
+        GamesEffects.History.setGameStep("meWrite")
 
         return () => {
             changeEpicVisibility(true)
@@ -268,12 +273,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     }
 
     const GameStepShowResult = () => {
-        const album = mockedAlbum.map((item) => (
-            <div key={item.vkId} className={styles.albumContainer}>
-                <HistoryAlbumListItem item={item} />
-            </div>
-        ))
-
+        const messages = useUnit(GamesEffects.History.$messages)
         const downloadGIF = () => {
             if (gifContent) {
                 navigator.showModal(Modals.HISTORY_GIF_PREVIEW)
@@ -294,13 +294,18 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             console.log("share on story")
         }
 
-        const newGame = () => {
-            console.log("new game")
+        const nextAction = () => {
+            if ((messages?.length || 0) - 1 === currentChatRoot) {
+                GamesEffects.History.setGameStep("meWrite")
+                GamesEffects.History.setStart(false)
+            } else {
+                setCurrentChatRoot((prev) => prev + 1)
+            }
         }
 
         return (
             <div>
-                <div className={styles.albumContainer}>{album}</div>
+                <HistoryChat root={currentChatRoot} />
 
                 <div style={{ height: 16 }} />
 
@@ -340,8 +345,20 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                         onClick={shareOnStory}
                     />
 
-                    <Button size="l" before={<Icon24Add />} onClick={newGame}>
-                        Новая игра
+                    <Button
+                        size="l"
+                        before={
+                            (messages?.length || 0) - 1 === currentChatRoot ? (
+                                <Icon24Add />
+                            ) : (
+                                <Icon24ArrowRightOutline />
+                            )
+                        }
+                        onClick={nextAction}
+                    >
+                        {(messages?.length || 0) - 1 !== currentChatRoot
+                            ? "Дальше"
+                            : "Новая игра"}
                     </Button>
                 </ButtonGroup>
 
@@ -385,24 +402,4 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             </Group>
         </Panel>
     )
-}
-
-const mockedAlbum: IAlbumItem[] = [
-    {
-        phrase: "Синий кит пьет кефир",
-        vkId: 1,
-    },
-    {
-        phrase: "Я не александр локалхостов",
-        vkId: 729565990,
-    },
-    {
-        phrase: "БЛяяяя аыф а ыав фы вафывафыв а фыва фыва фвыа фыпривет как дела выаф ываф а ы выаф ываф а ывыаф ываф а ы выаф ываф а ы выаф ываф а ы",
-        vkId: 15,
-    },
-]
-
-export interface IAlbumItem {
-    phrase: string
-    vkId: number
 }

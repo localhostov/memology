@@ -8,7 +8,10 @@ import bridge from "@vkontakte/vk-bridge"
 import { createEffect, createEvent, createStore, sample } from "effector"
 import { API } from "../api"
 import { APIError, isAPIError } from "../api/APIError"
-import { WebsocketServer_HistoryEvents_UserLeaved } from "../proto"
+import {
+    WebsocketServer_HistoryEvents_FinishGame_Dialog,
+    WebsocketServer_HistoryEvents_UserLeaved,
+} from "../proto"
 import { disconnectWs } from "./websocket"
 
 interface IGetLobbyParams {
@@ -94,6 +97,13 @@ export namespace GamesEffects {
         export const nextStep = createEvent<string>()
         $historyStep.on(nextStep, (step) => step + 1)
         $previousContext.on(nextStep, (_, ctx) => ctx)
+
+        export const $messages = createStore<
+            WebsocketServer_HistoryEvents_FinishGame_Dialog[] | null
+        >(null)
+        export const setMessages =
+            createEvent<WebsocketServer_HistoryEvents_FinishGame_Dialog[]>()
+        $messages.on(setMessages, (_, msgs) => msgs)
 
         export const $gifContent = createStore<string | null>(null)
         export const getContentLinkFx = createEffect((buffer: Uint8Array) =>
