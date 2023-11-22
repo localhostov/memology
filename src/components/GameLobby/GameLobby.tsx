@@ -1,6 +1,7 @@
-import { $vkUserData, APP_ID, GamesEffects } from "@shared"
+import { $vkUserData, APP_ID, disconnectWs, GamesEffects } from "@shared"
 import { TGameModeType, TGameTabType, TSendFunction } from "@types"
 import {
+    Icon24Cancel,
     Icon24GearOutline,
     Icon24LinkedOutline,
     Icon24Play,
@@ -8,7 +9,14 @@ import {
 } from "@vkontakte/icons"
 import bridge from "@vkontakte/vk-bridge"
 import { useParams } from "@vkontakte/vk-mini-apps-router"
-import { Button, HorizontalScroll, Tabs, TabsItem } from "@vkontakte/vkui"
+import {
+    Button,
+    HorizontalScroll,
+    Placeholder,
+    Spinner,
+    Tabs,
+    TabsItem,
+} from "@vkontakte/vkui"
 import { useList, useUnit } from "effector-react"
 import { ReactElement, useState } from "react"
 import { GameParticipantListItem } from "../GameParticipantListItem/GameParticipantListItem"
@@ -37,7 +45,17 @@ export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
         send("startGame", {})
     }
 
-    return (
+    const onLeaveFromGame = () => {
+        disconnectWs()
+    }
+
+    return users.length === 0 ? (
+        <Placeholder
+            header="Создаём комнату"
+            icon={<Spinner size="large" />}
+            children="Загружаем всё необходимое"
+        />
+    ) : (
         <div>
             <Tabs>
                 <HorizontalScroll arrowSize="m">
@@ -62,6 +80,18 @@ export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
 
             <div className={styles.container}>
                 <div className={styles.buttons}>
+                    {vkUserData?.id !== gameOwner?.vkId && (
+                        <Button
+                            size="l"
+                            stretched
+                            before={<Icon24Cancel />}
+                            onClick={onLeaveFromGame}
+                            appearance="negative"
+                        >
+                            Выйти
+                        </Button>
+                    )}
+
                     <Button
                         size="l"
                         stretched
@@ -91,9 +121,15 @@ export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
 }
 
 const ParticipantsTabContent = (send: TSendFunction<TGameModeType>) => {
+    const users = useUnit(GamesEffects.History.$users)
+    const gameOwner = users.find((it) => it.isOwner)
     const usersList = useList(GamesEffects.History.$users, (item) => (
         <div key={item.vkId}>
-            <GameParticipantListItem item={item} send={send} />
+            <GameParticipantListItem
+                item={item}
+                send={send}
+                ownerId={gameOwner?.vkId}
+            />
         </div>
     ))
 
