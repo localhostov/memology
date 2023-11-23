@@ -1,11 +1,10 @@
-import { useSafeBack } from "@shared"
+import { disconnectWs } from "@shared"
 import { IModalProps } from "@types"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Button, ButtonGroup, ModalCard } from "@vkontakte/vkui"
 
 export const ExitFromGameConfirmation = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()
-    const safeBack = useSafeBack()
 
     return (
         <ModalCard
@@ -24,7 +23,7 @@ export const ExitFromGameConfirmation = ({ id }: IModalProps) => {
                     </Button>
 
                     <Button
-                        onClick={() => safeBack.back(3)}
+                        onClick={() => disconnectWs()}
                         stretched
                         size="l"
                         appearance="negative"

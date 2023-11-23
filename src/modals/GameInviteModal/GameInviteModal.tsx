@@ -36,7 +36,11 @@ export const GameInviteModal = ({ id }: IModalProps) => {
 
     const accept = () => {
         if (params?.mode && params.gameId) {
-            navigator.push(`/games/${params.mode}/${params.gameId}`)
+            navigator
+                .replace(`/games/${params.mode}/${params.gameId}`)
+                .then(() => {
+                    GameInfoEffects.clearGameInfo()
+                })
         }
     }
 

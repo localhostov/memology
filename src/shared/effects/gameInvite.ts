@@ -29,6 +29,9 @@ export namespace GameInfoEffects {
         return null
     })
 
+    export const clearGameInfo = createEvent()
+    $gameInfo.on(clearGameInfo, () => null)
+
     sample({
         clock: fetchGameInfo,
         target: getGameInviteDataFx,

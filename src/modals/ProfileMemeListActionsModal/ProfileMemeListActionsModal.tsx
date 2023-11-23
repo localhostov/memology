@@ -14,7 +14,7 @@ export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
     }
 
     const openMeme = () => {
-        navigator.push(`/meme/${params?.memeId}`)
+        navigator.replace(`/meme/${params?.memeId}`)
     }
 
     return (

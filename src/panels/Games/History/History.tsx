@@ -311,9 +311,10 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     }
 
     const GameStepShowResult = () => {
-        const [nextActionIsLocked, setNextActionIsLocked] = useState(true)
-
+        const [allMessagesShowed, setAllMessagesShowed] = useState(false)
         const messages = useUnit(GamesEffects.History.$messages)
+        const gameOwner = users.find((it) => it.isOwner)
+
         const downloadGIF = () => {
             if (gifContent) {
                 navigator.showModal(Modals.HISTORY_GIF_PREVIEW)
@@ -344,7 +345,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             if ((messages?.length || 0) - 1 === currentChatRoot) {
                 send("newGame", {})
             } else {
-                setNextActionIsLocked(true)
+                setAllMessagesShowed(false)
                 send("showDialog", {
                     dialogId: currentChatRoot + 1,
                 })
@@ -352,7 +353,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         }
 
         const onLastMessageShowed = () => {
-            setNextActionIsLocked(false)
+            setAllMessagesShowed(true)
         }
 
         return (
@@ -362,60 +363,71 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     onLastMessageShowed={onLastMessageShowed}
                 />
 
-                <div style={{ height: 16 }} />
+                {allMessagesShowed && (
+                    <>
+                        <div style={{ height: 16 }} />
 
-                <div className={styles.partableDividerContainer}>
-                    <div className={styles.dividerPart} />
-                    <div className={styles.partableDividerText}>
-                        Конец прeкрасной истории
-                    </div>
-                    <div className={styles.dividerPart} />
-                </div>
+                        <div className={styles.partableDividerContainer}>
+                            <div className={styles.dividerPart} />
+                            <div className={styles.partableDividerText}>
+                                Конец прeкрасной истории
+                            </div>
+                            <div className={styles.dividerPart} />
+                        </div>
 
-                <div style={{ height: 16 }} />
+                        <div style={{ height: 16 }} />
+                    </>
+                )}
 
                 <ButtonGroup gap="s" align="center" stretched>
-                    <Button
-                        before={
-                            <Icon28GifOutline
-                                style={{ width: 24, height: 24 }}
+                    {allMessagesShowed && (
+                        <>
+                            <Button
+                                before={
+                                    <Icon28GifOutline
+                                        style={{ width: 24, height: 24 }}
+                                    />
+                                }
+                                size="l"
+                                mode="secondary"
+                                onClick={downloadGIF}
                             />
-                        }
-                        size="l"
-                        mode="secondary"
-                        onClick={downloadGIF}
-                    />
 
-                    <Button
-                        before={<Icon24AdvertisingOutline />}
-                        size="l"
-                        mode="secondary"
-                        onClick={shareOnWall}
-                    />
+                            <Button
+                                before={<Icon24AdvertisingOutline />}
+                                size="l"
+                                mode="secondary"
+                                onClick={shareOnWall}
+                            />
 
-                    <Button
-                        before={<Icon24StoryReplyOutline />}
-                        size="l"
-                        mode="secondary"
-                        onClick={shareOnStory}
-                    />
+                            <Button
+                                before={<Icon24StoryReplyOutline />}
+                                size="l"
+                                mode="secondary"
+                                onClick={shareOnStory}
+                            />
+                        </>
+                    )}
 
-                    <Button
-                        size="l"
-                        before={
-                            (messages?.length || 0) - 1 === currentChatRoot ? (
-                                <Icon24Add />
-                            ) : (
-                                <Icon24ArrowRightOutline />
-                            )
-                        }
-                        onClick={nextAction}
-                        disabled={nextActionIsLocked}
-                    >
-                        {(messages?.length || 0) - 1 !== currentChatRoot
-                            ? "Дальше"
-                            : "Новая игра"}
-                    </Button>
+                    {vkUserData?.id === gameOwner?.vkId && (
+                        <Button
+                            size="l"
+                            before={
+                                (messages?.length || 0) - 1 ===
+                                currentChatRoot ? (
+                                    <Icon24Add />
+                                ) : (
+                                    <Icon24ArrowRightOutline />
+                                )
+                            }
+                            onClick={nextAction}
+                            disabled={!allMessagesShowed}
+                        >
+                            {(messages?.length || 0) - 1 !== currentChatRoot
+                                ? "Дальше"
+                                : "Новая игра"}
+                        </Button>
+                    )}
                 </ButtonGroup>
 
                 <div style={{ height: 16 }} />
