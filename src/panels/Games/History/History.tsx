@@ -151,6 +151,10 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         }
 
         useEffect(() => {
+            setMeWriteValue("")
+        }, [gameStep])
+
+        useEffect(() => {
             if (previousContext) {
                 setMeWriteValue("")
             }
@@ -301,6 +305,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         const nextAction = () => {
             if ((messages?.length || 0) - 1 === currentChatRoot) {
                 send("newGame", {})
+                setCurrentChatRoot(0)
             } else {
                 setCurrentChatRoot((prev) => prev + 1)
             }
