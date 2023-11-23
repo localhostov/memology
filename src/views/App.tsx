@@ -9,6 +9,7 @@ import {
 } from "@vkontakte/vk-bridge-react"
 import { RouterProvider } from "@vkontakte/vk-mini-apps-router"
 import { AdaptivityProvider, AppRoot, ConfigProvider } from "@vkontakte/vkui"
+import { useEffect } from "react"
 import { Epic } from "./Epic"
 
 export const App = () => {
@@ -18,6 +19,14 @@ export const App = () => {
     const { vk_platform } = parseURLSearchParamsForGetLaunchParams(
         window.location.search,
     )
+
+    useEffect(() => {
+        bridge.send("VKWebAppSetViewSettings", {
+            status_bar_style: vkBridgeAppearance === "light" ? "dark" : "light",
+            action_bar_color:
+                vkBridgeAppearance === "light" ? "#FFFFFF" : "#19191A",
+        })
+    }, [vkBridgeAppearance])
 
     return (
         <ConfigProvider
