@@ -10,13 +10,15 @@ export const HistoryGifPreviewModal = ({ id }: IModalProps) => {
     const platform = usePlatform()
     const gifContent = gifs.find((x) => x.dialogId === root)
 
+    if (!gifContent) return <div>Гифки то нет</div>
+
     const downloadGif = () => {
         try {
             if (platform === Platform.VKCOM) {
-                downloadFile(gifContent!.link, "history.gif")
+                downloadFile(gifContent.link, "history.gif")
             } else {
                 bridge.send("VKWebAppDownloadFile", {
-                    url: gifContent!.link.split("blob:")[1],
+                    url: gifContent.link.split("blob:")[1],
                     filename: "history.gif",
                 })
             }
@@ -25,7 +27,7 @@ export const HistoryGifPreviewModal = ({ id }: IModalProps) => {
 
     return (
         <ModalCard id={id}>
-            <img src={gifContent!.link} alt="" style={{ borderRadius: 14 }} />
+            <img src={gifContent.link} alt="" style={{ borderRadius: 14 }} />
 
             <div style={{ height: 16 }} />
 
