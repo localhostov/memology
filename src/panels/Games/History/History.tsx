@@ -45,12 +45,13 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
     const isStarted = useUnit(GamesEffects.History.$isStarted)
     const users = useUnit(GamesEffects.History.$users)
+    const currentChatRoot = useUnit(GamesEffects.History.$currentChatRoot)
     const gifs = useUnit(GamesEffects.History.$gifContent)
     const gifContent = gifs.find((x) => x.dialogId === currentChatRoot)
     const gameStep = useUnit(GamesEffects.History.$gameStep)
     const vkUserData = useUnit($vkUserData)
     const unblock = useRef<() => void>()
-    const currentChatRoot = useUnit(GamesEffects.History.$currentChatRoot)
+
     const [vkGifAttachment, setVkGifAttachment] = useState("")
 
     const { send } = useWebsocket(

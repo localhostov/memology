@@ -127,7 +127,7 @@ export namespace GamesEffects {
             current.concat(newGif).sort((a, b) => a.dialogId - b.dialogId),
         )
         export const setGifBuffer = createEvent<IGifContent>()
-
+        $gifContent.on($isStarted, () => [])
         export const $gameStep = createStore<TGameHistoryStepType>("meWrite")
 
         export const setGameStep = createEvent<TGameHistoryStepType>()
