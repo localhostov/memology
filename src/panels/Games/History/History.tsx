@@ -155,10 +155,10 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         }, [gameStep])
 
         useEffect(() => {
-            if (previousContext) {
+            if (step) {
                 setMeWriteValue("")
             }
-        }, [previousContext])
+        }, [step, isStarted])
 
         return (
             <div>

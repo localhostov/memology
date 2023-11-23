@@ -298,6 +298,10 @@ export interface WebsocketServer_HistoryEvents_GameGif {
      * @generated from protobuf field: bytes buffer = 2;
      */
     buffer: Uint8Array;
+    /**
+     * @generated from protobuf field: string vkAttachment = 3;
+     */
+    vkAttachment: string;
 }
 /**
  * @generated from protobuf message WebsocketServer.HistoryEvents.NewGame
@@ -1469,11 +1473,12 @@ class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketSe
     constructor() {
         super("WebsocketServer.HistoryEvents.GameGif", [
             { no: 1, name: "dialogId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
-            { no: 2, name: "buffer", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
+            { no: 2, name: "buffer", kind: "scalar", T: 12 /*ScalarType.BYTES*/ },
+            { no: 3, name: "vkAttachment", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents_GameGif>): WebsocketServer_HistoryEvents_GameGif {
-        const message = { dialogId: 0, buffer: new Uint8Array(0) };
+        const message = { dialogId: 0, buffer: new Uint8Array(0), vkAttachment: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<WebsocketServer_HistoryEvents_GameGif>(this, message, value);
@@ -1489,6 +1494,9 @@ class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketSe
                     break;
                 case /* bytes buffer */ 2:
                     message.buffer = reader.bytes();
+                    break;
+                case /* string vkAttachment */ 3:
+                    message.vkAttachment = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1508,6 +1516,9 @@ class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketSe
         /* bytes buffer = 2; */
         if (message.buffer.length)
             writer.tag(2, WireType.LengthDelimited).bytes(message.buffer);
+        /* string vkAttachment = 3; */
+        if (message.vkAttachment !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.vkAttachment);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
