@@ -19,6 +19,7 @@
     border-radius: 16px 0 16px 16px;
     direction: ltr;
     transition: 0.3s all ease;
+    word-break: break-all;
 }
 
 /* loader */

@@ -48,7 +48,8 @@ export const Profile = ({ id }: IPanelProps) => {
                         level="2"
                         weight="2"
                     >
-                        {user?.name || "Загрузочка..."}
+                        {vkUser?.first_name || "Загрузочка..."}{" "}
+                        {vkUser?.last_name}
                     </Title>
                 </div>
 
