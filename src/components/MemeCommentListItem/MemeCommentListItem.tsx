@@ -64,30 +64,29 @@ export const MemeCommentListItem = ({ item }: { item: TCommentWithOwner }) => {
 
                     <div className={styles.text}>{item.text}</div>
                 </div>
-
-                <div className={styles.markContainer}>
-                    <div
-                        onClick={() => handleMark("dislike")}
-                        style={{ padding: 0, cursor: "pointer" }}
-                    >
-                        {item.mark === Mark.DISLIKE ? (
-                            <Icon24ThumbsDown />
-                        ) : (
-                            <Icon24ThumbsDownOutline />
-                        )}
-                    </div>
-                    0
-                    <div
-                        onClick={() => handleMark("like")}
-                        style={{ padding: 0, cursor: "pointer" }}
-                    >
-                        {item.mark === Mark.LIKE ? (
-                            <Icon24ThumbsUp />
-                        ) : (
-                            <Icon24ThumbsUpOutline />
-                        )}
-                    </div>
-                </div>
+                {/*<div className={styles.markContainer}>*/}
+                {/*    <div*/}
+                {/*        onClick={() => handleMark("dislike")}*/}
+                {/*        style={{ padding: 0, cursor: "pointer" }}*/}
+                {/*    >*/}
+                {/*        {item.mark === Mark.DISLIKE ? (*/}
+                {/*            <Icon24ThumbsDown />*/}
+                {/*        ) : (*/}
+                {/*            <Icon24ThumbsDownOutline />*/}
+                {/*        )}*/}
+                {/*    </div>*/}
+                {/*    0*/}
+                {/*    <div*/}
+                {/*        onClick={() => handleMark("like")}*/}
+                {/*        style={{ padding: 0, cursor: "pointer" }}*/}
+                {/*    >*/}
+                {/*        {item.mark === Mark.LIKE ? (*/}
+                {/*            <Icon24ThumbsUp />*/}
+                {/*        ) : (*/}
+                {/*            <Icon24ThumbsUpOutline />*/}
+                {/*        )}*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
         </div>
     )
