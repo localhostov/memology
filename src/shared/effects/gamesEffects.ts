@@ -22,6 +22,7 @@ interface IGetLobbyParams {
 interface IGifContent {
     dialogId: number
     buffer: Uint8Array
+    vkAttachment: string
 }
 
 export namespace GamesEffects {
@@ -115,6 +116,7 @@ export namespace GamesEffects {
             {
                 dialogId: number
                 link: string
+                vkAttachment: string
             }[]
         >([])
         export const getContentLinkFx = createEffect((gif: IGifContent) => ({
@@ -122,6 +124,7 @@ export namespace GamesEffects {
             link: URL.createObjectURL(
                 new Blob([gif.buffer], { type: "image/gif" }),
             ),
+            vkAttachment: gif.vkAttachment,
         }))
         $gifContent.on(getContentLinkFx.doneData, (current, newGif) =>
             current.concat(newGif).sort((a, b) => a.dialogId - b.dialogId),
