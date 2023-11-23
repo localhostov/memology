@@ -19,6 +19,11 @@ interface IGetLobbyParams {
     roomId: string
 }
 
+interface IGifContent {
+    dialogId: number
+    buffer: Uint8Array
+}
+
 export namespace GamesEffects {
     export const $lobbyInfo = createStore<ReturnApiType<
         typeof API.getRoom
@@ -84,7 +89,7 @@ export namespace GamesEffects {
 
         export const $historyStep = createStore<number>(1)
 
-        $historyStep.reset(disconnectWs)
+        $historyStep.reset($isStarted)
         export const $readyCounter = createStore(0)
         export const setReadyCount = createEvent<number>()
         $readyCounter.on(setReadyCount, (_, count) => count)
@@ -106,12 +111,22 @@ export namespace GamesEffects {
             createEvent<WebsocketServer_HistoryEvents_FinishGame_Dialog[]>()
         $messages.on(setMessages, (_, msgs) => msgs)
 
-        export const $gifContent = createStore<string | null>(null)
-        export const getContentLinkFx = createEffect((buffer: Uint8Array) =>
-            URL.createObjectURL(new Blob([buffer], { type: "image/gif" })),
+        export const $gifContent = createStore<
+            {
+                dialogId: number
+                link: string
+            }[]
+        >([])
+        export const getContentLinkFx = createEffect((gif: IGifContent) => ({
+            dialogId: gif.dialogId,
+            link: URL.createObjectURL(
+                new Blob([gif.buffer], { type: "image/gif" }),
+            ),
+        }))
+        $gifContent.on(getContentLinkFx.doneData, (current, newGif) =>
+            current.concat(newGif).sort((a, b) => a.dialogId - b.dialogId),
         )
-        $gifContent.on(getContentLinkFx.doneData, (_, link) => link)
-        export const setGifBuffer = createEvent<Uint8Array>()
+        export const setGifBuffer = createEvent<IGifContent>()
 
         export const $gameStep = createStore<TGameHistoryStepType>("meWrite")
 

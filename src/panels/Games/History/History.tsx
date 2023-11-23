@@ -45,7 +45,8 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
     const isStarted = useUnit(GamesEffects.History.$isStarted)
     const users = useUnit(GamesEffects.History.$users)
-    const gifContent = useUnit(GamesEffects.History.$gifContent)
+    const gifs = useUnit(GamesEffects.History.$gifContent)
+    const gifContent = gifs.find((x) => x.dialogId === currentChatRoot)
     const gameStep = useUnit(GamesEffects.History.$gameStep)
     const vkUserData = useUnit($vkUserData)
     const unblock = useRef<() => void>()
@@ -102,8 +103,8 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                 GamesEffects.History.setMessages(msg.dialogs)
                 GamesEffects.History.setGameStep("readyResult")
             },
-            gameGif: ({ buffer, vkAttachment }) => {
-                GamesEffects.History.setGifBuffer(buffer)
+            gameGif: ({ dialogId, buffer, vkAttachment }) => {
+                GamesEffects.History.setGifBuffer({ dialogId, buffer })
                 setVkGifAttachment(vkAttachment)
             },
             readyCounter: (num) => GamesEffects.History.setReadyCount(num),
@@ -135,7 +136,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
         return () => {
             changeEpicVisibility(true)
-            if (gifContent) URL.revokeObjectURL(gifContent)
+            if (gifContent) URL.revokeObjectURL(gifContent.link)
         }
     }, [])
 
