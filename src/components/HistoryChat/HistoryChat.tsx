@@ -10,6 +10,10 @@ export const HistoryChat = ({ root }: { root: number }) => {
     const safeMessages = messages?.[root]?.msgs || []
 
     useEffect(() => {
+        setCurrentChatIndex(1)
+    }, [root])
+
+    useEffect(() => {
         if (currentChatIndex < safeMessages.length) {
             const timer = setTimeout(() => {
                 setCurrentChatIndex((prev) => prev + 1)

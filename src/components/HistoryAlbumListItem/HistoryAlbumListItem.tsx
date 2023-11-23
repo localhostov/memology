@@ -16,12 +16,13 @@ export const HistoryAlbumListItem = ({
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
+        setIsLoading(true) // if item changed from 2+ root
         const timer = setTimeout(() => {
             setIsLoading(false)
         }, 1500)
 
         return () => clearInterval(timer)
-    }, [])
+    }, [item])
 
     return (
         <div className={styles.container}>
@@ -44,9 +45,15 @@ export const HistoryAlbumListItem = ({
                             vkUserData?.id === item.owner?.id
                                 ? "white"
                                 : "--vkui--color_text_primary",
+                        fontStyle:
+                            item.text.trim().length > 0 ? "normal" : "italic",
                     }}
                 >
-                    {isLoading ? <div className={styles.loading} /> : item.text}
+                    {isLoading ? (
+                        <div className={styles.loading} />
+                    ) : (
+                        item.text || "Пусто"
+                    )}
                 </div>
             </div>
         </div>
