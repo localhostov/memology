@@ -123,5 +123,10 @@ export namespace GamesEffects {
             clock: setGifBuffer,
             target: getContentLinkFx,
         })
+
+        export const $currentChatRoot = createStore(0)
+        export const setChatRoot = createEvent<number>()
+        $currentChatRoot.on(setChatRoot, (_, num) => num)
+        $currentChatRoot.reset($isStarted)
     }
 }

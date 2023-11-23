@@ -49,7 +49,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const gameStep = useUnit(GamesEffects.History.$gameStep)
     const vkUserData = useUnit($vkUserData)
     const unblock = useRef<() => void>()
-    const [currentChatRoot, setCurrentChatRoot] = useState(0)
+    const currentChatRoot = useUnit(GamesEffects.History.$currentChatRoot)
     const [vkGifAttachment, setVkGifAttachment] = useState("")
 
     const { send } = useWebsocket(
@@ -110,6 +110,11 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             newGame: () => {
                 GamesEffects.History.setStart(false)
                 GamesEffects.History.setGameStep("meWrite")
+            },
+            showDialog: ({ dialogId }) => {
+                if (gameStep !== "showResult")
+                    GamesEffects.History.setGameStep("showResult")
+                GamesEffects.History.setChatRoot(dialogId)
             },
         },
         {
@@ -248,7 +253,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
     const GameStepReadyResult = () => {
         const showGameResult = () => {
-            GamesEffects.History.setGameStep("showResult")
+            send("showDialog", { dialogId: 0 })
         }
         const roomOwner = users.find((it) => it.isOwner)
 
@@ -336,10 +341,11 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         const nextAction = () => {
             if ((messages?.length || 0) - 1 === currentChatRoot) {
                 send("newGame", {})
-                setCurrentChatRoot(0)
             } else {
                 setNextActionIsLocked(true)
-                setCurrentChatRoot((prev) => prev + 1)
+                send("showDialog", {
+                    dialogId: currentChatRoot + 1,
+                })
             }
         }
 
