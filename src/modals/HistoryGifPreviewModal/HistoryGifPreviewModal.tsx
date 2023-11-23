@@ -1,19 +1,23 @@
 import { downloadFile, GamesEffects } from "@shared"
 import { IModalProps } from "@types"
 import bridge from "@vkontakte/vk-bridge"
-import { Button, ModalCard } from "@vkontakte/vkui"
+import { Button, ModalCard, Platform, usePlatform } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
 
 export const HistoryGifPreviewModal = ({ id }: IModalProps) => {
     const gifContent = useUnit(GamesEffects.History.$gifContent)!
+    const platform = usePlatform()
 
     const downloadGif = () => {
         try {
-            downloadFile(gifContent, "history.gif")
-            bridge.send("VKWebAppDownloadFile", {
-                url: gifContent.split("blob:")[1],
-                filename: "history.gif",
-            })
+            if (platform === Platform.VKCOM) {
+                downloadFile(gifContent, "history.gif")
+            } else {
+                bridge.send("VKWebAppDownloadFile", {
+                    url: gifContent.split("blob:")[1],
+                    filename: "history.gif",
+                })
+            }
         } catch (error) {}
     }
 
