@@ -41,6 +41,10 @@ export interface WebsocketClient_HistoryCommand {
      * @generated from protobuf field: WebsocketClient.HistoryCommand.SetReady setReady = 4;
      */
     setReady?: WebsocketClient_HistoryCommand_SetReady;
+    /**
+     * @generated from protobuf field: WebsocketClient.HistoryCommand.NewGame newGame = 5;
+     */
+    newGame?: WebsocketClient_HistoryCommand_NewGame;
 }
 /**
  * @generated from protobuf message WebsocketClient.HistoryCommand.KickUser
@@ -73,6 +77,11 @@ export interface WebsocketClient_HistoryCommand_SetReady {
      * @generated from protobuf field: string text = 1;
      */
     text: string;
+}
+/**
+ * @generated from protobuf message WebsocketClient.HistoryCommand.NewGame
+ */
+export interface WebsocketClient_HistoryCommand_NewGame {
 }
 /**
  * @generated from protobuf message WebsocketError
@@ -140,6 +149,10 @@ export interface WebsocketServer_HistoryEvents {
      * @generated from protobuf field: optional uint32 readyCounter = 10;
      */
     readyCounter?: number;
+    /**
+     * @generated from protobuf field: WebsocketServer.HistoryEvents.NewGame newGame = 11;
+     */
+    newGame?: WebsocketServer_HistoryEvents_NewGame;
 }
 /**
  * @generated from protobuf message WebsocketServer.HistoryEvents.LobbyUser
@@ -278,9 +291,18 @@ export interface WebsocketServer_HistoryEvents_FinishGame_Dialog {
  */
 export interface WebsocketServer_HistoryEvents_GameGif {
     /**
-     * @generated from protobuf field: bytes buffer = 1;
+     * @generated from protobuf field: uint32 dialogId = 1;
+     */
+    dialogId: number;
+    /**
+     * @generated from protobuf field: bytes buffer = 2;
      */
     buffer: Uint8Array;
+}
+/**
+ * @generated from protobuf message WebsocketServer.HistoryEvents.NewGame
+ */
+export interface WebsocketServer_HistoryEvents_NewGame {
 }
 /**
  * @generated from protobuf message GetRoomInfoResponse
@@ -371,7 +393,8 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
             { no: 1, name: "kickUser", kind: "message", T: () => WebsocketClient_HistoryCommand_KickUser },
             { no: 2, name: "startGame", kind: "message", T: () => WebsocketClient_HistoryCommand_StartGame },
             { no: 3, name: "sendText", kind: "message", T: () => WebsocketClient_HistoryCommand_SendText },
-            { no: 4, name: "setReady", kind: "message", T: () => WebsocketClient_HistoryCommand_SetReady }
+            { no: 4, name: "setReady", kind: "message", T: () => WebsocketClient_HistoryCommand_SetReady },
+            { no: 5, name: "newGame", kind: "message", T: () => WebsocketClient_HistoryCommand_NewGame }
         ]);
     }
     create(value?: PartialMessage<WebsocketClient_HistoryCommand>): WebsocketClient_HistoryCommand {
@@ -398,6 +421,9 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
                 case /* WebsocketClient.HistoryCommand.SetReady setReady */ 4:
                     message.setReady = WebsocketClient_HistoryCommand_SetReady.internalBinaryRead(reader, reader.uint32(), options, message.setReady);
                     break;
+                case /* WebsocketClient.HistoryCommand.NewGame newGame */ 5:
+                    message.newGame = WebsocketClient_HistoryCommand_NewGame.internalBinaryRead(reader, reader.uint32(), options, message.newGame);
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -422,6 +448,9 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
         /* WebsocketClient.HistoryCommand.SetReady setReady = 4; */
         if (message.setReady)
             WebsocketClient_HistoryCommand_SetReady.internalBinaryWrite(message.setReady, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
+        /* WebsocketClient.HistoryCommand.NewGame newGame = 5; */
+        if (message.newGame)
+            WebsocketClient_HistoryCommand_NewGame.internalBinaryWrite(message.newGame, writer.tag(5, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -600,6 +629,32 @@ class WebsocketClient_HistoryCommand_SetReady$Type extends MessageType<Websocket
  */
 export const WebsocketClient_HistoryCommand_SetReady = new WebsocketClient_HistoryCommand_SetReady$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class WebsocketClient_HistoryCommand_NewGame$Type extends MessageType<WebsocketClient_HistoryCommand_NewGame> {
+    constructor() {
+        super("WebsocketClient.HistoryCommand.NewGame", []);
+    }
+    create(value?: PartialMessage<WebsocketClient_HistoryCommand_NewGame>): WebsocketClient_HistoryCommand_NewGame {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketClient_HistoryCommand_NewGame>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketClient_HistoryCommand_NewGame): WebsocketClient_HistoryCommand_NewGame {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: WebsocketClient_HistoryCommand_NewGame, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketClient.HistoryCommand.NewGame
+ */
+export const WebsocketClient_HistoryCommand_NewGame = new WebsocketClient_HistoryCommand_NewGame$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class WebsocketError$Type extends MessageType<WebsocketError> {
     constructor() {
         super("WebsocketError", [
@@ -713,7 +768,8 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
             { no: 7, name: "nextStep", kind: "message", T: () => WebsocketServer_HistoryEvents_NextStep },
             { no: 8, name: "finishGame", kind: "message", T: () => WebsocketServer_HistoryEvents_FinishGame },
             { no: 9, name: "gameGif", kind: "message", T: () => WebsocketServer_HistoryEvents_GameGif },
-            { no: 10, name: "readyCounter", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ }
+            { no: 10, name: "readyCounter", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ },
+            { no: 11, name: "newGame", kind: "message", T: () => WebsocketServer_HistoryEvents_NewGame }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents>): WebsocketServer_HistoryEvents {
@@ -758,6 +814,9 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
                 case /* optional uint32 readyCounter */ 10:
                     message.readyCounter = reader.uint32();
                     break;
+                case /* WebsocketServer.HistoryEvents.NewGame newGame */ 11:
+                    message.newGame = WebsocketServer_HistoryEvents_NewGame.internalBinaryRead(reader, reader.uint32(), options, message.newGame);
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -800,6 +859,9 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
         /* optional uint32 readyCounter = 10; */
         if (message.readyCounter !== undefined)
             writer.tag(10, WireType.Varint).uint32(message.readyCounter);
+        /* WebsocketServer.HistoryEvents.NewGame newGame = 11; */
+        if (message.newGame)
+            WebsocketServer_HistoryEvents_NewGame.internalBinaryWrite(message.newGame, writer.tag(11, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1406,11 +1468,12 @@ export const WebsocketServer_HistoryEvents_FinishGame_Dialog = new WebsocketServ
 class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketServer_HistoryEvents_GameGif> {
     constructor() {
         super("WebsocketServer.HistoryEvents.GameGif", [
-            { no: 1, name: "buffer", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
+            { no: 1, name: "dialogId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "buffer", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents_GameGif>): WebsocketServer_HistoryEvents_GameGif {
-        const message = { buffer: new Uint8Array(0) };
+        const message = { dialogId: 0, buffer: new Uint8Array(0) };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<WebsocketServer_HistoryEvents_GameGif>(this, message, value);
@@ -1421,7 +1484,10 @@ class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketSe
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* bytes buffer */ 1:
+                case /* uint32 dialogId */ 1:
+                    message.dialogId = reader.uint32();
+                    break;
+                case /* bytes buffer */ 2:
                     message.buffer = reader.bytes();
                     break;
                 default:
@@ -1436,9 +1502,12 @@ class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketSe
         return message;
     }
     internalBinaryWrite(message: WebsocketServer_HistoryEvents_GameGif, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* bytes buffer = 1; */
+        /* uint32 dialogId = 1; */
+        if (message.dialogId !== 0)
+            writer.tag(1, WireType.Varint).uint32(message.dialogId);
+        /* bytes buffer = 2; */
         if (message.buffer.length)
-            writer.tag(1, WireType.LengthDelimited).bytes(message.buffer);
+            writer.tag(2, WireType.LengthDelimited).bytes(message.buffer);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1449,6 +1518,32 @@ class WebsocketServer_HistoryEvents_GameGif$Type extends MessageType<WebsocketSe
  * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.GameGif
  */
 export const WebsocketServer_HistoryEvents_GameGif = new WebsocketServer_HistoryEvents_GameGif$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class WebsocketServer_HistoryEvents_NewGame$Type extends MessageType<WebsocketServer_HistoryEvents_NewGame> {
+    constructor() {
+        super("WebsocketServer.HistoryEvents.NewGame", []);
+    }
+    create(value?: PartialMessage<WebsocketServer_HistoryEvents_NewGame>): WebsocketServer_HistoryEvents_NewGame {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketServer_HistoryEvents_NewGame>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketServer_HistoryEvents_NewGame): WebsocketServer_HistoryEvents_NewGame {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: WebsocketServer_HistoryEvents_NewGame, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.NewGame
+ */
+export const WebsocketServer_HistoryEvents_NewGame = new WebsocketServer_HistoryEvents_NewGame$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class GetRoomInfoResponse$Type extends MessageType<GetRoomInfoResponse> {
     constructor() {

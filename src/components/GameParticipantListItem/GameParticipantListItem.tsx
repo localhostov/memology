@@ -2,7 +2,7 @@ import { $vkUserData } from "@shared"
 import { IGameParticipant, TSendFunction } from "@types"
 import { Icon24CancelOutline, Icon24CrownOutline } from "@vkontakte/icons"
 import { Avatar, IconButton, SimpleCell } from "@vkontakte/vkui"
-import { useUnit } from "effector-react/compat"
+import { useUnit } from "effector-react"
 import { MouseEvent } from "react"
 import styles from "./styles.module.css"
 

@@ -83,6 +83,7 @@ export namespace GamesEffects {
         $time.on(setStart, (_, isStarted) => (isStarted ? 15 : null))
 
         export const $historyStep = createStore<number>(1)
+
         $historyStep.reset(disconnectWs)
         export const $readyCounter = createStore(0)
         export const setReadyCount = createEvent<number>()
@@ -91,13 +92,13 @@ export namespace GamesEffects {
         export const $isReady = createStore(false)
         export const setIsReady = createEvent()
         $isReady.on(setIsReady, (isReady) => !isReady)
-        $isReady.reset($historyStep)
+        $isReady.reset($historyStep, $isStarted)
         export const $previousContext = createStore<string | null>(null)
-        $previousContext.reset($historyStep)
+        // $previousContext.reset($historyStep)
         export const nextStep = createEvent<string>()
         $historyStep.on(nextStep, (step) => step + 1)
         $previousContext.on(nextStep, (_, ctx) => ctx)
-
+        $time.on(nextStep, () => 15)
         export const $messages = createStore<
             WebsocketServer_HistoryEvents_FinishGame_Dialog[] | null
         >(null)

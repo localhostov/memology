@@ -102,6 +102,10 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             },
             gameGif: ({ buffer }) => GamesEffects.History.setGifBuffer(buffer),
             readyCounter: (num) => GamesEffects.History.setReadyCount(num),
+            newGame: () => {
+                GamesEffects.History.setStart(false)
+                GamesEffects.History.setGameStep("meWrite")
+            },
         },
         {
             onClose: () => {
@@ -296,8 +300,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
         const nextAction = () => {
             if ((messages?.length || 0) - 1 === currentChatRoot) {
-                GamesEffects.History.setGameStep("meWrite")
-                GamesEffects.History.setStart(false)
+                send("newGame", {})
             } else {
                 setCurrentChatRoot((prev) => prev + 1)
             }
