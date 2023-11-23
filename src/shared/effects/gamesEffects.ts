@@ -94,7 +94,7 @@ export namespace GamesEffects {
         $isReady.on(setIsReady, (isReady) => !isReady)
         $isReady.reset($historyStep, $isStarted)
         export const $previousContext = createStore<string | null>(null)
-        // $previousContext.reset($historyStep)
+        $previousContext.reset($isStarted)
         export const nextStep = createEvent<string>()
         $historyStep.on(nextStep, (step) => step + 1)
         $previousContext.on(nextStep, (_, ctx) => ctx)
