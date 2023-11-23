@@ -32,7 +32,7 @@ export const GameInviteModal = ({ id }: IModalProps) => {
                 mode: params.mode as TGameModeType,
             })
         }
-    }, [])
+    }, [params?.gameId, params?.mode])
 
     const accept = () => {
         if (params?.mode && params.gameId) {
