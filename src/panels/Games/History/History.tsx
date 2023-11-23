@@ -1,6 +1,7 @@
 import { GameLobby, HistoryChat } from "@components"
 import {
     $vkUserData,
+    APP_ID,
     changeEpicVisibility,
     declOfNum,
     GamesEffects,
@@ -49,6 +50,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const vkUserData = useUnit($vkUserData)
     const unblock = useRef<() => void>()
     const [currentChatRoot, setCurrentChatRoot] = useState(0)
+    const [vkGifAttachment, setVkGifAttachment] = useState("")
 
     const { send } = useWebsocket(
         "history",
@@ -100,7 +102,10 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                 GamesEffects.History.setMessages(msg.dialogs)
                 GamesEffects.History.setGameStep("readyResult")
             },
-            gameGif: ({ buffer }) => GamesEffects.History.setGifBuffer(buffer),
+            gameGif: ({ buffer, vkAttachment }) => {
+                GamesEffects.History.setGifBuffer(buffer)
+                setVkGifAttachment(vkAttachment)
+            },
             readyCounter: (num) => GamesEffects.History.setReadyCount(num),
             newGame: () => {
                 GamesEffects.History.setStart(false)
@@ -159,6 +164,12 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                 setMeWriteValue("")
             }
         }, [step, isStarted])
+
+        useEffect(() => {
+            if (time !== null && time === 1) {
+                send("sendText", { text: meWriteValue })
+            }
+        }, [time])
 
         return (
             <div>
@@ -239,6 +250,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         const showGameResult = () => {
             GamesEffects.History.setGameStep("showResult")
         }
+        const roomOwner = users.find((it) => it.isOwner)
 
         return (
             <div>
@@ -248,7 +260,11 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                             style={{ width: 56, height: 56 }}
                         />
                     }
-                    header="Просмотр результата"
+                    header={
+                        vkUserData?.id === roomOwner?.vkId
+                            ? "Просмотр результата"
+                            : "Ожидаем-с..."
+                    }
                     action={
                         <div>
                             <UsersStack
@@ -265,22 +281,31 @@ export const HistoryGame = ({ id }: IPanelProps) => {
 
                             <div style={{ height: 16 }} />
 
-                            <Button
-                                before={<Icon24Play />}
-                                onClick={showGameResult}
-                            >
-                                Начать
-                            </Button>
+                            {vkUserData?.id === roomOwner?.vkId && (
+                                <Button
+                                    before={<Icon24Play />}
+                                    onClick={showGameResult}
+                                >
+                                    Начать
+                                </Button>
+                            )}
                         </div>
                     }
                 >
-                    Нажмите на кнопку ниже, чтобы начать просмотр результата
+                    {vkUserData?.id === roomOwner?.vkId
+                        ? "Нажмите на кнопку ниже, чтобы начать просмотр результата"
+                        : `Ждём, пока ${
+                              roomOwner?.vkData.first_name ||
+                              "создатель комнаты"
+                          } запустит просмотр истории`}
                 </Placeholder>
             </div>
         )
     }
 
     const GameStepShowResult = () => {
+        const [nextActionIsLocked, setNextActionIsLocked] = useState(true)
+
         const messages = useUnit(GamesEffects.History.$messages)
         const downloadGIF = () => {
             if (gifContent) {
@@ -295,11 +320,17 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         }
 
         const shareOnWall = () => {
-            console.log("share on wall")
+            bridge.send("VKWebAppShowWallPostBox", {
+                message: `Мемология - vk.com/app${APP_ID}`,
+                attachments: vkGifAttachment,
+            })
         }
 
-        const shareOnStory = () => {
-            console.log("share on story")
+        const shareOnStory = async () => {
+            await bridge.send("VKWebAppShowStoryBox", {
+                background_type: "image",
+                url: `https://vk.com/doc-223365328_666051336`,
+            })
         }
 
         const nextAction = () => {
@@ -307,13 +338,21 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                 send("newGame", {})
                 setCurrentChatRoot(0)
             } else {
+                setNextActionIsLocked(true)
                 setCurrentChatRoot((prev) => prev + 1)
             }
         }
 
+        const onLastMessageShowed = () => {
+            setNextActionIsLocked(false)
+        }
+
         return (
             <div>
-                <HistoryChat root={currentChatRoot} />
+                <HistoryChat
+                    root={currentChatRoot}
+                    onLastMessageShowed={onLastMessageShowed}
+                />
 
                 <div style={{ height: 16 }} />
 
@@ -363,6 +402,7 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                             )
                         }
                         onClick={nextAction}
+                        disabled={nextActionIsLocked}
                     >
                         {(messages?.length || 0) - 1 !== currentChatRoot
                             ? "Дальше"

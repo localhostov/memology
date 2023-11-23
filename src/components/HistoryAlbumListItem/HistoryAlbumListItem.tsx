@@ -9,8 +9,10 @@ import styles from "./styles.module.css"
 
 export const HistoryAlbumListItem = ({
     item,
+    onEndMessageLoading,
 }: {
     item: WebsocketServer_HistoryEvents_FinishGame_Msg
+    onEndMessageLoading: (ownerId: number) => void
 }) => {
     const vkUserData = useUnit($vkUserData)
     const [isLoading, setIsLoading] = useState(true)
@@ -19,6 +21,7 @@ export const HistoryAlbumListItem = ({
         setIsLoading(true) // if item changed from 2+ root
         const timer = setTimeout(() => {
             setIsLoading(false)
+            onEndMessageLoading(item.owner?.id || -1)
         }, 1500)
 
         return () => clearInterval(timer)
