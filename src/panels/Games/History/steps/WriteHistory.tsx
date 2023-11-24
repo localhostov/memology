@@ -1,7 +1,17 @@
 import { GamesEffects } from "@shared"
 import { TSendFunction } from "@types"
-import { Icon16CheckDoubleOutline, Icon28PencilSquare } from "@vkontakte/icons"
-import { Button, Input, Placeholder, Progress } from "@vkontakte/vkui"
+import {
+    Icon16CheckDoubleOutline,
+    Icon16Clear,
+    Icon28PencilSquare,
+} from "@vkontakte/icons"
+import {
+    Button,
+    IconButton,
+    Input,
+    Placeholder,
+    Progress,
+} from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
 import { useEffect, useState } from "react"
 import styles from "../styles.module.css"
@@ -79,9 +89,11 @@ export function WriteHistory({ send }: IProps) {
             <Placeholder
                 icon={<Icon28PencilSquare style={{ width: 56, height: 56 }} />}
                 header={
-                    previousContext
-                        ? "Продолжите эту историю"
-                        : "Начните писать историю"
+                    step === users.length
+                        ? "Завершите эту историю"
+                        : previousContext
+                          ? "Продолжите эту историю"
+                          : "Начните писать историю"
                 }
                 style={{ paddingBottom: 0 }}
             />
@@ -97,20 +109,34 @@ export function WriteHistory({ send }: IProps) {
                 </>
             )}
 
+            <div style={{ height: 16 }} />
+
             <div className={styles.meWriteInputContainer}>
                 <Input
                     style={{ flex: 1 }}
                     type="text"
                     disabled={isReady}
                     value={meWriteValue}
-                    placeholder="Писать сюда если что"
+                    placeholder="Ондажды..."
                     onChange={(e) => setMeWriteValue(e.target.value)}
+                    after={
+                        meWriteValue.length > 0 && (
+                            <IconButton
+                                hoverMode="opacity"
+                                aria-label="Очистить поле"
+                                onClick={() => setMeWriteValue("")}
+                            >
+                                <Icon16Clear />
+                            </IconButton>
+                        )
+                    }
                 />
 
                 <Button
                     onClick={ready}
                     size="l"
                     mode={isReady ? "secondary" : "primary"}
+                    disabled={meWriteValue.trim().length === 0}
                 >
                     {isReady ? "Изменить" : "Готово"}
                 </Button>
