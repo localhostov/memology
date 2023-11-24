@@ -1,4 +1,4 @@
-import { $vkUserData, GamesEffects, Modals, setSnackbar } from "@shared"
+import { $vkUserData, GamesEffects, setSnackbar } from "@shared"
 import { TGameModeType, TGameTabType, TSendFunction } from "@types"
 import {
     Icon20LogoVkCallsOutline,
@@ -25,18 +25,18 @@ import { useList, useUnit } from "effector-react"
 import { ReactElement, useState } from "react"
 import { GameParticipantListItem } from "../GameParticipantListItem/GameParticipantListItem"
 import styles from "./styles.module.css"
-import setCallData = GamesEffects.History.setCallLink
-import setCallLink = GamesEffects.History.setCallLink
+
+const { setCallLink, $users, $callLink } = GamesEffects.History
 
 export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
     const navigator = useRouteNavigator()
-    const users = useUnit(GamesEffects.History.$users)
+    const users = useUnit($users)
     const vkUserData = useUnit($vkUserData)
     const [activeTab, setActiveTab] = useState<TGameTabType>("participants")
     const [callButtonLoading, setCallButtonLoading] = useState(false)
     const params = useParams<"roomId">()
     const gameOwner = users.find((user) => user.isOwner)
-    const callLink = useUnit(GamesEffects.History.$callLink)
+    const callLink = useUnit($callLink)
 
     const share = () => {
         navigator.push(`/games/history/${params?.roomId}/share`)
@@ -61,8 +61,12 @@ export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
                 bridge
                     .send("VKWebAppCallStart")
                     .then((data) => {
+                        console.log(data)
                         if (data.result) {
                             setCallLink(data.join_link)
+                            send("setCallData", {
+                                link: data.join_link,
+                            })
                         }
                     })
                     .catch(() => {
