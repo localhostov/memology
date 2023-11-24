@@ -102,6 +102,14 @@ export interface MemeResponse {
      * @generated from protobuf field: optional Mark mark = 10;
      */
     mark?: Mark;
+    /**
+     * @generated from protobuf field: optional uint32 placeInEternalRating = 11;
+     */
+    placeInEternalRating?: number;
+    /**
+     * @generated from protobuf field: optional uint32 placeInWeeklyRating = 12;
+     */
+    placeInWeeklyRating?: number;
 }
 /**
  * @generated from protobuf enum Mark
@@ -272,7 +280,9 @@ class MemeResponse$Type extends MessageType<MemeResponse> {
             { no: 7, name: "likesCount", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
             { no: 8, name: "commentsCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 9, name: "ownerId", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
-            { no: 10, name: "mark", kind: "enum", opt: true, T: () => ["Mark", Mark] }
+            { no: 10, name: "mark", kind: "enum", opt: true, T: () => ["Mark", Mark] },
+            { no: 11, name: "placeInEternalRating", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ },
+            { no: 12, name: "placeInWeeklyRating", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<MemeResponse>): MemeResponse {
@@ -317,6 +327,12 @@ class MemeResponse$Type extends MessageType<MemeResponse> {
                 case /* optional Mark mark */ 10:
                     message.mark = reader.int32();
                     break;
+                case /* optional uint32 placeInEternalRating */ 11:
+                    message.placeInEternalRating = reader.uint32();
+                    break;
+                case /* optional uint32 placeInWeeklyRating */ 12:
+                    message.placeInWeeklyRating = reader.uint32();
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -359,6 +375,12 @@ class MemeResponse$Type extends MessageType<MemeResponse> {
         /* optional Mark mark = 10; */
         if (message.mark !== undefined)
             writer.tag(10, WireType.Varint).int32(message.mark);
+        /* optional uint32 placeInEternalRating = 11; */
+        if (message.placeInEternalRating !== undefined)
+            writer.tag(11, WireType.Varint).uint32(message.placeInEternalRating);
+        /* optional uint32 placeInWeeklyRating = 12; */
+        if (message.placeInWeeklyRating !== undefined)
+            writer.tag(12, WireType.Varint).uint32(message.placeInWeeklyRating);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

@@ -86,9 +86,16 @@ export const Meme = ({ id }: IPanelProps) => {
                         />
 
                         <div className={styles.imageContainerContent}>
-                            <div className={styles.placeInRating}>
-                                #1 в недельном рейтинге
-                            </div>
+                            {meme.placeInWeeklyRating && (
+                                <div className={styles.placeInRating}>
+                                    #1 в недельном рейтинге
+                                </div>
+                            )}
+                            {meme.placeInEternalRating && (
+                                <div className={styles.placeInRating}>
+                                    #1 в постоянном рейтинге
+                                </div>
+                            )}
                             <div className={styles.title}>{meme.title}</div>
                             <div className={styles.description}>
                                 {meme.description}

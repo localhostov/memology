@@ -155,5 +155,16 @@ export namespace GamesEffects {
         export const $callLink = createStore<string | null>(null)
         export const setCallLink = createEvent<string | null>()
         $callLink.on(setCallLink, (_, link) => link)
+        $callLink.reset($isStarted, disconnectWs)
+
+        export const joinToCallFx = createEffect((link: string) =>
+            bridge.send("VKWebAppCallJoin", { join_link: link }),
+        )
+
+        sample({
+            clock: $callLink,
+            filter: (link): link is string => link !== null,
+            target: joinToCallFx,
+        })
     }
 }

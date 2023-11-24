@@ -38,6 +38,8 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         "history",
         {
             lobbyInfo: async (msg) => {
+                if (msg.callLink) GamesEffects.History.setCallLink(msg.callLink)
+
                 // TODO: place in effects
                 const result: IGameParticipant[] = []
 
@@ -101,6 +103,8 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     GamesEffects.History.setGameStep("showResult")
                 GamesEffects.History.setChatRoot(dialogId)
             },
+            callData: ({ link }) =>
+                GamesEffects.History.setCallLink(link ?? null),
         },
         {
             onClose: () => {

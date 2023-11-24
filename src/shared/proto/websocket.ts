@@ -49,6 +49,10 @@ export interface WebsocketClient_HistoryCommand {
      * @generated from protobuf field: WebsocketClient.HistoryCommand.ShowDialog showDialog = 6;
      */
     showDialog?: WebsocketClient_HistoryCommand_ShowDialog;
+    /**
+     * @generated from protobuf field: WebsocketClient.HistoryCommand.SetCallData setCallData = 7;
+     */
+    setCallData?: WebsocketClient_HistoryCommand_SetCallData;
 }
 /**
  * @generated from protobuf message WebsocketClient.HistoryCommand.KickUser
@@ -95,6 +99,15 @@ export interface WebsocketClient_HistoryCommand_ShowDialog {
      * @generated from protobuf field: uint32 dialogId = 1;
      */
     dialogId: number;
+}
+/**
+ * @generated from protobuf message WebsocketClient.HistoryCommand.SetCallData
+ */
+export interface WebsocketClient_HistoryCommand_SetCallData {
+    /**
+     * @generated from protobuf field: optional string link = 1;
+     */
+    link?: string;
 }
 /**
  * @generated from protobuf message WebsocketError
@@ -170,6 +183,10 @@ export interface WebsocketServer_HistoryEvents {
      * @generated from protobuf field: WebsocketServer.HistoryEvents.ShowDialog showDialog = 12;
      */
     showDialog?: WebsocketServer_HistoryEvents_ShowDialog;
+    /**
+     * @generated from protobuf field: WebsocketServer.HistoryEvents.CallData callData = 13;
+     */
+    callData?: WebsocketServer_HistoryEvents_CallData;
 }
 /**
  * @generated from protobuf message WebsocketServer.HistoryEvents.LobbyUser
@@ -218,6 +235,10 @@ export interface WebsocketServer_HistoryEvents_LobbyInfo {
      * @generated from protobuf field: repeated WebsocketServer.HistoryEvents.LobbyUser users = 1;
      */
     users: WebsocketServer_HistoryEvents_LobbyUser[];
+    /**
+     * @generated from protobuf field: optional string callLink = 2;
+     */
+    callLink?: string;
 }
 /**
  * @generated from protobuf message WebsocketServer.HistoryEvents.ShowSnackbar
@@ -335,6 +356,15 @@ export interface WebsocketServer_HistoryEvents_ShowDialog {
     dialogId: number;
 }
 /**
+ * @generated from protobuf message WebsocketServer.HistoryEvents.CallData
+ */
+export interface WebsocketServer_HistoryEvents_CallData {
+    /**
+     * @generated from protobuf field: optional string link = 1;
+     */
+    link?: string;
+}
+/**
  * @generated from protobuf message GetRoomInfoResponse
  */
 export interface GetRoomInfoResponse {
@@ -425,7 +455,8 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
             { no: 3, name: "sendText", kind: "message", T: () => WebsocketClient_HistoryCommand_SendText },
             { no: 4, name: "setReady", kind: "message", T: () => WebsocketClient_HistoryCommand_SetReady },
             { no: 5, name: "newGame", kind: "message", T: () => WebsocketClient_HistoryCommand_NewGame },
-            { no: 6, name: "showDialog", kind: "message", T: () => WebsocketClient_HistoryCommand_ShowDialog }
+            { no: 6, name: "showDialog", kind: "message", T: () => WebsocketClient_HistoryCommand_ShowDialog },
+            { no: 7, name: "setCallData", kind: "message", T: () => WebsocketClient_HistoryCommand_SetCallData }
         ]);
     }
     create(value?: PartialMessage<WebsocketClient_HistoryCommand>): WebsocketClient_HistoryCommand {
@@ -458,6 +489,9 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
                 case /* WebsocketClient.HistoryCommand.ShowDialog showDialog */ 6:
                     message.showDialog = WebsocketClient_HistoryCommand_ShowDialog.internalBinaryRead(reader, reader.uint32(), options, message.showDialog);
                     break;
+                case /* WebsocketClient.HistoryCommand.SetCallData setCallData */ 7:
+                    message.setCallData = WebsocketClient_HistoryCommand_SetCallData.internalBinaryRead(reader, reader.uint32(), options, message.setCallData);
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -488,6 +522,9 @@ class WebsocketClient_HistoryCommand$Type extends MessageType<WebsocketClient_Hi
         /* WebsocketClient.HistoryCommand.ShowDialog showDialog = 6; */
         if (message.showDialog)
             WebsocketClient_HistoryCommand_ShowDialog.internalBinaryWrite(message.showDialog, writer.tag(6, WireType.LengthDelimited).fork(), options).join();
+        /* WebsocketClient.HistoryCommand.SetCallData setCallData = 7; */
+        if (message.setCallData)
+            WebsocketClient_HistoryCommand_SetCallData.internalBinaryWrite(message.setCallData, writer.tag(7, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -739,6 +776,53 @@ class WebsocketClient_HistoryCommand_ShowDialog$Type extends MessageType<Websock
  */
 export const WebsocketClient_HistoryCommand_ShowDialog = new WebsocketClient_HistoryCommand_ShowDialog$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class WebsocketClient_HistoryCommand_SetCallData$Type extends MessageType<WebsocketClient_HistoryCommand_SetCallData> {
+    constructor() {
+        super("WebsocketClient.HistoryCommand.SetCallData", [
+            { no: 1, name: "link", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<WebsocketClient_HistoryCommand_SetCallData>): WebsocketClient_HistoryCommand_SetCallData {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketClient_HistoryCommand_SetCallData>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketClient_HistoryCommand_SetCallData): WebsocketClient_HistoryCommand_SetCallData {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* optional string link */ 1:
+                    message.link = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: WebsocketClient_HistoryCommand_SetCallData, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* optional string link = 1; */
+        if (message.link !== undefined)
+            writer.tag(1, WireType.LengthDelimited).string(message.link);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketClient.HistoryCommand.SetCallData
+ */
+export const WebsocketClient_HistoryCommand_SetCallData = new WebsocketClient_HistoryCommand_SetCallData$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class WebsocketError$Type extends MessageType<WebsocketError> {
     constructor() {
         super("WebsocketError", [
@@ -854,7 +938,8 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
             { no: 9, name: "gameGif", kind: "message", T: () => WebsocketServer_HistoryEvents_GameGif },
             { no: 10, name: "readyCounter", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ },
             { no: 11, name: "newGame", kind: "message", T: () => WebsocketServer_HistoryEvents_NewGame },
-            { no: 12, name: "showDialog", kind: "message", T: () => WebsocketServer_HistoryEvents_ShowDialog }
+            { no: 12, name: "showDialog", kind: "message", T: () => WebsocketServer_HistoryEvents_ShowDialog },
+            { no: 13, name: "callData", kind: "message", T: () => WebsocketServer_HistoryEvents_CallData }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents>): WebsocketServer_HistoryEvents {
@@ -905,6 +990,9 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
                 case /* WebsocketServer.HistoryEvents.ShowDialog showDialog */ 12:
                     message.showDialog = WebsocketServer_HistoryEvents_ShowDialog.internalBinaryRead(reader, reader.uint32(), options, message.showDialog);
                     break;
+                case /* WebsocketServer.HistoryEvents.CallData callData */ 13:
+                    message.callData = WebsocketServer_HistoryEvents_CallData.internalBinaryRead(reader, reader.uint32(), options, message.callData);
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -953,6 +1041,9 @@ class WebsocketServer_HistoryEvents$Type extends MessageType<WebsocketServer_His
         /* WebsocketServer.HistoryEvents.ShowDialog showDialog = 12; */
         if (message.showDialog)
             WebsocketServer_HistoryEvents_ShowDialog.internalBinaryWrite(message.showDialog, writer.tag(12, WireType.LengthDelimited).fork(), options).join();
+        /* WebsocketServer.HistoryEvents.CallData callData = 13; */
+        if (message.callData)
+            WebsocketServer_HistoryEvents_CallData.internalBinaryWrite(message.callData, writer.tag(13, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1129,7 +1220,8 @@ export const WebsocketServer_HistoryEvents_UserLeaved = new WebsocketServer_Hist
 class WebsocketServer_HistoryEvents_LobbyInfo$Type extends MessageType<WebsocketServer_HistoryEvents_LobbyInfo> {
     constructor() {
         super("WebsocketServer.HistoryEvents.LobbyInfo", [
-            { no: 1, name: "users", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => WebsocketServer_HistoryEvents_LobbyUser }
+            { no: 1, name: "users", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => WebsocketServer_HistoryEvents_LobbyUser },
+            { no: 2, name: "callLink", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<WebsocketServer_HistoryEvents_LobbyInfo>): WebsocketServer_HistoryEvents_LobbyInfo {
@@ -1147,6 +1239,9 @@ class WebsocketServer_HistoryEvents_LobbyInfo$Type extends MessageType<Websocket
                 case /* repeated WebsocketServer.HistoryEvents.LobbyUser users */ 1:
                     message.users.push(WebsocketServer_HistoryEvents_LobbyUser.internalBinaryRead(reader, reader.uint32(), options));
                     break;
+                case /* optional string callLink */ 2:
+                    message.callLink = reader.string();
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -1162,6 +1257,9 @@ class WebsocketServer_HistoryEvents_LobbyInfo$Type extends MessageType<Websocket
         /* repeated WebsocketServer.HistoryEvents.LobbyUser users = 1; */
         for (let i = 0; i < message.users.length; i++)
             WebsocketServer_HistoryEvents_LobbyUser.internalBinaryWrite(message.users[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* optional string callLink = 2; */
+        if (message.callLink !== undefined)
+            writer.tag(2, WireType.LengthDelimited).string(message.callLink);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1689,6 +1787,53 @@ class WebsocketServer_HistoryEvents_ShowDialog$Type extends MessageType<Websocke
  * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.ShowDialog
  */
 export const WebsocketServer_HistoryEvents_ShowDialog = new WebsocketServer_HistoryEvents_ShowDialog$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class WebsocketServer_HistoryEvents_CallData$Type extends MessageType<WebsocketServer_HistoryEvents_CallData> {
+    constructor() {
+        super("WebsocketServer.HistoryEvents.CallData", [
+            { no: 1, name: "link", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<WebsocketServer_HistoryEvents_CallData>): WebsocketServer_HistoryEvents_CallData {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<WebsocketServer_HistoryEvents_CallData>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: WebsocketServer_HistoryEvents_CallData): WebsocketServer_HistoryEvents_CallData {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* optional string link */ 1:
+                    message.link = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: WebsocketServer_HistoryEvents_CallData, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* optional string link = 1; */
+        if (message.link !== undefined)
+            writer.tag(1, WireType.LengthDelimited).string(message.link);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message WebsocketServer.HistoryEvents.CallData
+ */
+export const WebsocketServer_HistoryEvents_CallData = new WebsocketServer_HistoryEvents_CallData$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class GetRoomInfoResponse$Type extends MessageType<GetRoomInfoResponse> {
     constructor() {
