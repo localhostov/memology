@@ -3,9 +3,7 @@ import { TCommentWithOwner, TMemeMarkType } from "@types"
 import {
     Icon24MoreHorizontal,
     Icon24ThumbsDown,
-    Icon24ThumbsDownOutline,
     Icon24ThumbsUp,
-    Icon24ThumbsUpOutline,
 } from "@vkontakte/icons"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Avatar, IconButton, SimpleCell } from "@vkontakte/vkui"

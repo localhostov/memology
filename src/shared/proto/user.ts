@@ -41,6 +41,10 @@ export interface UserResponse_UserItem {
      * @generated from protobuf field: uint32 favoritesCount = 5;
      */
     favoritesCount: number;
+    /**
+     * @generated from protobuf field: uint32 suggestMemesCount = 6;
+     */
+    suggestMemesCount: number;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class UserResponse$Type extends MessageType<UserResponse> {
@@ -76,11 +80,12 @@ class UserResponse_UserItem$Type extends MessageType<UserResponse_UserItem> {
             { no: 2, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "likesCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 4, name: "dislikesCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
-            { no: 5, name: "favoritesCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+            { no: 5, name: "favoritesCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 6, name: "suggestMemesCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<UserResponse_UserItem>): UserResponse_UserItem {
-        const message = { id: 0, name: "", likesCount: 0, dislikesCount: 0, favoritesCount: 0 };
+        const message = { id: 0, name: "", likesCount: 0, dislikesCount: 0, favoritesCount: 0, suggestMemesCount: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<UserResponse_UserItem>(this, message, value);
@@ -105,6 +110,9 @@ class UserResponse_UserItem$Type extends MessageType<UserResponse_UserItem> {
                     break;
                 case /* uint32 favoritesCount */ 5:
                     message.favoritesCount = reader.uint32();
+                    break;
+                case /* uint32 suggestMemesCount */ 6:
+                    message.suggestMemesCount = reader.uint32();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -133,6 +141,9 @@ class UserResponse_UserItem$Type extends MessageType<UserResponse_UserItem> {
         /* uint32 favoritesCount = 5; */
         if (message.favoritesCount !== 0)
             writer.tag(5, WireType.Varint).uint32(message.favoritesCount);
+        /* uint32 suggestMemesCount = 6; */
+        if (message.suggestMemesCount !== 0)
+            writer.tag(6, WireType.Varint).uint32(message.suggestMemesCount);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

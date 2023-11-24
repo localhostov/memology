@@ -98,7 +98,7 @@ export const Profile = ({ id }: IPanelProps) => {
                                 ProfileEffects.selectTab("my")
                             }
                             before={<Icon24FolderSimpleUserOutline />}
-                            status={user?.favoritesCount || 0}
+                            status={user?.suggestMemesCount || 0}
                         >
                             Мои мемы
                         </TabsItem>
