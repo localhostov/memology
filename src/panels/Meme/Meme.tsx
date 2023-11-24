@@ -6,6 +6,7 @@ import {
     fetchMeme,
     getCommentsFx,
     Mark,
+    Modals,
     panelNames,
     unmountMeme,
     useSafeBack,
@@ -58,7 +59,7 @@ export const Meme = ({ id }: IPanelProps) => {
     }
 
     const openCommentModal = () => {
-        navigator.push(`/meme/${meme?.id}/comment`)
+        navigator.showModal(Modals.CREATE_MEME_COMMENT)
     }
 
     const commentsList = useList($comments, (item) => (
@@ -88,12 +89,14 @@ export const Meme = ({ id }: IPanelProps) => {
                         <div className={styles.imageContainerContent}>
                             {meme.placeInWeeklyRating && (
                                 <div className={styles.placeInRating}>
-                                    #1 в недельном рейтинге
+                                    #{meme.placeInWeeklyRating} в недельном
+                                    рейтинге
                                 </div>
                             )}
                             {meme.placeInEternalRating && (
                                 <div className={styles.placeInRating}>
-                                    #1 в постоянном рейтинге
+                                    #{meme.placeInEternalRating} в постоянном
+                                    рейтинге
                                 </div>
                             )}
                             <div className={styles.title}>{meme.title}</div>
@@ -191,7 +194,7 @@ export const Meme = ({ id }: IPanelProps) => {
 
                         <div className={styles.horizontalDivider} />
 
-                        {commentsIsLoading ? (
+                        {commentsIsLoading && commentsItemsList.length === 0 ? (
                             <Placeholder
                                 icon={<Spinner size="medium" />}
                                 header="Загрузочка..."
