@@ -1,7 +1,7 @@
 import { GamesListItem } from "@components"
 import { panelNames, routes } from "@shared"
 import { IGameModeItem, IPanelProps } from "@types"
-import { Icon28PencilSquare } from "@vkontakte/icons"
+import { Icon28PencilSquare, Icon36GameOutline } from "@vkontakte/icons"
 import { Group, Panel, PanelHeader, Placeholder } from "@vkontakte/vkui"
 import styles from "./styles.module.css"
 
@@ -17,7 +17,12 @@ export const Games = ({ id }: IPanelProps) => {
             <PanelHeader>{panelNames[id]}</PanelHeader>
 
             <Group>
-                <Placeholder header="Выберите игру">
+                <Placeholder
+                    header="Выберите игру"
+                    icon={
+                        <Icon36GameOutline style={{ width: 56, height: 56 }} />
+                    }
+                >
                     Чтобы продолжить, выберите режим, в который вы хотели бы
                     поиграть со своими друзьями
                 </Placeholder>
@@ -34,7 +39,7 @@ const gamesList: IGameModeItem[] = [
     {
         mode: "history",
         title: "История",
-        description: "Какое-то описание, но не очень длинное",
+        description: "Создание истории исходя из предыдущего предложения",
         icon: <Icon28PencilSquare style={{ height: 36, width: 36 }} />,
         route: routes.root.games.gameHistory,
     },

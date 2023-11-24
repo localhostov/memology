@@ -5,19 +5,10 @@
     margin: 16px;
 }
 
-.image {
-    height: 240px;
-    width: 280px;
-    object-fit: cover;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: 0.3s all ease;
-}
-
 .pickBlock {
     background: var(--vkui--color_background_secondary);
-    height: 240px;
-    width: 280px;
+    height: 140px;
+    width: 140px;
     border-radius: 16px;
     cursor: pointer;
     transition: 0.3s all ease;
@@ -48,11 +39,6 @@
     }
 
     .image {
-        height: 300px;
-        width: 100%;
-    }
-
-    .pickBlock {
         height: 300px;
         width: 100%;
     }

@@ -9,13 +9,14 @@ import {
     useWebsocket,
 } from "@shared"
 import { IGameParticipant, IPanelProps, TGameHistoryStepType } from "@types"
+import { Icon24Cancel } from "@vkontakte/icons"
 import bridge from "@vkontakte/vk-bridge"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import {
     Group,
     Panel,
     PanelHeader,
-    PanelHeaderBack,
+    PanelHeaderButton,
     Snackbar,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
@@ -137,15 +138,15 @@ export const HistoryGame = ({ id }: IPanelProps) => {
         <Panel id={id}>
             <PanelHeader
                 before={
-                    !isStarted && (
-                        <PanelHeaderBack
-                            onClick={() =>
-                                navigator.showModal(
-                                    Modals.EXIT_FROM_GAME_CONFIRMATION,
-                                )
-                            }
-                        />
-                    )
+                    <PanelHeaderButton
+                        onClick={() =>
+                            navigator.showModal(
+                                Modals.EXIT_FROM_GAME_CONFIRMATION,
+                            )
+                        }
+                    >
+                        <Icon24Cancel />
+                    </PanelHeaderButton>
                 }
             >
                 {panelNames[id]}
