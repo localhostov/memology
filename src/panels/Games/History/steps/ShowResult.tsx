@@ -12,8 +12,8 @@ import bridge from "@vkontakte/vk-bridge"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Button, ButtonGroup, Snackbar } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
-import { useState } from "react"
 import styles from "../styles.module.css"
+import setChatAlbumIsShowed = GamesEffects.History.setChatAlbumIsShowed
 
 interface IProps {
     send: TSendFunction<"history">
@@ -26,9 +26,9 @@ export function ShowResult({ send }: IProps) {
     const users = useUnit(GamesEffects.History.$users)
     const gifs = useUnit(GamesEffects.History.$gifContent)
     const vkUserData = useUnit($vkUserData)
-    const [allMessagesShowed, setAllMessagesShowed] = useState(false)
     const gifContent = gifs.find((x) => x.dialogId === currentChatRoot)
     const gameOwner = users.find((it) => it.isOwner)
+    const chatAlbumIsShowed = useUnit(GamesEffects.History.$chatAlbumIsShowed)
 
     const downloadGIF = () => {
         if (gifContent) {
@@ -62,7 +62,6 @@ export function ShowResult({ send }: IProps) {
         if ((messages?.length || 0) - 1 === currentChatRoot) {
             send("newGame", {})
         } else {
-            setAllMessagesShowed(false)
             send("showDialog", {
                 dialogId: currentChatRoot + 1,
             })
@@ -70,7 +69,7 @@ export function ShowResult({ send }: IProps) {
     }
 
     const onLastMessageShowed = () => {
-        setAllMessagesShowed(true)
+        setChatAlbumIsShowed(true)
     }
 
     return (
@@ -80,10 +79,10 @@ export function ShowResult({ send }: IProps) {
                 onLastMessageShowed={onLastMessageShowed}
             />
 
-            {allMessagesShowed && (
-                <>
-                    <div style={{ height: 16 }} />
+            <div style={{ height: 16 }} />
 
+            {chatAlbumIsShowed && (
+                <>
                     <div className={styles.partableDividerContainer}>
                         <div className={styles.dividerPart} />
                         <div className={styles.partableDividerText}>
@@ -97,7 +96,7 @@ export function ShowResult({ send }: IProps) {
             )}
 
             <ButtonGroup gap="s" align="center" stretched>
-                {allMessagesShowed && (
+                {chatAlbumIsShowed && (
                     <>
                         <Button
                             before={
@@ -137,7 +136,7 @@ export function ShowResult({ send }: IProps) {
                             )
                         }
                         onClick={nextAction}
-                        disabled={!allMessagesShowed}
+                        disabled={!chatAlbumIsShowed}
                     >
                         {(messages?.length || 0) - 1 !== currentChatRoot
                             ? "Дальше"
@@ -145,6 +144,20 @@ export function ShowResult({ send }: IProps) {
                     </Button>
                 )}
             </ButtonGroup>
+
+            <div style={{ height: 16 }} />
+
+            {chatAlbumIsShowed && (
+                <div className={styles.caption}>
+                    {(messages?.length || 0) - 1 === currentChatRoot
+                        ? `Ждём, пока ${
+                              gameOwner?.vkData.first_name || "создатель игры"
+                          } запустит новую игру`
+                        : `Ждём, пока ${
+                              gameOwner?.vkData.first_name || "создатель игры"
+                          } запустит следующую историю`}
+                </div>
+            )}
 
             <div style={{ height: 16 }} />
         </div>
