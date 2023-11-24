@@ -1,4 +1,4 @@
-import { panelNames } from "@shared"
+import { panelNames, setSnackbar } from "@shared"
 import { IPanelProps } from "@types"
 import { Icon56GalleryOutline } from "@vkontakte/icons"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
@@ -10,37 +10,61 @@ import {
     Panel,
     PanelHeader,
     PanelHeaderBack,
+    Snackbar,
     Textarea,
     Title,
 } from "@vkontakte/vkui"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
+import { API } from "../../shared/api"
 import styles from "./styles.module.css"
 
 export const Suggest = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
-    const [image, setImage] = useState<string | ArrayBuffer | null>(null)
+    const [image, setImage] = useState<string | null>(null)
+    const [imageData, setImageData] = useState<File | null>(null)
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
 
+    useEffect(() => {
+        return () => (image ? URL.revokeObjectURL(image) : undefined)
+    }, [])
+
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        acceptedFiles.forEach((file) => {
-            const reader = new FileReader()
+        const file = acceptedFiles[0]!
 
-            reader.addEventListener("load", (e) => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setImage(e.target.result)
-            })
-
-            reader.readAsDataURL(file)
-        })
+        setImageData(file)
+        setImage(URL.createObjectURL(file))
     }, [])
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         maxFiles: 1,
     })
+
+    async function suggestMeme() {
+        if (!imageData) return
+
+        await API.suggestMeme({
+            title,
+            description,
+            image: imageData,
+        })
+            .then(() =>
+                setSnackbar(
+                    <Snackbar onClose={() => setSnackbar(null)}>
+                        Мем успешно загружен! Ожидайте модерации
+                    </Snackbar>,
+                ),
+            )
+            .catch(() =>
+                setSnackbar(
+                    <Snackbar onClose={() => setSnackbar(null)}>
+                        Произошла какая-то ошибка....
+                    </Snackbar>,
+                ),
+            )
+    }
 
     return (
         <Panel id={id}>
@@ -113,6 +137,7 @@ export const Suggest = ({ id }: IPanelProps) => {
                             title.trim().length === 0 ||
                             description.trim().length === 0
                         }
+                        onClick={suggestMeme}
                         stretched
                     >
                         Отправить на рассмотрение
