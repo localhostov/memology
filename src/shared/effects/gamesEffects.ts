@@ -146,5 +146,14 @@ export namespace GamesEffects {
         export const setChatRoot = createEvent<number>()
         $currentChatRoot.on(setChatRoot, (_, num) => num)
         $currentChatRoot.reset($isStarted)
+
+        export const $chatAlbumIsShowed = createStore(false)
+        export const setChatAlbumIsShowed = createEvent<boolean>()
+        $chatAlbumIsShowed.on(setChatAlbumIsShowed, (_, showed) => showed)
+        $chatAlbumIsShowed.reset($currentChatRoot)
+
+        export const $callLink = createStore<string | null>(null)
+        export const setCallLink = createEvent<string | null>()
+        $callLink.on(setCallLink, (_, link) => link)
     }
 }
