@@ -1,18 +1,22 @@
-import { $vkUserData, APP_ID, disconnectWs, GamesEffects } from "@shared"
+import { $vkUserData, GamesEffects, Modals, setSnackbar } from "@shared"
 import { TGameModeType, TGameTabType, TSendFunction } from "@types"
 import {
-    Icon24Cancel,
+    Icon20LogoVkCallsOutline,
+    Icon24ClockCircleDashedOutline,
     Icon24GearOutline,
     Icon24LinkedOutline,
     Icon24Play,
     Icon24UsersOutline,
 } from "@vkontakte/icons"
 import bridge from "@vkontakte/vk-bridge"
-import { useParams } from "@vkontakte/vk-mini-apps-router"
+import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import {
     Button,
     HorizontalScroll,
     Placeholder,
+    Select,
+    SimpleCell,
+    Snackbar,
     Spinner,
     Tabs,
     TabsItem,
@@ -21,18 +25,21 @@ import { useList, useUnit } from "effector-react"
 import { ReactElement, useState } from "react"
 import { GameParticipantListItem } from "../GameParticipantListItem/GameParticipantListItem"
 import styles from "./styles.module.css"
+import setCallData = GamesEffects.History.setCallLink
+import setCallLink = GamesEffects.History.setCallLink
 
 export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
+    const navigator = useRouteNavigator()
     const users = useUnit(GamesEffects.History.$users)
     const vkUserData = useUnit($vkUserData)
     const [activeTab, setActiveTab] = useState<TGameTabType>("participants")
+    const [callButtonLoading, setCallButtonLoading] = useState(false)
     const params = useParams<"roomId">()
     const gameOwner = users.find((user) => user.isOwner)
+    const callLink = useUnit(GamesEffects.History.$callLink)
 
-    const copyInviteLink = () => {
-        const link = `https://vk.com/app${APP_ID}#/games/history/invite/${params?.roomId}`
-
-        bridge.send("VKWebAppShare", { link })
+    const share = () => {
+        navigator.push(`/games/history/${params?.roomId}/share`)
     }
 
     const tabContent: Record<TGameTabType, ReactElement> = {
@@ -41,12 +48,38 @@ export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
     }
 
     const onStartGame = () => {
-        console.log("start")
         send("startGame", {})
     }
 
-    const onLeaveFromGame = () => {
-        disconnectWs()
+    const callAction = () => {
+        const isOwner = vkUserData?.id === gameOwner?.vkId
+
+        if (isOwner) {
+            if (!callLink) {
+                setCallButtonLoading(true)
+
+                bridge
+                    .send("VKWebAppCallStart")
+                    .then((data) => {
+                        if (data.result) {
+                            setCallLink(data.join_link)
+                        }
+                    })
+                    .catch(() => {
+                        setSnackbar(
+                            <Snackbar onClose={() => setSnackbar(null)}>
+                                Произошла ошибка при создании звонка, попробуйте
+                                снова
+                            </Snackbar>,
+                        )
+                    })
+                    .finally(() => setCallButtonLoading(false))
+            }
+        } else if (callLink !== null) {
+            bridge.send("VKWebAppCallJoin", {
+                join_link: callLink,
+            })
+        }
     }
 
     return users.length === 0 ? (
@@ -80,39 +113,55 @@ export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
 
             <div className={styles.container}>
                 <div className={styles.buttons}>
-                    {vkUserData?.id !== gameOwner?.vkId && (
-                        <Button
-                            size="l"
-                            stretched
-                            before={<Icon24Cancel />}
-                            onClick={onLeaveFromGame}
-                            appearance="negative"
-                        >
-                            Выйти
-                        </Button>
-                    )}
-
                     <Button
                         size="l"
                         stretched
                         mode="secondary"
                         before={<Icon24LinkedOutline />}
-                        onClick={copyInviteLink}
+                        onClick={share}
                     >
                         Пригласить
                     </Button>
 
-                    {vkUserData?.id === gameOwner?.vkId && (
-                        <Button
-                            size="l"
-                            stretched
-                            before={<Icon24Play />}
-                            onClick={onStartGame}
-                        >
-                            Начать игру
-                        </Button>
-                    )}
+                    <Button
+                        stretched
+                        size="l"
+                        onClick={callAction}
+                        loading={callButtonLoading}
+                        before={
+                            <Icon20LogoVkCallsOutline
+                                style={{ width: 24, height: 24 }}
+                            />
+                        }
+                        disabled={
+                            (vkUserData?.id === gameOwner?.vkData.id &&
+                                callLink !== null) ||
+                            (vkUserData?.id !== gameOwner?.vkData.id &&
+                                callLink === null)
+                        }
+                    >
+                        {vkUserData?.id === gameOwner?.vkData.id
+                            ? callLink
+                                ? "Звонок активен"
+                                : "Начать звонок"
+                            : "Присоединиться к звонку"}
+                    </Button>
                 </div>
+
+                <div style={{ height: 8 }} />
+
+                {vkUserData?.id === gameOwner?.vkId && (
+                    <Button
+                        size="l"
+                        stretched
+                        before={<Icon24Play />}
+                        onClick={onStartGame}
+                    >
+                        Начать игру
+                    </Button>
+                )}
+
+                <div style={{ height: 16 }} />
 
                 <div>{tabContent[activeTab]}</div>
             </div>
@@ -141,5 +190,27 @@ const ParticipantsTabContent = (send: TSendFunction<TGameModeType>) => {
 }
 
 const SettingsTabContent = () => {
-    return <div>когда-нибудь здесь будут настройки</div>
+    return (
+        <div>
+            <SimpleCell
+                before={<Icon24ClockCircleDashedOutline />}
+                subtitle="На один раунд будет даваться это количество времени"
+                disabled
+                multiline
+                after={
+                    <Select
+                        value="left"
+                        // onChange={(e) => setAlign(e.target.value)}
+                        options={[
+                            { label: "15 с.", value: "left" },
+                            { label: "30 с.", value: "center" },
+                            { label: "60 с.", value: "right" },
+                        ]}
+                    />
+                }
+            >
+                Время раунда
+            </SimpleCell>
+        </div>
+    )
 }

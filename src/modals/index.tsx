@@ -8,6 +8,7 @@ import { GameInviteModal } from "./GameInviteModal/GameInviteModal"
 import { GameInfoPreviewModal } from "./GamePreviewModal/GameInfoPreviewModal"
 import { HistoryGifPreviewModal } from "./HistoryGifPreviewModal/HistoryGifPreviewModal"
 import { ProfileMemeListActionsModal } from "./ProfileMemeListActionsModal/ProfileMemeListActionsModal"
+import { ShareGameModal } from "./ShareGameModal/ShareGameModal"
 
 export const Modal = ({ activeModal }: { activeModal: string | undefined }) => {
     const navigator = useRouteNavigator()
@@ -27,6 +28,7 @@ export const Modal = ({ activeModal }: { activeModal: string | undefined }) => {
             <ExitFromGameConfirmation id={Modals.EXIT_FROM_GAME_CONFIRMATION} />
             <GameInviteModal id={Modals.GAME_INVITE} />
             <HistoryGifPreviewModal id={Modals.HISTORY_GIF_PREVIEW} />
+            <ShareGameModal id={Modals.SHARE_GAME_MODAL} />
         </ModalRoot>
     )
 }
