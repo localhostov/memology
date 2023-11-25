@@ -39,6 +39,10 @@ export const Suggest = ({ id }: IPanelProps) => {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
+        accept: {
+            "image/png": [".png"],
+            "image/jpeg": [".jpeg", ".jpg"],
+        },
         maxFiles: 1,
     })
 
