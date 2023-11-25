@@ -1,17 +1,7 @@
 import { GamesEffects } from "@shared"
 import { TSendFunction } from "@types"
-import {
-    Icon16CheckDoubleOutline,
-    Icon16Clear,
-    Icon28PencilSquare,
-} from "@vkontakte/icons"
-import {
-    Button,
-    IconButton,
-    Input,
-    Placeholder,
-    Progress,
-} from "@vkontakte/vkui"
+import { Icon16CheckDoubleOutline, Icon28PencilSquare } from "@vkontakte/icons"
+import { Button, Input, Placeholder, Progress } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
 import { useEffect, useState } from "react"
 import styles from "../styles.module.css"
@@ -119,17 +109,17 @@ export function WriteHistory({ send }: IProps) {
                     value={meWriteValue}
                     placeholder="Ондажды..."
                     onChange={(e) => setMeWriteValue(e.target.value)}
-                    after={
-                        meWriteValue.length > 0 && (
-                            <IconButton
-                                hoverMode="opacity"
-                                aria-label="Очистить поле"
-                                onClick={() => setMeWriteValue("")}
-                            >
-                                <Icon16Clear />
-                            </IconButton>
-                        )
-                    }
+                    // after={
+                    //     meWriteValue.length > 0 && (
+                    //         <IconButton
+                    //             hoverMode="opacity"
+                    //             aria-label="Очистить поле"
+                    //             onClick={() => setMeWriteValue("")}
+                    //         >
+                    //             <Icon16Clear />
+                    //         </IconButton>
+                    //     )
+                    // }
                 />
 
                 <Button

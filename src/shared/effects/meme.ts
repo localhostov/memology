@@ -2,6 +2,7 @@ import { Mark, MemeResponse } from "@shared"
 import { TCommentWithOwner } from "@types"
 import bridge, { UserInfo } from "@vkontakte/vk-bridge"
 import { createEffect, createEvent, createStore, sample } from "effector"
+import { debounce } from "patronum"
 import { API } from "../api"
 
 type TMemeWithOwner = MemeResponse & { owner: UserInfo }
@@ -27,31 +28,69 @@ export const addToListFx = createEffect(API.addMemeToList)
 
 export const addToList = createEvent<Mark | "favorite">()
 
-sample({
-    clock: fetchMeme,
-    target: getMemeFx,
-})
-
-sample({
-    source: {
-        meme: $meme,
-    },
-    clock: addToList,
-    fn: ({ meme }, type) => ({
-        id: meme!.id,
-        type,
-    }),
+// [INFO] patronum not copy all sample features...
+export const debouncedAddToList = createEvent<{
+    id: number
+    type: Mark | "favorite"
+}>()
+//TODO: add debounce logic
+debounce({
+    source: debouncedAddToList,
+    timeout: 10,
     target: addToListFx,
 })
-
-sample({
-    source: {
-        meme: $meme,
-    },
-    clock: addToListFx.done,
-    fn: ({ meme }) => meme?.id || -1,
-    target: getMemeFx,
+$meme.on(addToList, (current, type) => {
+    if (current) {
+        if (type === Mark.LIKE)
+            return {
+                ...current,
+                mark: current.mark !== Mark.LIKE ? Mark.LIKE : undefined,
+                likesCount:
+                    current.mark === Mark.LIKE
+                        ? current.likesCount - 1
+                        : (current.mark === Mark.DISLIKE
+                          ? current.likesCount + 2
+                          : current.likesCount + 1),
+            }
+        if (type === Mark.DISLIKE)
+            return {
+                ...current,
+                mark: current.mark !== Mark.DISLIKE ? Mark.DISLIKE : undefined,
+                likesCount:
+                    current.mark === Mark.LIKE
+                        ? current.likesCount - 2
+                        : (current.mark === Mark.DISLIKE
+                          ? current.likesCount + 1
+                          : current.likesCount - 1),
+            }
+        if (type === "favorite") {
+            const newState = !current.isFavorites
+            return {
+                ...current,
+                isFavorites: newState,
+                favoritesCount: newState
+                    ? current.favoritesCount + 1
+                    : current.favoritesCount - 1,
+            }
+        }
+    }
 })
+sample({
+    source: $meme,
+    clock: addToList,
+    filter: (meme): meme is NonNullable<TMemeWithOwner> => meme !== null,
+    fn: (meme, type) => ({ id: meme?.id || -1, type }),
+    target: debouncedAddToList,
+})
+
+// sample({
+//     source: {
+//         meme: $meme,
+//     },
+//     clock: addToListFx.done,
+//     fn: ({ meme }) => meme?.id || -1,
+//     target: getMemeFx,
+// })
 
 export const $comments = createStore<TCommentWithOwner[]>([])
 $comments.reset(unmountMeme)
@@ -72,12 +111,15 @@ export const getCommentsFx = createEffect(async (id: number) => {
 })
 
 $comments.on(getCommentsFx.doneData, (_, comments) => comments)
-
 sample({
-    clock: $meme,
-    fn: (meme) => meme?.id || -1,
-    target: getCommentsFx,
+    clock: fetchMeme,
+    target: [getMemeFx, getCommentsFx],
 })
+// sample({
+//     clock: $meme,
+//     fn: (meme) => meme?.id || -1,
+//     target: getCommentsFx,
+// })
 
 export const createComment = createEvent<string>()
 
