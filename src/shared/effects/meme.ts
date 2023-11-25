@@ -1,13 +1,11 @@
 import { Mark, MemeResponse } from "@shared"
 import { TCommentWithOwner } from "@types"
 import bridge, { UserInfo } from "@vkontakte/vk-bridge"
-import { createEffect, createEvent, createStore, sample } from "effector"
+import { createEffect, createEvent, restore, sample } from "effector"
 import { debounce } from "patronum"
 import { API } from "../api"
 
 type TMemeWithOwner = MemeResponse & { owner: UserInfo }
-
-export const $meme = createStore<TMemeWithOwner | null>(null)
 
 export const getMemeFx = createEffect(async (id: number) => {
     const meme = await API.meme(id)
@@ -18,7 +16,7 @@ export const getMemeFx = createEffect(async (id: number) => {
 
     return Object.assign(meme, { owner }) as TMemeWithOwner
 })
-$meme.on(getMemeFx.doneData, (_, meme) => meme)
+export const $meme = restore(getMemeFx, null)
 
 export const fetchMeme = createEvent<number>()
 export const unmountMeme = createEvent()
@@ -78,8 +76,9 @@ $meme.on(addToList, (current, type) => {
 sample({
     source: $meme,
     clock: addToList,
-    filter: (meme): meme is NonNullable<TMemeWithOwner> => meme !== null,
-    fn: (meme, type) => ({ id: meme?.id || -1, type }),
+    filter: (meme: TMemeWithOwner | null): meme is TMemeWithOwner =>
+        meme !== null,
+    fn: (meme, type) => ({ id: meme.id, type }),
     target: debouncedAddToList,
 })
 
@@ -91,9 +90,6 @@ sample({
 //     fn: ({ meme }) => meme?.id || -1,
 //     target: getMemeFx,
 // })
-
-export const $comments = createStore<TCommentWithOwner[]>([])
-$comments.reset(unmountMeme)
 
 export const getCommentsFx = createEffect(async (id: number) => {
     const data = (await API.memeComments(id, { page: 1, pageSize: 20 })).items
@@ -109,8 +105,9 @@ export const getCommentsFx = createEffect(async (id: number) => {
 
     return result
 })
+export const $comments = restore(getCommentsFx, [])
+$comments.reset(unmountMeme)
 
-$comments.on(getCommentsFx.doneData, (_, comments) => comments)
 sample({
     clock: fetchMeme,
     target: [getMemeFx, getCommentsFx],
@@ -126,11 +123,9 @@ export const createComment = createEvent<string>()
 export const createCommentFx = createEffect(API.addComment)
 
 sample({
-    source: {
-        meme: $meme,
-    },
+    source: $meme,
     clock: createComment,
-    fn: ({ meme }, text) => ({ memeId: meme?.id || -1, text }),
+    fn: (meme, text) => ({ memeId: meme?.id || -1, text }),
     target: createCommentFx,
 })
 
@@ -139,11 +134,9 @@ export const deleteComment = createEvent<number>()
 export const deleteCommentFx = createEffect(API.deleteComment)
 
 sample({
-    source: {
-        meme: $meme,
-    },
+    source: $meme,
     clock: deleteComment,
-    fn: ({ meme }, commentId) => ({ memeId: meme?.id || -1, commentId }),
+    fn: (meme, commentId) => ({ memeId: meme?.id || -1, commentId }),
     target: deleteCommentFx,
 })
 

@@ -1,5 +1,11 @@
 import { ReturnApiType } from "@types"
-import { createEffect, createEvent, createStore, sample } from "effector"
+import {
+    createEffect,
+    createEvent,
+    createStore,
+    restore,
+    sample,
+} from "effector"
 import { debounce } from "patronum"
 import { API } from "../api"
 
@@ -7,11 +13,9 @@ export const $memesList = createStore<
     ReturnApiType<typeof API.memesList>["items"]
 >([])
 
-export const $memesSearch = createStore("")
-
 export const searchMeme = createEvent<string>()
 
-$memesSearch.on(searchMeme, (_, query) => query)
+export const $memesSearch = restore(searchMeme, "")
 
 export const getMemesListFx = createEffect((query: string) =>
     API.memesList(query, 1, 10),

@@ -1,11 +1,12 @@
-import {
-    IGameParticipant,
-    ReturnApiType,
-    TGameHistoryStepType,
-    TGameModeType,
-} from "@types"
+import { IGameParticipant, TGameHistoryStepType, TGameModeType } from "@types"
 import bridge from "@vkontakte/vk-bridge"
-import { createEffect, createEvent, createStore, sample } from "effector"
+import {
+    createEffect,
+    createEvent,
+    createStore,
+    restore,
+    sample,
+} from "effector"
 import { API } from "../api"
 import { APIError, isAPIError } from "../api/APIError"
 import {
@@ -26,11 +27,6 @@ interface IGifContent {
 }
 
 export namespace GamesEffects {
-    export const $lobbyInfo = createStore<ReturnApiType<
-        typeof API.getRoom
-    > | null>(null)
-    export const $lobbyInfoError = createStore<APIError | null>(null)
-
     export const getLobbyInfoFx = createEffect(
         async ({ type, roomId }: IGetLobbyParams) => {
             const room = await API.getRoom(type, roomId)
@@ -40,7 +36,8 @@ export namespace GamesEffects {
             return Object.assign(room, { owner })
         },
     )
-    $lobbyInfo.on(getLobbyInfoFx.doneData, (_, info) => info)
+    export const $lobbyInfo = restore(getLobbyInfoFx, null)
+    export const $lobbyInfoError = createStore<APIError | null>(null)
     $lobbyInfoError.on(getLobbyInfoFx.failData, (_, error) => {
         if (isAPIError(error)) return error
         return null
@@ -77,40 +74,35 @@ export namespace GamesEffects {
             //TODO: fix array copy
             return [...current]
         })
-        export const $isStarted = createStore<boolean>(false)
-        export const setStart = createEvent<boolean>()
 
-        $isStarted.on(setStart, (_, value) => value)
+        export const setStart = createEvent<boolean>()
+        export const $isStarted = restore(setStart, false)
         $isStarted.reset(disconnectWs)
 
-        export const $time = createStore<number | null>(null)
         export const setTime = createEvent<number | null>()
-        $time.on(setTime, (_, time) => time)
+        export const $time = restore(setTime, null)
         $time.on(setStart, (_, isStarted) => (isStarted ? 15 : null))
 
         export const $historyStep = createStore<number>(1)
 
         $historyStep.reset($isStarted)
-        export const $readyCounter = createStore(0)
         export const setReadyCount = createEvent<number>()
-        $readyCounter.on(setReadyCount, (_, count) => count)
+        export const $readyCounter = restore(setReadyCount, 0)
         $readyCounter.reset($historyStep)
         export const $isReady = createStore(false)
         export const setIsReady = createEvent()
         $isReady.on(setIsReady, (isReady) => !isReady)
         $isReady.reset($historyStep, $isStarted)
-        export const $previousContext = createStore<string | null>(null)
-        $previousContext.reset($isStarted)
+
         export const nextStep = createEvent<string>()
         $historyStep.on(nextStep, (step) => step + 1)
-        $previousContext.on(nextStep, (_, ctx) => ctx)
+        export const $previousContext = restore(nextStep, null)
+        $previousContext.reset($isStarted)
         $time.on(nextStep, () => 15)
-        export const $messages = createStore<
-            WebsocketServer_HistoryEvents_FinishGame_Dialog[] | null
-        >(null)
+
         export const setMessages =
             createEvent<WebsocketServer_HistoryEvents_FinishGame_Dialog[]>()
-        $messages.on(setMessages, (_, msgs) => msgs)
+        export const $messages = restore(setMessages, null)
 
         export const $gifContent = createStore<
             {
@@ -130,41 +122,23 @@ export namespace GamesEffects {
             current.concat(newGif).sort((a, b) => a.dialogId - b.dialogId),
         )
         export const setGifBuffer = createEvent<IGifContent>()
-        $gifContent.on($isStarted, () => [])
-        export const $gameStep = createStore<TGameHistoryStepType>("meWrite")
-
-        export const setGameStep = createEvent<TGameHistoryStepType>()
-
-        $gameStep.on(setGameStep, (_, currentStep) => currentStep)
-        $gameStep.reset($historyStep)
         sample({
             clock: setGifBuffer,
             target: getContentLinkFx,
         })
+        $gifContent.on($isStarted, () => [])
+        export const setGameStep = createEvent<TGameHistoryStepType>()
 
-        export const $currentChatRoot = createStore(0)
+        export const $gameStep = restore(setGameStep, "meWrite")
+        $gameStep.reset($historyStep)
+
+        //finish game
         export const setChatRoot = createEvent<number>()
-        $currentChatRoot.on(setChatRoot, (_, num) => num)
+        export const $currentChatRoot = restore(setChatRoot, 0)
         $currentChatRoot.reset($isStarted)
 
-        export const $chatAlbumIsShowed = createStore(false)
         export const setChatAlbumIsShowed = createEvent<boolean>()
-        $chatAlbumIsShowed.on(setChatAlbumIsShowed, (_, showed) => showed)
+        export const $chatAlbumIsShowed = restore(setChatAlbumIsShowed, false)
         $chatAlbumIsShowed.reset($currentChatRoot)
-
-        export const $callLink = createStore<string | null>(null)
-        export const setCallLink = createEvent<string | null>()
-        $callLink.on(setCallLink, (_, link) => link)
-        $callLink.reset($isStarted, disconnectWs)
-
-        export const joinToCallFx = createEffect((link: string) =>
-            bridge.send("VKWebAppCallJoin", { join_link: link }),
-        )
-
-        sample({
-            clock: $callLink,
-            filter: (link): link is string => link !== null,
-            target: joinToCallFx,
-        })
     }
 }

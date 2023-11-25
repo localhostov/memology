@@ -1,14 +1,15 @@
 import { TGameModeType } from "@types"
-import bridge, { UserInfo } from "@vkontakte/vk-bridge"
-import { createEffect, createEvent, createStore, sample } from "effector"
+import bridge from "@vkontakte/vk-bridge"
+import { createEffect, createEvent, restore, sample } from "effector"
 import { API } from "../api"
-import { APIError, isAPIError } from "../api/APIError"
+import { isAPIError } from "../api/APIError"
+
+interface GameInfoFetch {
+    mode: TGameModeType
+    roomId: string
+}
 
 export namespace GameInfoEffects {
-    export const $gameInfo = createStore<UserInfo | null>(null)
-
-    export const $gameInfoError = createStore<APIError | null>(null)
-
     export const getGameInviteDataFx = createEffect(
         async (data: GameInfoFetch) => {
             const { ownerVkId } = await API.getRoom(data.mode, data.roomId)
@@ -18,10 +19,10 @@ export namespace GameInfoEffects {
             })
         },
     )
+    export const $gameInfo = restore(getGameInviteDataFx, null)
+    export const $gameInfoError = restore(getGameInviteDataFx.failData, null)
 
     export const fetchGameInfo = createEvent<GameInfoFetch>()
-
-    $gameInfo.on(getGameInviteDataFx.doneData, (_, data) => data)
 
     $gameInfoError.on(getGameInviteDataFx.failData, (_, error) => {
         if (isAPIError(error)) return error
@@ -36,9 +37,4 @@ export namespace GameInfoEffects {
         clock: fetchGameInfo,
         target: getGameInviteDataFx,
     })
-}
-
-interface GameInfoFetch {
-    mode: TGameModeType
-    roomId: string
 }

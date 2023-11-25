@@ -1,4 +1,4 @@
-import { createEffect, createEvent, createStore, sample } from "effector"
+import { createEffect, createEvent, restore, sample } from "effector"
 import { WebsocketClient, WebsocketServer } from "../proto"
 
 export interface IConnectWs {
@@ -7,8 +7,6 @@ export interface IConnectWs {
     onClose: () => unknown
     roomId: string
 }
-
-export const $ws = createStore<WebSocket | null>(null)
 
 export const connectSocketFx = createEffect(
     ({ game, handler, roomId, onClose }: IConnectWs) => {
@@ -33,7 +31,7 @@ export const connectSocketFx = createEffect(
         return ws
     },
 )
-
+export const $ws = restore(connectSocketFx, null)
 export const connectWs = createEvent<IConnectWs>()
 
 export const closeWsConnectionFx = createEffect((ws: WebSocket) => {

@@ -1,5 +1,11 @@
 import { ReturnApiType, TRatingTabListType } from "@types"
-import { createEffect, createEvent, createStore, sample } from "effector"
+import {
+    createEffect,
+    createEvent,
+    createStore,
+    restore,
+    sample,
+} from "effector"
 import { API } from "../api"
 
 export type TRatingItem = ReturnApiType<typeof API.memesRating>["items"][0]
@@ -15,12 +21,9 @@ export namespace RatingEffects {
 
     export const fetchRatingItems = createEvent()
 
-    export const $selectedTab = createStore<TRatingTabListType>("eternal")
-
     export const selectTab = createEvent<TRatingTabListType>()
+    export const $selectedTab = restore(selectTab, "eternal")
     $items.reset(selectTab)
-
-    $selectedTab.on(selectTab, (_, tab) => tab)
 
     sample({
         source: $selectedTab,

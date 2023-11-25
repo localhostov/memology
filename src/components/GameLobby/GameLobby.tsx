@@ -1,4 +1,10 @@
-import { $vkUserData, GamesEffects, setSnackbar } from "@shared"
+import {
+    $callLink,
+    $vkUserData,
+    GamesEffects,
+    setCallLink,
+    setSnackbar,
+} from "@shared"
 import { TGameModeType, TGameTabType, TSendFunction } from "@types"
 import {
     Icon20LogoVkCallsOutline,
@@ -26,7 +32,7 @@ import { ReactElement, useState } from "react"
 import { GameParticipantListItem } from "../GameParticipantListItem/GameParticipantListItem"
 import styles from "./styles.module.css"
 
-const { setCallLink, $users, $callLink } = GamesEffects.History
+const { $users } = GamesEffects.History
 
 export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
     const navigator = useRouteNavigator()

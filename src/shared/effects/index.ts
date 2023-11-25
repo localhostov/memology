@@ -1,4 +1,5 @@
 export * from "./bridge"
+export * from "./calls"
 export * from "./epic"
 export * from "./gameInvite"
 export * from "./gamesEffects"

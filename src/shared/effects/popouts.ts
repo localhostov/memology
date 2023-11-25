@@ -1,12 +1,8 @@
-import { createEvent, createStore } from "effector"
+import { createEvent, restore } from "effector"
 import { ReactElement } from "react"
 
-export const $snackbar = createStore<ReactElement | null>(null)
 export const setSnackbar = createEvent<ReactElement | null>()
+export const $snackbar = restore(setSnackbar, null)
 
-$snackbar.on(setSnackbar, (_, snackbar) => snackbar)
-
-export const $popout = createStore<ReactElement | null>(null)
 export const setPopout = createEvent<ReactElement | null>()
-
-$popout.on(setPopout, (_, popout) => popout)
+export const $popout = restore(setPopout, null)
