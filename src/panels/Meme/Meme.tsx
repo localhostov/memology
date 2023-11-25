@@ -3,11 +3,13 @@ import {
     $comments,
     $meme,
     addToList,
+    addToListFx,
     fetchMeme,
     getCommentsFx,
     Mark,
     Modals,
     panelNames,
+    setPopout,
     unmountMeme,
     useSafeBack,
 } from "@shared"
@@ -29,6 +31,7 @@ import {
     PanelHeader,
     PanelHeaderBack,
     Placeholder,
+    ScreenSpinner,
     SimpleCell,
     Spinner,
 } from "@vkontakte/vkui"
@@ -43,6 +46,7 @@ export const Meme = ({ id }: IPanelProps) => {
     const { memeId } = useParams<"memeId">()!
     const commentsIsLoading = useUnit(getCommentsFx.pending)
     const commentsItemsList = useUnit($comments)
+    const addingToListLoading = useUnit(addToListFx.pending)
     const safeBack = useSafeBack()
 
     useEffect(() => {
@@ -50,6 +54,18 @@ export const Meme = ({ id }: IPanelProps) => {
 
         return unmountMeme
     }, [memeId])
+
+    useEffect(() => {
+        if (addingToListLoading) {
+            setPopout(<ScreenSpinner state="loading" />)
+        } else {
+            setPopout(null)
+        }
+
+        return () => {
+            setPopout(null)
+        }
+    }, [addingToListLoading])
 
     const openImage = () => {
         if (!meme) return

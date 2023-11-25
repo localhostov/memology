@@ -1,10 +1,12 @@
 import {
     $epicIsShowed,
+    $popout,
     $snackbar,
     getUserFx,
     panelNames,
     Panels,
     routes,
+    setPopout,
 } from "@shared"
 import { ITab } from "@types"
 import {
@@ -38,7 +40,7 @@ import {
     useAdaptivityConditionalRender,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
-import { ReactNode, useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Modal } from "../modals"
 import {
     Games,
@@ -58,8 +60,8 @@ export const Epic = () => {
     const navigator = useRouteNavigator()
     const location = useLocation()
     const userIsLoading = useUnit(getUserFx.pending)
-    const [popout, setPopout] = useState<ReactNode | null>(null)
     const snackbar = useUnit($snackbar)
+    const popout = useUnit($popout)
     const epicIsShowed = useUnit($epicIsShowed)
 
     const { viewWidth } = useAdaptivityConditionalRender()
@@ -72,9 +74,7 @@ export const Epic = () => {
     const onStoryChange = (panel: PanelPage<string>) => {
         if (location.pathname === panel.path) return
 
-        navigator
-            .replace(panel)
-            .then(() => console.log(`change tab to ${panel.path}`))
+        navigator.replace(panel)
     }
 
     const hasHeader =
@@ -149,6 +149,10 @@ export const Epic = () => {
         if (userIsLoading) {
             setPopout(<ScreenSpinner state="loading" />)
         } else {
+            setPopout(null)
+        }
+
+        return () => {
             setPopout(null)
         }
     }, [userIsLoading])
