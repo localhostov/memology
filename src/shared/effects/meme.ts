@@ -110,13 +110,13 @@ $comments.reset(unmountMeme)
 
 sample({
     clock: fetchMeme,
-    target: [getMemeFx, getCommentsFx],
+    target: getMemeFx,
 })
-// sample({
-//     clock: $meme,
-//     fn: (meme) => meme?.id || -1,
-//     target: getCommentsFx,
-// })
+sample({
+    clock: getMemeFx.done,
+    fn: ({ params }) => params,
+    target: getCommentsFx,
+})
 
 export const createComment = createEvent<string>()
 
@@ -125,7 +125,9 @@ export const createCommentFx = createEffect(API.addComment)
 sample({
     source: $meme,
     clock: createComment,
-    fn: (meme, text) => ({ memeId: meme?.id || -1, text }),
+    filter: (meme: TMemeWithOwner | null): meme is TMemeWithOwner =>
+        meme !== null,
+    fn: (meme, text) => ({ memeId: meme.id, text }),
     target: createCommentFx,
 })
 
@@ -136,7 +138,9 @@ export const deleteCommentFx = createEffect(API.deleteComment)
 sample({
     source: $meme,
     clock: deleteComment,
-    fn: (meme, commentId) => ({ memeId: meme?.id || -1, commentId }),
+    filter: (meme: TMemeWithOwner | null): meme is TMemeWithOwner =>
+        meme !== null,
+    fn: (meme, commentId) => ({ memeId: meme.id, commentId }),
     target: deleteCommentFx,
 })
 
