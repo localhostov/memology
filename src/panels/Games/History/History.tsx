@@ -5,6 +5,7 @@ import {
     GamesEffects,
     Modals,
     panelNames,
+    setCallLink,
     setSnackbar,
     useWebsocket,
 } from "@shared"
@@ -24,21 +25,33 @@ import { ReactElement, useEffect, useRef } from "react"
 import { ShowResult, WaitResult, WriteHistory } from "./steps"
 import styles from "./styles.module.css"
 
+const {
+    $gameStep,
+    $gifContent,
+    $currentChatRoot,
+    $isStarted,
+    setSettings,
+    $settings,
+} = GamesEffects.History
+
 export const HistoryGame = ({ id }: IPanelProps) => {
     const navigator = useRouteNavigator()
-    const isStarted = useUnit(GamesEffects.History.$isStarted)
-    const currentChatRoot = useUnit(GamesEffects.History.$currentChatRoot)
-    const gifs = useUnit(GamesEffects.History.$gifContent)
+    const isStarted = useUnit($isStarted)
+    const currentChatRoot = useUnit($currentChatRoot)
+    const gifs = useUnit($gifContent)
+    //TODO: auto store
     const gifContent = gifs.find((x) => x.dialogId === currentChatRoot)
-    const gameStep = useUnit(GamesEffects.History.$gameStep)
+    const gameStep = useUnit($gameStep)
     const vkUserData = useUnit($vkUserData)
+    const settings = useUnit($settings)
     const unblock = useRef<() => void>()
 
     const { send } = useWebsocket(
         "history",
         {
             lobbyInfo: async (msg) => {
-                if (msg.callLink) GamesEffects.History.setCallLink(msg.callLink)
+                setSettings(msg.settings!)
+                if (msg.callLink) setCallLink(msg.callLink)
 
                 // TODO: place in effects
                 const result: IGameParticipant[] = []
@@ -78,7 +91,10 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     )
                 }
             },
-            startLobby: () => GamesEffects.History.setStart(true),
+            startLobby: () => {
+                GamesEffects.History.setTime(settings.roundTime)
+                GamesEffects.History.setStart(true)
+            },
             timerTick: ({ time }) => GamesEffects.History.setTime(time),
             nextStep: ({ previousContext }) =>
                 GamesEffects.History.nextStep(previousContext),
@@ -103,8 +119,8 @@ export const HistoryGame = ({ id }: IPanelProps) => {
                     GamesEffects.History.setGameStep("showResult")
                 GamesEffects.History.setChatRoot(dialogId)
             },
-            callData: ({ link }) =>
-                GamesEffects.History.setCallLink(link ?? null),
+            callData: ({ link }) => setCallLink(link ?? null),
+            settingsUpdate: (settings) => setSettings(settings),
         },
         {
             onClose: () => {

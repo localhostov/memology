@@ -19,9 +19,10 @@ export function WriteHistory({ send }: IProps) {
     const users = useUnit(GamesEffects.History.$users)
     const isStarted = useUnit(GamesEffects.History.$isStarted)
     const isReady = useUnit(GamesEffects.History.$isReady)
+    const settings = useUnit(GamesEffects.History.$settings)
     const [meWriteValue, setMeWriteValue] = useState("")
 
-    const progressPercent = ((time || 0) * 100) / 15
+    const progressPercent = ((time || 0) * 100) / settings.roundTime
 
     const ready = () => {
         if (meWriteValue.length === 0) return

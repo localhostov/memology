@@ -14,15 +14,20 @@ export const HistoryGifPreviewModal = ({ id }: IModalProps) => {
 
     const downloadGif = () => {
         try {
+            console.log(gifContent.base64)
             if (platform === Platform.VKCOM) {
                 downloadFile(gifContent.link, "history.gif")
             } else {
-                bridge.send("VKWebAppDownloadFile", {
-                    url: gifContent.link.split("blob:")[1],
-                    filename: "history.gif",
-                })
+                bridge
+                    .send("VKWebAppDownloadFile", {
+                        url: gifContent.base64,
+                        filename: "history.gif",
+                    })
+                    .then(console.log)
             }
-        } catch (error) {}
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (

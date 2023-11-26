@@ -11,9 +11,18 @@ import { API } from "../api"
 import { APIError, isAPIError } from "../api/APIError"
 import {
     WebsocketServer_HistoryEvents_FinishGame_Dialog,
+    WebsocketServer_HistoryEvents_SettingsUpdate,
     WebsocketServer_HistoryEvents_UserLeaved,
 } from "../proto"
 import { disconnectWs } from "./websocket"
+
+function blobToBase64(blob: Blob) {
+    return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result as string)
+        reader.readAsDataURL(blob)
+    }) as Promise<string>
+}
 
 interface IGetLobbyParams {
     type: TGameModeType
@@ -81,7 +90,6 @@ export namespace GamesEffects {
 
         export const setTime = createEvent<number | null>()
         export const $time = restore(setTime, null)
-        $time.on(setStart, (_, isStarted) => (isStarted ? 15 : null))
 
         export const $historyStep = createStore<number>(1)
 
@@ -98,7 +106,6 @@ export namespace GamesEffects {
         $historyStep.on(nextStep, (step) => step + 1)
         export const $previousContext = restore(nextStep, null)
         $previousContext.reset($isStarted)
-        $time.on(nextStep, () => 15)
 
         export const setMessages =
             createEvent<WebsocketServer_HistoryEvents_FinishGame_Dialog[]>()
@@ -109,15 +116,22 @@ export namespace GamesEffects {
                 dialogId: number
                 link: string
                 vkAttachment: string
+                base64: string
             }[]
         >([])
-        export const getContentLinkFx = createEffect((gif: IGifContent) => ({
-            dialogId: gif.dialogId,
-            link: URL.createObjectURL(
-                new Blob([gif.buffer], { type: "image/gif" }),
-            ),
-            vkAttachment: gif.vkAttachment,
-        }))
+
+        export const getContentLinkFx = createEffect(
+            async (gif: IGifContent) => ({
+                dialogId: gif.dialogId,
+                link: URL.createObjectURL(
+                    new Blob([gif.buffer], { type: "image/gif" }),
+                ),
+                vkAttachment: gif.vkAttachment,
+                base64: await blobToBase64(
+                    new Blob([gif.buffer], { type: "image/gif" }),
+                ),
+            }),
+        )
         $gifContent.on(getContentLinkFx.doneData, (current, newGif) =>
             current.concat(newGif).sort((a, b) => a.dialogId - b.dialogId),
         )
@@ -140,5 +154,18 @@ export namespace GamesEffects {
         export const setChatAlbumIsShowed = createEvent<boolean>()
         export const $chatAlbumIsShowed = restore(setChatAlbumIsShowed, false)
         $chatAlbumIsShowed.reset($currentChatRoot)
+
+        export const setSettings =
+            createEvent<WebsocketServer_HistoryEvents_SettingsUpdate>()
+        export const $settings = restore(setSettings, {
+            roundTime: 15,
+        })
+
+        sample({
+            source: $settings,
+            clock: [setStart, nextStep],
+            fn: ({ roundTime }) => roundTime,
+            target: setTime,
+        })
     }
 }

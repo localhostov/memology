@@ -32,7 +32,7 @@ import { ReactElement, useState } from "react"
 import { GameParticipantListItem } from "../GameParticipantListItem/GameParticipantListItem"
 import styles from "./styles.module.css"
 
-const { $users } = GamesEffects.History
+const { $users, setSettings } = GamesEffects.History
 
 export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
     const navigator = useRouteNavigator()
@@ -50,7 +50,7 @@ export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
 
     const tabContent: Record<TGameTabType, ReactElement> = {
         participants: ParticipantsTabContent(send),
-        settings: SettingsTabContent(),
+        settings: SettingsTabContent({ send }),
     }
 
     const onStartGame = () => {
@@ -199,7 +199,21 @@ const ParticipantsTabContent = (send: TSendFunction<TGameModeType>) => {
     )
 }
 
-const SettingsTabContent = () => {
+const SettingsTabContent = ({ send }: { send: TSendFunction<"history"> }) => {
+    const users = useUnit(GamesEffects.History.$users)
+    const settings = useUnit(GamesEffects.History.$settings)
+    const currentVkUser = useUnit($vkUserData)
+    const isOwner = Boolean(
+        users.find((it) => it.vkId === currentVkUser?.id && it.isOwner),
+    )
+
+    function updateSettings(
+        settings: NonNullable<Parameters<typeof setSettings>[0]>,
+    ) {
+        setSettings(settings)
+        send("changeSettings", settings)
+    }
+
     return (
         <div>
             <SimpleCell
@@ -209,12 +223,20 @@ const SettingsTabContent = () => {
                 multiline
                 after={
                     <Select
-                        value="left"
-                        // onChange={(e) => setAlign(e.target.value)}
+                        value={settings.roundTime}
+                        disabled={!isOwner}
+                        onChange={(e) =>
+                            updateSettings({
+                                ...settings,
+                                roundTime: Number(e.target.value),
+                            })
+                        }
                         options={[
-                            { label: "15 с.", value: "left" },
-                            { label: "30 с.", value: "center" },
-                            { label: "60 с.", value: "right" },
+                            { label: "15 с.", value: 15 },
+                            { label: "20 с.", value: 20 },
+                            { label: "30 с.", value: 30 },
+                            { label: "45 с.", value: 45 },
+                            { label: "60 с.", value: 60 },
                         ]}
                     />
                 }
