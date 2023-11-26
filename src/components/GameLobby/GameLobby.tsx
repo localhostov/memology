@@ -254,10 +254,14 @@ const SettingsTabContent = ({ send }: { send: TSendFunction<"history"> }) => {
                 disabled
                 multiline
                 after={
-                    <Switch
-                        checked={isTTSEnabled}
-                        onClick={() => changeTTSStatus()}
-                    />
+                    isSupportTTS ? (
+                        <Switch
+                            checked={isTTSEnabled}
+                            onChange={() => changeTTSStatus()}
+                        />
+                    ) : (
+                        <></>
+                    )
                 }
             >
                 Преобразование текста в речь
