@@ -7,6 +7,17 @@ import { useUnit } from "effector-react"
 import { useEffect, useState } from "react"
 import styles from "./styles.module.css"
 
+function AutoplayTTS({ text }: { text: string }) {
+    useEffect(() => {
+        if ("SpeechSynthesisUtterance" in window) {
+            const msg = new SpeechSynthesisUtterance(text)
+            window.speechSynthesis.speak(msg)
+        }
+    }, [text])
+
+    return <div>{text}</div>
+}
+
 export const HistoryAlbumListItem = ({
     item,
     onEndMessageLoading,
@@ -55,7 +66,7 @@ export const HistoryAlbumListItem = ({
                     {isLoading ? (
                         <div className={styles.loading} />
                     ) : (
-                        item.text || "Пусто"
+                        <AutoplayTTS text={item.text} />
                     )}
                 </div>
             </div>
