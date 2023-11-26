@@ -1,5 +1,6 @@
 import {
     $vkUserData,
+    GamesEffects,
     WebsocketServer_HistoryEvents_FinishGame_Msg,
 } from "@shared"
 import { Avatar } from "@vkontakte/vkui"
@@ -8,14 +9,16 @@ import { useEffect, useState } from "react"
 import styles from "./styles.module.css"
 
 function AutoplayTTS({ text }: { text: string }) {
-    useEffect(() => {
-        if ("SpeechSynthesisUtterance" in window) {
-            const msg = new SpeechSynthesisUtterance(text)
-            window.speechSynthesis.speak(msg)
-        }
-    }, [text])
+    const isTTSEnabled = useUnit(GamesEffects.History.$isTTSEnabled)
 
-    return <div>{text}</div>
+    useEffect(() => {
+        if ("speechSynthesis" in window && isTTSEnabled) {
+            const msg = new SpeechSynthesisUtterance(text)
+            speechSynthesis.speak(msg)
+        }
+    }, [])
+
+    return <div>{text || "Текст отсутствует"}</div>
 }
 
 export const HistoryAlbumListItem = ({

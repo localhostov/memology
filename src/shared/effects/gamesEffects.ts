@@ -167,5 +167,9 @@ export namespace GamesEffects {
             fn: ({ roundTime }) => roundTime,
             target: setTime,
         })
+
+        export const $isTTSEnabled = createStore(true)
+        export const changeTTSStatus = createEvent()
+        $isTTSEnabled.on(changeTTSStatus, (status) => !status)
     }
 }

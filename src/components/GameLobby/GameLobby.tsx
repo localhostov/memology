@@ -13,6 +13,7 @@ import {
     Icon24LinkedOutline,
     Icon24Play,
     Icon24UsersOutline,
+    Icon24VolumeOutline,
 } from "@vkontakte/icons"
 import bridge from "@vkontakte/vk-bridge"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
@@ -24,6 +25,7 @@ import {
     SimpleCell,
     Snackbar,
     Spinner,
+    Switch,
     Tabs,
     TabsItem,
 } from "@vkontakte/vkui"
@@ -32,7 +34,7 @@ import { ReactElement, useState } from "react"
 import { GameParticipantListItem } from "../GameParticipantListItem/GameParticipantListItem"
 import styles from "./styles.module.css"
 
-const { $users, setSettings } = GamesEffects.History
+const { $users, setSettings, changeTTSStatus } = GamesEffects.History
 
 export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
     const navigator = useRouteNavigator()
@@ -202,10 +204,12 @@ const ParticipantsTabContent = (send: TSendFunction<TGameModeType>) => {
 const SettingsTabContent = ({ send }: { send: TSendFunction<"history"> }) => {
     const users = useUnit(GamesEffects.History.$users)
     const settings = useUnit(GamesEffects.History.$settings)
+    const isTTSEnabled = useUnit(GamesEffects.History.$isTTSEnabled)
     const currentVkUser = useUnit($vkUserData)
     const isOwner = Boolean(
         users.find((it) => it.vkId === currentVkUser?.id && it.isOwner),
     )
+    const isSupportTTS = "speechSynthesis" in window
 
     function updateSettings(
         settings: NonNullable<Parameters<typeof setSettings>[0]>,
@@ -242,6 +246,21 @@ const SettingsTabContent = ({ send }: { send: TSendFunction<"history"> }) => {
                 }
             >
                 Время раунда
+            </SimpleCell>
+
+            <SimpleCell
+                before={<Icon24VolumeOutline />}
+                subtitle={isSupportTTS ? "Поддерживается" : "Не поддерживается"}
+                disabled
+                multiline
+                after={
+                    <Switch
+                        checked={isTTSEnabled}
+                        onClick={() => changeTTSStatus()}
+                    />
+                }
+            >
+                Преобразование текста в речь
             </SimpleCell>
         </div>
     )
