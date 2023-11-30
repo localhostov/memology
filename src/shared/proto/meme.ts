@@ -52,6 +52,10 @@ export interface MemeItem {
      * @generated from protobuf field: uint32 commentsCount = 9;
      */
     commentsCount: number;
+    /**
+     * @generated from protobuf field: optional Mark mark = 10;
+     */
+    mark?: Mark;
 }
 /**
  * @generated from protobuf message MemeListResponse
@@ -144,7 +148,8 @@ class MemeItem$Type extends MessageType<MemeItem> {
             { no: 6, name: "isFavorites", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 7, name: "likesCount", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
             { no: 8, name: "isSuggest", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 9, name: "commentsCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+            { no: 9, name: "commentsCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 10, name: "mark", kind: "enum", opt: true, T: () => ["Mark", Mark] }
         ]);
     }
     create(value?: PartialMessage<MemeItem>): MemeItem {
@@ -186,6 +191,9 @@ class MemeItem$Type extends MessageType<MemeItem> {
                 case /* uint32 commentsCount */ 9:
                     message.commentsCount = reader.uint32();
                     break;
+                case /* optional Mark mark */ 10:
+                    message.mark = reader.int32();
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -225,6 +233,9 @@ class MemeItem$Type extends MessageType<MemeItem> {
         /* uint32 commentsCount = 9; */
         if (message.commentsCount !== 0)
             writer.tag(9, WireType.Varint).uint32(message.commentsCount);
+        /* optional Mark mark = 10; */
+        if (message.mark !== undefined)
+            writer.tag(10, WireType.Varint).int32(message.mark);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

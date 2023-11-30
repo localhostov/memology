@@ -9,8 +9,7 @@ import {
     sample,
 } from "effector"
 import { debounce } from "patronum"
-import { API } from "../api"
-import { APIError, isAPIError } from "../api/APIError"
+import { API, APIError, isAPIError } from "../api"
 
 type TMemeWithOwner = MemeResponse & { owner: UserInfo }
 

@@ -1,4 +1,4 @@
-import { TRatingItem } from "@shared"
+import { Mark, TRatingItem } from "@shared"
 import {
     Icon20CommentOutline,
     Icon28ArrowUpRectangleOutline,
@@ -56,9 +56,27 @@ export const RatingListItem = ({ item }: { item: TRatingItem }) => {
                             {item.favoritesCount}
                         </div>
 
-                        <div>
+                        <div
+                            style={{
+                                background:
+                                    (item.mark !== undefined &&
+                                        (item.mark === Mark.LIKE
+                                            ? "var(--like-background-alpha)"
+                                            : "var(--dislike-background-alpha)")) ||
+                                    undefined,
+                            }}
+                        >
                             <Icon28ArrowUpRectangleOutline
-                                style={{ width: 17, height: 17 }}
+                                style={{
+                                    width: 17,
+                                    height: 17,
+                                    color:
+                                        (item.mark !== undefined &&
+                                            (item.mark === Mark.LIKE
+                                                ? "var(--like-background)"
+                                                : "var(--dislike-background)")) ||
+                                        undefined,
+                                }}
                             />
                             {item.likesCount}
                         </div>

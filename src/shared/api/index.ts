@@ -13,6 +13,8 @@ import FormDataAddon from "wretch/addons/formData"
 import QueryStringAddon from "wretch/addons/queryString"
 import { APIError } from "./APIError"
 
+export * from "./APIError"
+
 const api = wretch("https://memology.animaru.app")
     .headers({
         "vk-params": window.location.search.slice(1),

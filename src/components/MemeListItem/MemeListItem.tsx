@@ -1,4 +1,4 @@
-import { MemeItem } from "@shared"
+import { Mark, MemeItem } from "@shared"
 import {
     Icon20CommentOutline,
     Icon28ArrowUpRectangleOutline,
@@ -23,7 +23,7 @@ export const MemeListItem = ({
     const openMeme = (memeId: number) => {
         navigator.push(`/meme/${memeId}`)
     }
-
+    console.log(item)
     return (
         <div
             key={item.id}
@@ -79,19 +79,25 @@ export const MemeListItem = ({
                             </div>
 
                             <div
-                            // style={{
-                            //     background: item.isFavorites
-                            //         ? "var(--like-background-alpha)"
-                            //         : undefined,
-                            // }}
+                                style={{
+                                    background:
+                                        (item.mark !== undefined &&
+                                            (item.mark === Mark.LIKE
+                                                ? "var(--like-background-alpha)"
+                                                : "var(--dislike-background-alpha)")) ||
+                                        undefined,
+                                }}
                             >
                                 <Icon28ArrowUpRectangleOutline
                                     style={{
                                         width: 17,
                                         height: 17,
-                                        // color: item.isFavorites
-                                        //     ? "var(--like-background)"
-                                        //     : undefined,
+                                        color:
+                                            (item.mark !== undefined &&
+                                                (item.mark === Mark.LIKE
+                                                    ? "var(--like-background)"
+                                                    : "var(--dislike-background)")) ||
+                                            undefined,
                                     }}
                                 />
                                 {item.likesCount}
