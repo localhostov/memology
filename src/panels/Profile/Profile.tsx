@@ -1,4 +1,4 @@
-import { ProfileTabList } from "@components"
+import { MainTabPanelHeader, ProfileTabList } from "@components"
 import {
     $user,
     $vkUserData,
@@ -18,7 +18,6 @@ import {
     Group,
     HorizontalScroll,
     Panel,
-    PanelHeader,
     Tabs,
     TabsItem,
     Title,
@@ -38,7 +37,7 @@ export const Profile = ({ id }: IPanelProps) => {
 
     return (
         <Panel id={id}>
-            <PanelHeader>{panelNames[id]}</PanelHeader>
+            <MainTabPanelHeader children={panelNames[id]} />
 
             <Group>
                 <div className={styles.userInfoContainer}>

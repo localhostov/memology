@@ -1,4 +1,4 @@
-import { RatingListItem } from "@components"
+import { MainTabPanelHeader, RatingListItem } from "@components"
 import { panelNames, RatingEffects } from "@shared"
 import { IPanelProps } from "@types"
 import { Icon24Globe, Icon24PollOutline } from "@vkontakte/icons"
@@ -6,7 +6,7 @@ import {
     Group,
     HorizontalScroll,
     Panel,
-    PanelHeader,
+    Spinner,
     Tabs,
     TabsItem,
 } from "@vkontakte/vkui"
@@ -16,6 +16,8 @@ import styles from "./styles.module.css"
 
 export const Rating = ({ id }: IPanelProps) => {
     const selectedTab = useUnit(RatingEffects.$selectedTab)
+    const ratingIsLoading = useUnit(RatingEffects.getRatingItemsFx.pending)
+    const ratingItems = useUnit(RatingEffects.$items)
 
     useEffect(() => {
         RatingEffects.fetchRatingItems()
@@ -27,10 +29,10 @@ export const Rating = ({ id }: IPanelProps) => {
 
     return (
         <Panel id={id}>
-            <PanelHeader>{panelNames[id]}</PanelHeader>
+            <MainTabPanelHeader children={panelNames[id]} />
 
             <Group>
-                <Tabs mode="accent">
+                <Tabs>
                     <HorizontalScroll arrowSize="m">
                         <TabsItem
                             selected={selectedTab === "eternal"}
@@ -56,9 +58,17 @@ export const Rating = ({ id }: IPanelProps) => {
                     </HorizontalScroll>
                 </Tabs>
 
-                <div className={styles.tabContentContainer}>
-                    <div className={styles.listContainer}>{renderedRating}</div>
-                </div>
+                {ratingIsLoading && ratingItems.length === 0 ? (
+                    <div style={{ margin: 32 }}>
+                        <Spinner size="large" />
+                    </div>
+                ) : (
+                    <div className={styles.tabContentContainer}>
+                        <div className={styles.listContainer}>
+                            {renderedRating}
+                        </div>
+                    </div>
+                )}
             </Group>
         </Panel>
     )

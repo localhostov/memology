@@ -1,4 +1,4 @@
-import { MemeListItem } from "@components"
+import { MainTabPanelHeader, MemeListItem } from "@components"
 import {
     $memesList,
     $memesSearch,
@@ -19,7 +19,6 @@ import {
     Button,
     Group,
     Panel,
-    PanelHeader,
     PanelHeaderContent,
     PanelHeaderContext,
     Placeholder,
@@ -52,23 +51,26 @@ export const Memes = ({ id }: IPanelProps) => {
 
     return (
         <Panel id={id}>
-            <PanelHeader>
-                <PanelHeaderContent
-                    aside={
-                        <Icon16Dropdown
-                            style={{
-                                transform: `rotate(${
-                                    contextMenuIsOpen ? "180deg" : "0"
-                                })`,
-                                transition: "0.3s all ease",
-                            }}
-                        />
-                    }
-                    onClick={() => setContextMenuIsOpen(true)}
-                >
-                    {panelNames[id]}
-                </PanelHeaderContent>
-            </PanelHeader>
+            <MainTabPanelHeader
+                children={
+                    <PanelHeaderContent
+                        aside={
+                            <Icon16Dropdown
+                                style={{
+                                    transform: `rotate(${
+                                        contextMenuIsOpen ? "180deg" : "0"
+                                    })`,
+                                    transition: "0.3s all ease",
+                                }}
+                            />
+                        }
+                        onClick={() => setContextMenuIsOpen(true)}
+                    >
+                        {panelNames[id]}
+                    </PanelHeaderContent>
+                }
+            />
+
             <PanelHeaderContext
                 opened={contextMenuIsOpen}
                 onClose={() => setContextMenuIsOpen(false)}
@@ -89,6 +91,8 @@ export const Memes = ({ id }: IPanelProps) => {
                     style={{ paddingLeft: 0, paddingRight: 0 }}
                     placeholder="Поиск мемов"
                 />
+
+                <div style={{ height: 16 }} />
 
                 {isLoading ? (
                     <Spinner size="medium" style={{ margin: "20px 0" }} />

@@ -1,8 +1,8 @@
-import { GamesListItem } from "@components"
+import { GamesListItem, MainTabPanelHeader } from "@components"
 import { panelNames, routes } from "@shared"
 import { IGameModeItem, IPanelProps } from "@types"
 import { Icon28PencilSquare, Icon36GameOutline } from "@vkontakte/icons"
-import { Group, Panel, PanelHeader, Placeholder } from "@vkontakte/vkui"
+import { Group, Panel, Placeholder } from "@vkontakte/vkui"
 import styles from "./styles.module.css"
 
 export const Games = ({ id }: IPanelProps) => {
@@ -14,13 +14,20 @@ export const Games = ({ id }: IPanelProps) => {
 
     return (
         <Panel id={id}>
-            <PanelHeader>{panelNames[id]}</PanelHeader>
+            <MainTabPanelHeader children={panelNames[id]} />
 
             <Group>
                 <Placeholder
                     header="Выберите игру"
                     icon={
-                        <Icon36GameOutline style={{ width: 56, height: 56 }} />
+                        <Icon36GameOutline
+                            style={{
+                                width: 56,
+                                height: 56,
+                                color: "var(--app-accent)",
+                            }}
+                            className={styles.iconAnimation}
+                        />
                     }
                 >
                     Чтобы продолжить, выберите режим, в который вы хотели бы
