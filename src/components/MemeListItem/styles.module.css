@@ -1,14 +1,19 @@
 .card {
-    background: var(--vkui--color_background_secondary);
+    background: var(--card-background);
     border-radius: 10px;
     overflow: hidden;
     cursor: pointer;
     min-width: 200px;
     transition: 0.3s all ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .cardContent {
-    padding: 4px 8px;
+    flex: 1;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
 }
 
 .cardHeader {
@@ -38,7 +43,10 @@
 .cardImage {
     height: 150px;
     width: 100%;
-    object-fit: cover;
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .cardInfoBox {
@@ -53,4 +61,74 @@
     align-items: center;
     justify-content: center;
     column-gap: 8px;
+}
+
+.countersContainer {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+}
+
+.countersContainer div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 8px;
+    background: var(--card-background-secondary);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 14px;
+}
+
+.mobileTitle {
+    display: none;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    font-size: 13px;
+    padding: 2px 8px;
+    border-radius: 10px 10px 10px 0;
+    color: white;
+}
+
+.onModeration {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    font-size: 13px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    color: white;
+}
+
+.imageTextContainer {
+    position: absolute;
+    z-index: 1;
+    bottom: 6px;
+    left: 6px;
+    right: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media screen and (max-width: 460px) {
+    .cardImage {
+        height: 200px;
+    }
+
+    .cardHeader {
+        display: none;
+    }
+
+    .mobileTitle {
+        display: block;
+    }
+
+    .cardDescription {
+        line-clamp: 3;
+        -webkit-line-clamp: 3;
+    }
 }

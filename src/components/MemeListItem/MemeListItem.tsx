@@ -1,5 +1,6 @@
 import { MemeItem } from "@shared"
 import {
+    Icon20CommentOutline,
     Icon28ArrowUpRectangleOutline,
     Icon28BookmarkCircleFillYellow,
     Icon28BookmarkOutline,
@@ -31,54 +32,76 @@ export const MemeListItem = ({
                 onClick !== null ? onClick(item.id) : openMeme(item.id)
             }
         >
-            <img
-                src={item.image}
-                style={{ background: `url(${item.image})` }}
+            <div
                 className={styles.cardImage}
-                alt=""
-            />
+                style={{ backgroundImage: `url(${item.image})` }}
+            >
+                <div className={styles.imageTextContainer}>
+                    {item.isSuggest && (
+                        <div className={styles.onModeration}>
+                            На рассмотрении
+                        </div>
+                    )}
+
+                    <div className={styles.mobileTitle}>{item.title}</div>
+                </div>
+            </div>
 
             <div className={styles.cardContent}>
                 <div className={styles.cardHeader}>{item.title}</div>
                 <div className={styles.cardDescription}>{item.description}</div>
 
-                <div style={{ height: 8 }} />
+                <div style={{ minHeight: 8, flex: 1 }} />
 
                 {children !== null ? (
                     children
                 ) : (
                     <div className={styles.cardInfoBox}>
-                        {/*{item.placeInRating > -1 ? (*/}
-                        {/*    <div>*/}
-                        {/*        <Icon32PollOutline*/}
-                        {/*            style={{ width: 20, height: 20 }}*/}
-                        {/*        />*/}
-                        {/*        {item.placeInRating}*/}
-                        {/*    </div>*/}
-                        {/*) : (*/}
-                        {/*    <div />*/}
-                        {/*)}*/}
-
-                        <div>
-                            <div>
+                        <div className={styles.countersContainer}>
+                            <div
+                                style={{
+                                    background: item.isFavorites
+                                        ? "var(--favorites-background-alpha)"
+                                        : undefined,
+                                }}
+                            >
                                 {item.isFavorites ? (
                                     <Icon28BookmarkCircleFillYellow
-                                        style={{ width: 20, height: 20 }}
+                                        style={{ width: 17, height: 17 }}
                                     />
                                 ) : (
                                     <Icon28BookmarkOutline
-                                        style={{ width: 20, height: 20 }}
+                                        style={{ width: 17, height: 17 }}
                                     />
                                 )}
 
                                 {item.favoritesCount}
                             </div>
 
-                            <div>
+                            <div
+                            // style={{
+                            //     background: item.isFavorites
+                            //         ? "var(--like-background-alpha)"
+                            //         : undefined,
+                            // }}
+                            >
                                 <Icon28ArrowUpRectangleOutline
-                                    style={{ width: 20, height: 20 }}
+                                    style={{
+                                        width: 17,
+                                        height: 17,
+                                        // color: item.isFavorites
+                                        //     ? "var(--like-background)"
+                                        //     : undefined,
+                                    }}
                                 />
                                 {item.likesCount}
+                            </div>
+
+                            <div>
+                                <Icon20CommentOutline
+                                    style={{ width: 17, height: 17 }}
+                                />
+                                {item.commentsCount}
                             </div>
                         </div>
                     </div>
