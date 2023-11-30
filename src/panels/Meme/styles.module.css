@@ -2,7 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    margin: 16px;
+    margin: 0 16px;
 }
 
 .image {
@@ -45,7 +45,7 @@
 
 .actionsContainer {
     display: flex;
-    gap: 16px;
+    gap: 8px;
     align-items: center;
 }
 
@@ -53,7 +53,7 @@
     height: 34px;
     padding: 0 16px;
     border-radius: 34px;
-    background: var(--vkui--color_background_secondary);
+    background: var(--card-background);
     display: flex;
     column-gap: 8px;
     align-items: center;
@@ -69,13 +69,13 @@
 }
 
 .favorites {
-    background: var(--vkui--color_background_secondary) !important;
+    background: var(--card-background) !important;
 }
 
 .verticalDivider {
     width: 1px;
     border-radius: 50%;
-    background: var(--vkui--color_text_primary);
+    background: var(--card-background-secondary);
     height: 50%;
     margin: 0 4px;
 }

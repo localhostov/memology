@@ -7,23 +7,31 @@
 .memeImage {
     height: 100px;
     width: 150px;
-    object-fit: cover;
     border-radius: 16px;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
 }
 
 .place {
-    background: white;
-    color: black;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
     position: absolute;
-    bottom: 10px;
-    right: 6px;
+    bottom: 6px;
+    left: 6px;
     border-radius: 15px;
     height: 22px;
     padding: 0 12px;
+    backdrop-filter: blur(10px);
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .memeInfoContainer {
-    padding: 8px 0;
     overflow: hidden;
 }
 
@@ -55,4 +63,8 @@
     align-items: center;
     justify-content: center;
     column-gap: 8px;
+    background: var(--vkui--color_background_secondary);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 14px;
 }

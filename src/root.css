@@ -1,3 +1,48 @@
 .vkuiPanelHeader {
     user-select: none;
 }
+
+::-webkit-scrollbar {
+    width: 6px;
+    background: var(--vkui--color_background);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thubm);
+    border-radius: 10px 0 0 10px;
+}
+
+::-webkit-scrollbar-button {
+    background: transparent;
+    height: 8px;
+}
+
+.vkui--vkCom--light,
+.vkui--vkBase--light,
+.vkui--vkIOS--light,
+:root {
+    --app-accent: rgb(140, 86, 232);
+    --card-background: #e8e8e8;
+    --card-background-secondary: #d2d2d2;
+    --scrollbar-thubm: #7791ff;
+    --like-background-alpha: rgba(44, 150, 18, 0.16);
+    --like-background: rgb(44, 150, 18);
+    --dislike-background-alpha: rgba(239, 48, 23, 0.16);
+    --dislike-background: rgb(239, 48, 23);
+    --favorites-background-alpha: rgba(255,196,0,0.3);
+}
+
+.vkui--vkCom--dark,
+.vkui--vkBase--dark,
+.vkui--vkIOS--dark,
+:root {
+    --app-accent: rgb(140, 86, 232);
+    --card-background: #2a2a2a;
+    --card-background-secondary: #363636;
+    --scrollbar-thubm: #313131;
+    --like-background-alpha: rgba(69, 239, 23, 0.16);
+    --like-background: rgba(69, 239, 23);
+    --dislike-background-alpha: rgba(239, 48, 23, 0.16);
+    --dislike-background: rgb(239, 48, 23);
+    --favorites-background-alpha: rgba(255,196,0,0.16);
+}

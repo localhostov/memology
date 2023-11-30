@@ -10,3 +10,19 @@
         grid-template-columns: 1fr 1fr;
     }
 }
+
+.iconAnimation {
+    animation: rotate 4s ease-in-out infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+    to {
+        transform: scale(1);
+    }
+}

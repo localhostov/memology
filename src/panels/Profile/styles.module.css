@@ -14,8 +14,7 @@
 
 .cardsContainer {
     display: grid;
-    gap: 16px;
-    width: 100%;
+    gap: 6px;
 }
 
 @media screen and (min-width: 1024px) {

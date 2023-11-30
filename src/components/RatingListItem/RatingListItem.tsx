@@ -1,5 +1,6 @@
 import { TRatingItem } from "@shared"
 import {
+    Icon20CommentOutline,
     Icon28ArrowUpRectangleOutline,
     Icon28BookmarkCircleFillYellow,
     Icon28BookmarkOutline,
@@ -18,14 +19,12 @@ export const RatingListItem = ({ item }: { item: TRatingItem }) => {
         <div key={item.id}>
             <Tappable className={styles.card} onClick={openMeme}>
                 <div>
-                    <img
-                        src={item.image}
-                        style={{ background: `url(${item.image})` }}
+                    <div
+                        style={{ backgroundImage: `url(${item.image})` }}
                         className={styles.memeImage}
-                        alt=""
-                    />
-
-                    <div className={styles.place}>{item.place}</div>
+                    >
+                        <div className={styles.place}>{item.place}</div>
+                    </div>
                 </div>
 
                 <div className={styles.memeInfoContainer}>
@@ -37,14 +36,20 @@ export const RatingListItem = ({ item }: { item: TRatingItem }) => {
                     <div style={{ height: 8 }} />
 
                     <div className={styles.memeInfoCounters}>
-                        <div>
+                        <div
+                            style={{
+                                background: item.isFavorites
+                                    ? "var(--favorites-background-alpha)"
+                                    : undefined,
+                            }}
+                        >
                             {item.isFavorites ? (
                                 <Icon28BookmarkCircleFillYellow
-                                    style={{ width: 20, height: 20 }}
+                                    style={{ width: 17, height: 17 }}
                                 />
                             ) : (
                                 <Icon28BookmarkOutline
-                                    style={{ width: 20, height: 20 }}
+                                    style={{ width: 17, height: 17 }}
                                 />
                             )}
 
@@ -53,9 +58,16 @@ export const RatingListItem = ({ item }: { item: TRatingItem }) => {
 
                         <div>
                             <Icon28ArrowUpRectangleOutline
-                                style={{ width: 20, height: 20 }}
+                                style={{ width: 17, height: 17 }}
                             />
                             {item.likesCount}
+                        </div>
+
+                        <div>
+                            <Icon20CommentOutline
+                                style={{ width: 17, height: 17 }}
+                            />
+                            {item.commentsCount}
                         </div>
                     </div>
                 </div>
