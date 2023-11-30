@@ -21,7 +21,7 @@ import {
     Snackbar,
 } from "@vkontakte/vkui"
 import { useUnit } from "effector-react"
-import { ReactElement, useEffect, useRef } from "react"
+import { ReactElement, useEffect } from "react"
 import { ShowResult, WaitResult, WriteHistory } from "./steps"
 import styles from "./styles.module.css"
 
@@ -44,7 +44,6 @@ export const HistoryGame = ({ id }: IPanelProps) => {
     const gameStep = useUnit($gameStep)
     const vkUserData = useUnit($vkUserData)
     const settings = useUnit($settings)
-    const unblock = useRef<() => void>()
 
     const { send } = useWebsocket(
         "history",
@@ -143,10 +142,6 @@ export const HistoryGame = ({ id }: IPanelProps) => {
             if (gifContent) URL.revokeObjectURL(gifContent.link)
         }
     }, [])
-
-    useEffect(() => {
-        unblock.current = navigator.block(() => false)
-    }, [navigator])
 
     const currentGameStep: Record<TGameHistoryStepType, ReactElement> = {
         meWrite: WriteHistory({ send }),
