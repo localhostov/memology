@@ -63,30 +63,28 @@ export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
         const isOwner = vkUserData?.id === gameOwner?.vkId
 
         if (isOwner) {
-            if (!callLink) {
-                setCallButtonLoading(true)
+            setCallButtonLoading(true)
 
-                bridge
-                    .send("VKWebAppCallStart")
-                    .then((data) => {
-                        console.log(data)
-                        if (data.result) {
-                            setCallLink(data.join_link)
-                            send("setCallData", {
-                                link: data.join_link,
-                            })
-                        }
-                    })
-                    .catch(() => {
-                        setSnackbar(
-                            <Snackbar onClose={() => setSnackbar(null)}>
-                                Произошла ошибка при создании звонка, попробуйте
-                                снова
-                            </Snackbar>,
-                        )
-                    })
-                    .finally(() => setCallButtonLoading(false))
-            }
+            bridge
+                .send("VKWebAppCallStart")
+                .then((data) => {
+                    console.log(data)
+                    if (data.result) {
+                        setCallLink(data.join_link)
+                        send("setCallData", {
+                            link: data.join_link,
+                        })
+                    }
+                })
+                .catch(() => {
+                    setSnackbar(
+                        <Snackbar onClose={() => setSnackbar(null)}>
+                            Произошла ошибка при создании звонка, попробуйте
+                            снова
+                        </Snackbar>,
+                    )
+                })
+                .finally(() => setCallButtonLoading(false))
         } else if (callLink !== null) {
             bridge.send("VKWebAppCallJoin", {
                 join_link: callLink,
@@ -146,15 +144,12 @@ export const GameLobby = ({ send }: { send: TSendFunction<TGameModeType> }) => {
                             />
                         }
                         disabled={
-                            (vkUserData?.id === gameOwner?.vkData.id &&
-                                callLink !== null) ||
-                            (vkUserData?.id !== gameOwner?.vkData.id &&
-                                callLink === null)
+                            vkUserData?.id !== gameOwner?.vkData.id && !callLink
                         }
                     >
                         {vkUserData?.id === gameOwner?.vkData.id
                             ? callLink
-                                ? "Звонок активен"
+                                ? "Перезапустить звонок"
                                 : "Начать звонок"
                             : "Присоединиться к звонку"}
                     </Button>
