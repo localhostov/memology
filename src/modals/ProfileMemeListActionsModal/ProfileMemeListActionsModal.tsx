@@ -1,16 +1,24 @@
+import { setSnackbar } from "@shared"
 import { IModalProps } from "@types"
 import { Icon24MoreHorizontal } from "@vkontakte/icons"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
-import { Button, ButtonGroup, ModalCard } from "@vkontakte/vkui"
+import { Button, ButtonGroup, ModalCard, Snackbar } from "@vkontakte/vkui"
 
 export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()
     const params = useParams<"list" | "memeId">()
 
     const dropFromList = () => {
-        console.log(
-            `user drop meme (${params?.memeId}) from list ${params?.list}`,
+        // const currentList = params?.list as Mark | "favorite"
+        // addToList(currentList)
+
+        setSnackbar(
+            <Snackbar onClose={() => setSnackbar(null)}>
+                Фича на доработке, просим понять и простить
+            </Snackbar>,
         )
+
+        // console.log(currentList)
     }
 
     const openMeme = () => {
@@ -22,26 +30,28 @@ export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
             id={id}
             icon={<Icon24MoreHorizontal style={{ width: 48, height: 48 }} />}
             header="Действия"
-            subheader="Выберите, что бы вы хотели сделать с этим мемом"
+            subheader="Выберите, что бы вы хотели сделать с этим мемом в этом списке"
             actions={
-                <ButtonGroup stretched mode="vertical">
-                    <Button
-                        stretched
-                        size="m"
-                        appearance="negative"
-                        onClick={dropFromList}
-                    >
-                        Удалить
-                    </Button>
+                <ButtonGroup stretched mode="vertical" gap="s">
+                    <ButtonGroup stretched mode="horizontal" gap="s">
+                        <Button
+                            stretched
+                            size="l"
+                            appearance="negative"
+                            onClick={dropFromList}
+                        >
+                            Удалить
+                        </Button>
 
-                    <Button stretched size="m" onClick={openMeme}>
-                        Открыть
-                    </Button>
+                        <Button stretched size="l" onClick={openMeme}>
+                            Открыть
+                        </Button>
+                    </ButtonGroup>
 
                     <Button
                         stretched
                         mode="secondary"
-                        size="m"
+                        size="l"
                         onClick={() => navigator.hideModal()}
                     >
                         Отмена
