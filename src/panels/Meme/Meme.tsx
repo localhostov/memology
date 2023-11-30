@@ -2,24 +2,26 @@ import { MemeCommentListItem } from "@components"
 import {
     $comments,
     $meme,
+    $memeError,
     addToList,
-    addToListFx,
     fetchMeme,
     getCommentsFx,
+    getMemeFx,
     Mark,
     Modals,
     panelNames,
-    setPopout,
     unmountMeme,
     useSafeBack,
 } from "@shared"
 import { IPanelProps } from "@types"
 import {
+    Icon16LinkOutline,
     Icon24CommentOutline,
     Icon24ThumbsDown,
     Icon24ThumbsDownOutline,
     Icon24ThumbsUp,
     Icon24ThumbsUpOutline,
+    Icon56CancelCircleOutline,
 } from "@vkontakte/icons"
 import bridge from "@vkontakte/vk-bridge"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
@@ -31,7 +33,6 @@ import {
     PanelHeader,
     PanelHeaderBack,
     Placeholder,
-    ScreenSpinner,
     SimpleCell,
     Spinner,
 } from "@vkontakte/vkui"
@@ -46,26 +47,17 @@ export const Meme = ({ id }: IPanelProps) => {
     const { memeId } = useParams<"memeId">()!
     const commentsIsLoading = useUnit(getCommentsFx.pending)
     const commentsItemsList = useUnit($comments)
-    const addingToListLoading = useUnit(addToListFx.pending)
+    const memeError = useUnit($memeError)
+    const loadingMeme = useUnit(getMemeFx.pending)
     const safeBack = useSafeBack()
 
     useEffect(() => {
         fetchMeme(Number(memeId!))
 
-        return unmountMeme
-    }, [memeId])
-
-    useEffect(() => {
-        if (addingToListLoading) {
-            setPopout(<ScreenSpinner state="loading" />)
-        } else {
-            setPopout(null)
-        }
-
         return () => {
-            setPopout(null)
+            unmountMeme()
         }
-    }, [addingToListLoading])
+    }, [memeId])
 
     const openImage = () => {
         if (!meme) return
@@ -92,38 +84,66 @@ export const Meme = ({ id }: IPanelProps) => {
                 {panelNames[id]}
             </PanelHeader>
 
-            {meme ? (
-                <Group>
-                    <div className={styles.imageContainer}>
-                        <img
-                            src={meme.image}
-                            className={styles.image}
-                            onClick={openImage}
-                            alt=""
-                        />
+            <Group>
+                {loadingMeme && !meme ? (
+                    <Placeholder
+                        icon={<Spinner size="large" />}
+                        header="Загрузочка..."
+                    />
+                ) : memeError ? (
+                    <Placeholder
+                        header="Ой, ошибочка"
+                        icon={
+                            <Icon56CancelCircleOutline
+                                style={{ width: 56, height: 56 }}
+                            />
+                        }
+                    >
+                        {memeError.message}
+                    </Placeholder>
+                ) : (
+                    meme && (
+                        <>
+                            <div style={{ height: 16 }} />
 
-                        <div className={styles.imageContainerContent}>
-                            {meme.placeInWeeklyRating && (
-                                <div className={styles.placeInRating}>
-                                    #{meme.placeInWeeklyRating} в недельном
-                                    рейтинге
+                            <div className={styles.imageContainer}>
+                                <img
+                                    src={meme.image}
+                                    className={styles.image}
+                                    onClick={openImage}
+                                    alt=""
+                                />
+
+                                <div className={styles.imageContainerContent}>
+                                    {meme.placeInWeeklyRating && (
+                                        <div className={styles.placeInRating}>
+                                            #{meme.placeInWeeklyRating} в
+                                            недельном рейтинге
+                                        </div>
+                                    )}
+                                    {meme.placeInEternalRating && (
+                                        <div className={styles.placeInRating}>
+                                            #{meme.placeInEternalRating} в
+                                            постоянном рейтинге
+                                        </div>
+                                    )}
+                                    <div className={styles.title}>
+                                        {meme.title}
+                                    </div>
+                                    <div className={styles.description}>
+                                        {meme.description}
+                                    </div>
                                 </div>
-                            )}
-                            {meme.placeInEternalRating && (
-                                <div className={styles.placeInRating}>
-                                    #{meme.placeInEternalRating} в постоянном
-                                    рейтинге
-                                </div>
-                            )}
-                            <div className={styles.title}>{meme.title}</div>
-                            <div className={styles.description}>
-                                {meme.description}
                             </div>
 
-                            <div style={{ height: 8 }} />
+                            {/*<div style={{ padding: 16 }}>*/}
+                            {/*    */}
+                            {/*</div>*/}
 
-                            <div>
+                            <div className={styles.mainContent}>
                                 <SimpleCell
+                                    hasHover={false}
+                                    hasActive={false}
                                     before={
                                         <Avatar
                                             size={36}
@@ -131,9 +151,10 @@ export const Meme = ({ id }: IPanelProps) => {
                                         />
                                     }
                                     style={{
-                                        paddingLeft: 0,
-                                        borderRadius: 100,
+                                        cursor: "pointer",
+                                        padding: 0,
                                     }}
+                                    after={<Icon16LinkOutline />}
                                     subtitle="Автор мема"
                                     onClick={() =>
                                         window.open(ownerVkUrl, "_blank")
@@ -142,104 +163,125 @@ export const Meme = ({ id }: IPanelProps) => {
                                     {meme.owner.first_name || "Загрузка..."}
                                     {" " + meme.owner.last_name}
                                 </SimpleCell>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className={styles.mainContent}>
-                        <div className={styles.actionsContainer}>
+                                <div style={{ height: 16 }} />
+
+                                <div className={styles.actionsContainer}>
+                                    <div>
+                                        <div
+                                            onClick={() =>
+                                                addToList(Mark.DISLIKE)
+                                            }
+                                            style={{
+                                                padding: 0,
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            {meme.mark === Mark.DISLIKE ? (
+                                                <Icon24ThumbsDown
+                                                    style={{
+                                                        color: "var(--dislike-background)",
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Icon24ThumbsDownOutline />
+                                            )}
+                                        </div>
+                                        {meme.likesCount}
+                                        <div
+                                            onClick={() => addToList(Mark.LIKE)}
+                                            style={{
+                                                padding: 0,
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            {meme.mark === Mark.LIKE ? (
+                                                <Icon24ThumbsUp
+                                                    style={{
+                                                        color: "var(--like-background)",
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Icon24ThumbsUpOutline />
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        onClick={() => addToList("favorite")}
+                                        className={
+                                            meme.isFavorites
+                                                ? styles.favoritesCheck
+                                                : styles.favorites
+                                        }
+                                    >
+                                        {meme.favoritesCount}
+
+                                        <div
+                                            className={styles.verticalDivider}
+                                        />
+
+                                        {meme.isFavorites
+                                            ? "В избранном"
+                                            : "В избранное"}
+                                    </div>
+                                </div>
+                            </div>
+
                             <div>
-                                <div
-                                    onClick={() => addToList(Mark.DISLIKE)}
-                                    style={{ padding: 0, cursor: "pointer" }}
+                                <SimpleCell
+                                    disabled
+                                    subtitle={
+                                        meme.commentsCount > 0
+                                            ? `Всего: ${meme.commentsCount}`
+                                            : "Комментариев нет"
+                                    }
+                                    before={<Icon24CommentOutline />}
+                                    after={
+                                        <Button
+                                            mode="secondary"
+                                            onClick={openCommentModal}
+                                        >
+                                            Комментировать
+                                        </Button>
+                                    }
                                 >
-                                    {meme.mark === Mark.DISLIKE ? (
-                                        <Icon24ThumbsDown />
-                                    ) : (
-                                        <Icon24ThumbsDownOutline />
-                                    )}
-                                </div>
-                                {meme.likesCount}
-                                <div
-                                    onClick={() => addToList(Mark.LIKE)}
-                                    style={{ padding: 0, cursor: "pointer" }}
-                                >
-                                    {meme.mark === Mark.LIKE ? (
-                                        <Icon24ThumbsUp />
-                                    ) : (
-                                        <Icon24ThumbsUpOutline />
-                                    )}
-                                </div>
-                            </div>
+                                    Комментарии
+                                </SimpleCell>
 
-                            <div
-                                onClick={() => addToList("favorite")}
-                                className={
-                                    meme.isFavorites
-                                        ? styles.favoritesCheck
-                                        : styles.favorites
-                                }
-                            >
-                                {meme.favoritesCount}
+                                <div className={styles.horizontalDivider} />
 
-                                <div className={styles.verticalDivider} />
-
-                                {meme.isFavorites
-                                    ? "В избранном"
-                                    : "В избранное"}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <SimpleCell
-                            disabled
-                            subtitle={`Всего: ${meme.commentsCount}`}
-                            before={<Icon24CommentOutline />}
-                            after={
-                                <Button
-                                    mode="secondary"
-                                    onClick={openCommentModal}
-                                >
-                                    Комментировать
-                                </Button>
-                            }
-                        >
-                            Комментарии
-                        </SimpleCell>
-
-                        <div className={styles.horizontalDivider} />
-
-                        {commentsIsLoading && commentsItemsList.length === 0 ? (
-                            <Placeholder
-                                icon={<Spinner size="medium" />}
-                                header="Загрузочка..."
-                            />
-                        ) : commentsItemsList.length === 0 ? (
-                            <Placeholder
-                                icon={
-                                    <Icon24CommentOutline
-                                        style={{ width: 56, height: 56 }}
+                                {commentsIsLoading &&
+                                commentsItemsList.length === 0 ? (
+                                    <Placeholder
+                                        icon={<Spinner size="medium" />}
+                                        header="Загрузочка..."
                                     />
-                                }
-                                header="Комментариев нет"
-                                children="Но вы можете оставить первый комментарий"
-                            />
-                        ) : (
-                            <div className={styles.commentListContainer}>
-                                {commentsList}
+                                ) : commentsItemsList.length === 0 ? (
+                                    <Placeholder
+                                        icon={
+                                            <Icon24CommentOutline
+                                                style={{
+                                                    width: 56,
+                                                    height: 56,
+                                                }}
+                                            />
+                                        }
+                                        header="Комментариев нет"
+                                        children="Но вы можете оставить первый комментарий"
+                                    />
+                                ) : (
+                                    <div
+                                        className={styles.commentListContainer}
+                                    >
+                                        {commentsList}
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-                </Group>
-            ) : (
-                <Group>
-                    <Placeholder
-                        icon={<Spinner size="large" />}
-                        header="Загрузочка..."
-                    />
-                </Group>
-            )}
+                        </>
+                    )
+                )}
+            </Group>
         </Panel>
     )
 }

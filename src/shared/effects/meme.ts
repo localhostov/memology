@@ -1,9 +1,16 @@
 import { Mark, MemeResponse } from "@shared"
 import { TCommentWithOwner } from "@types"
 import bridge, { UserInfo } from "@vkontakte/vk-bridge"
-import { createEffect, createEvent, restore, sample } from "effector"
+import {
+    createEffect,
+    createEvent,
+    createStore,
+    restore,
+    sample,
+} from "effector"
 import { debounce } from "patronum"
 import { API } from "../api"
+import { APIError, isAPIError } from "../api/APIError"
 
 type TMemeWithOwner = MemeResponse & { owner: UserInfo }
 
@@ -17,6 +24,12 @@ export const getMemeFx = createEffect(async (id: number) => {
     return Object.assign(meme, { owner }) as TMemeWithOwner
 })
 export const $meme = restore(getMemeFx, null)
+export const $memeError = createStore<APIError | null>(null)
+$memeError.reset(getMemeFx)
+$memeError.on(getMemeFx.failData, (_, error) => {
+    if (isAPIError(error)) return error
+    return null
+})
 
 export const fetchMeme = createEvent<number>()
 export const unmountMeme = createEvent()
@@ -46,9 +59,9 @@ $meme.on(addToList, (current, type) => {
                 likesCount:
                     current.mark === Mark.LIKE
                         ? current.likesCount - 1
-                        : (current.mark === Mark.DISLIKE
+                        : current.mark === Mark.DISLIKE
                           ? current.likesCount + 2
-                          : current.likesCount + 1),
+                          : current.likesCount + 1,
             }
         if (type === Mark.DISLIKE)
             return {
@@ -57,9 +70,9 @@ $meme.on(addToList, (current, type) => {
                 likesCount:
                     current.mark === Mark.LIKE
                         ? current.likesCount - 2
-                        : (current.mark === Mark.DISLIKE
+                        : current.mark === Mark.DISLIKE
                           ? current.likesCount + 1
-                          : current.likesCount - 1),
+                          : current.likesCount - 1,
             }
         if (type === "favorite") {
             const newState = !current.isFavorites
