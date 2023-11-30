@@ -61,6 +61,10 @@ export interface MemeRatingResponse_MemeItem {
      * @generated from protobuf field: uint32 place = 8;
      */
     place: number;
+    /**
+     * @generated from protobuf field: uint32 commentsCount = 9;
+     */
+    commentsCount: number;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class MemeRatingResponse$Type extends MessageType<MemeRatingResponse> {
@@ -127,11 +131,12 @@ class MemeRatingResponse_MemeItem$Type extends MessageType<MemeRatingResponse_Me
             { no: 5, name: "favoritesCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 6, name: "isFavorites", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 7, name: "likesCount", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
-            { no: 8, name: "place", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+            { no: 8, name: "place", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 9, name: "commentsCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<MemeRatingResponse_MemeItem>): MemeRatingResponse_MemeItem {
-        const message = { id: 0, title: "", image: "", favoritesCount: 0, isFavorites: false, likesCount: 0, place: 0 };
+        const message = { id: 0, title: "", image: "", favoritesCount: 0, isFavorites: false, likesCount: 0, place: 0, commentsCount: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<MemeRatingResponse_MemeItem>(this, message, value);
@@ -165,6 +170,9 @@ class MemeRatingResponse_MemeItem$Type extends MessageType<MemeRatingResponse_Me
                     break;
                 case /* uint32 place */ 8:
                     message.place = reader.uint32();
+                    break;
+                case /* uint32 commentsCount */ 9:
+                    message.commentsCount = reader.uint32();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -202,6 +210,9 @@ class MemeRatingResponse_MemeItem$Type extends MessageType<MemeRatingResponse_Me
         /* uint32 place = 8; */
         if (message.place !== 0)
             writer.tag(8, WireType.Varint).uint32(message.place);
+        /* uint32 commentsCount = 9; */
+        if (message.commentsCount !== 0)
+            writer.tag(9, WireType.Varint).uint32(message.commentsCount);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

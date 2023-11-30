@@ -48,6 +48,10 @@ export interface MemeItem {
      * @generated from protobuf field: bool isSuggest = 8;
      */
     isSuggest: boolean;
+    /**
+     * @generated from protobuf field: uint32 commentsCount = 9;
+     */
+    commentsCount: number;
 }
 /**
  * @generated from protobuf message MemeListResponse
@@ -139,11 +143,12 @@ class MemeItem$Type extends MessageType<MemeItem> {
             { no: 5, name: "favoritesCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 6, name: "isFavorites", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 7, name: "likesCount", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
-            { no: 8, name: "isSuggest", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+            { no: 8, name: "isSuggest", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 9, name: "commentsCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<MemeItem>): MemeItem {
-        const message = { id: 0, title: "", image: "", favoritesCount: 0, isFavorites: false, likesCount: 0, isSuggest: false };
+        const message = { id: 0, title: "", image: "", favoritesCount: 0, isFavorites: false, likesCount: 0, isSuggest: false, commentsCount: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<MemeItem>(this, message, value);
@@ -177,6 +182,9 @@ class MemeItem$Type extends MessageType<MemeItem> {
                     break;
                 case /* bool isSuggest */ 8:
                     message.isSuggest = reader.bool();
+                    break;
+                case /* uint32 commentsCount */ 9:
+                    message.commentsCount = reader.uint32();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -214,6 +222,9 @@ class MemeItem$Type extends MessageType<MemeItem> {
         /* bool isSuggest = 8; */
         if (message.isSuggest !== false)
             writer.tag(8, WireType.Varint).bool(message.isSuggest);
+        /* uint32 commentsCount = 9; */
+        if (message.commentsCount !== 0)
+            writer.tag(9, WireType.Varint).uint32(message.commentsCount);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
