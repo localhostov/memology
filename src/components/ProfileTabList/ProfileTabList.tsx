@@ -31,7 +31,7 @@ export function ProfileTabList({ type }: Props) {
     const search = useUnit(ProfileEffects.$memesSearch)
     const memesIsLoading = useUnit(ProfileEffects.getMemesListFx.pending)
     const memesListSearchIsEmpty =
-        search.trim().length > 0 && memes.length === 0
+        search.trim().length > 0 && memes?.length === 0
 
     useEffect(() => {
         ProfileEffects.fetchMemes()
@@ -40,10 +40,6 @@ export function ProfileTabList({ type }: Props) {
     const openModal = (memeId: number) => {
         navigator.push(`/me/profileMemeListActions/${type}/${memeId}`)
     }
-
-    const memesList = useList(ProfileEffects.$memesList, (item) => (
-        <MemeListItem key={item.id} item={item} onClick={openModal} />
-    ))
 
     return (
         <>
@@ -54,10 +50,18 @@ export function ProfileTabList({ type }: Props) {
                 placeholder={searchPlaceholder[type]}
             />
             <div className={styles.tabContentContainer}>
-                {memesIsLoading ? (
+                {memesIsLoading || !memes ? (
                     <Spinner size="medium" />
-                ) : memes.length > 0 ? (
-                    <div className={styles.cardsContainer}>{memesList}</div>
+                ) : (memes.length > 0 ? (
+                    <div className={styles.cardsContainer}>
+                        {memes.map((item) => (
+                            <MemeListItem
+                                key={item.id}
+                                item={item}
+                                onClick={openModal}
+                            />
+                        ))}
+                    </div>
                 ) : (
                     <Placeholder
                         icon={
@@ -78,14 +82,14 @@ export function ProfileTabList({ type }: Props) {
                         }
                     >
                         {type === "my"
-                            ? memesListSearchIsEmpty
+                            ? (memesListSearchIsEmpty
                                 ? `Мемы с таким описанием или названием не найдены в этом списке`
-                                : `Похоже, вы еще не предложили нам ни одного мема`
-                            : memesListSearchIsEmpty
+                                : `Похоже, вы еще не предложили нам ни одного мема`)
+                            : (memesListSearchIsEmpty
                               ? `Похоже, вы еще не добавили такого мема в список ${listName[type]}`
-                              : `Вы не добавили ни одного мема в список ${listName[type]}`}
+                              : `Вы не добавили ни одного мема в список ${listName[type]}`)}
                     </Placeholder>
-                )}
+                ))}
             </div>
         </>
     )

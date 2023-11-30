@@ -12,8 +12,8 @@ import { API } from "../api"
 
 export namespace ProfileEffects {
     export const $memesList = createStore<
-        ReturnApiType<typeof API.profileMemesList>["items"]
-    >([])
+        ReturnApiType<typeof API.profileMemesList>["items"] | null
+    >(null)
 
     export const selectTab = createEvent<TProfileTabListType>()
     export const $selectedTab = restore(selectTab, "like")
