@@ -10,6 +10,7 @@ import {
 } from "@shared"
 import { ITab } from "@types"
 import {
+    Icon28AddSquareOutline,
     Icon28GameOutline,
     Icon28NewsfeedOutline,
     Icon28PollSquareOutline,
@@ -174,6 +175,14 @@ export const Epic = () => {
                     <Panel>
                         {hasHeader && <PanelHeader />}
                         <Group>{desktopTabs}</Group>
+                        <Group>
+                            <Cell
+                                onClick={() => navigator.push("/suggest")}
+                                before={<Icon28AddSquareOutline />}
+                            >
+                                Предложить мем
+                            </Cell>
+                        </Group>
                     </Panel>
                 </SplitCol>
             )}
