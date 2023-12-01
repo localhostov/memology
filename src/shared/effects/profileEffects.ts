@@ -9,6 +9,7 @@ import {
 } from "effector"
 import { debounce } from "patronum"
 import { API } from "../api"
+import { MemeItem } from "../proto"
 
 export namespace ProfileEffects {
     export const $memesList = createStore<
@@ -50,5 +51,21 @@ export namespace ProfileEffects {
         source: $tabbedSearch,
         timeout: 200,
         target: getMemesListFx,
+    })
+
+    export const deleteMemeFx = createEffect((id: number) => {
+        API.deleteMeme(id)
+
+        return id
+    })
+    export const deleteMeme = createEvent<number>()
+
+    $memesList.on(deleteMemeFx.doneData, (current, id) => {
+        return current?.filter((it) => it.id !== id) as MemeItem[]
+    })
+
+    sample({
+        clock: deleteMeme,
+        target: deleteMemeFx,
     })
 }

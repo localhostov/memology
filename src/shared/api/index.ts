@@ -177,4 +177,8 @@ export class API {
             .url("/meme/suggest")
             .post()
     }
+
+    static async deleteMeme(id: number) {
+        return api.post(`/meme/${id}/delete`)
+    }
 }

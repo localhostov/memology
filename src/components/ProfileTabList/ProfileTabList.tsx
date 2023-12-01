@@ -1,9 +1,9 @@
-import { ProfileEffects } from "@shared"
+import { MemeItem, ProfileEffects } from "@shared"
 import { TProfileTabListType } from "@types"
 import { Icon24FolderOutline, Icon28SadFaceOutline } from "@vkontakte/icons"
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Placeholder, Search, Spinner } from "@vkontakte/vkui"
-import { useList, useUnit } from "effector-react"
+import { useUnit } from "effector-react"
 import { useEffect } from "react"
 import styles from "../../panels/Profile/styles.module.css"
 import { MemeListItem } from "../index"
@@ -32,13 +32,18 @@ export function ProfileTabList({ type }: Props) {
     const memesIsLoading = useUnit(ProfileEffects.getMemesListFx.pending)
     const memesListSearchIsEmpty =
         search.trim().length > 0 && memes?.length === 0
+    const currentTab = useUnit(ProfileEffects.$selectedTab)
 
     useEffect(() => {
         ProfileEffects.fetchMemes()
     }, [])
 
-    const openModal = (memeId: number) => {
-        navigator.push(`/me/profileMemeListActions/${type}/${memeId}`)
+    const openMeme = (item: MemeItem) => {
+        if (currentTab === "my") {
+            navigator.push(`/me/profileMemeListActions/${type}/${item.id}`)
+        } else {
+            navigator.push(`/meme/${item.id}`)
+        }
     }
 
     return (
@@ -52,13 +57,13 @@ export function ProfileTabList({ type }: Props) {
             <div className={styles.tabContentContainer}>
                 {memesIsLoading || !memes ? (
                     <Spinner size="medium" />
-                ) : (memes.length > 0 ? (
+                ) : memes.length > 0 ? (
                     <div className={styles.cardsContainer}>
                         {memes.map((item) => (
                             <MemeListItem
                                 key={item.id}
                                 item={item}
-                                onClick={openModal}
+                                onClick={openMeme}
                             />
                         ))}
                     </div>
@@ -82,14 +87,14 @@ export function ProfileTabList({ type }: Props) {
                         }
                     >
                         {type === "my"
-                            ? (memesListSearchIsEmpty
+                            ? memesListSearchIsEmpty
                                 ? `Мемы с таким описанием или названием не найдены в этом списке`
-                                : `Похоже, вы еще не предложили нам ни одного мема`)
-                            : (memesListSearchIsEmpty
+                                : `Похоже, вы еще не предложили нам ни одного мема`
+                            : memesListSearchIsEmpty
                               ? `Похоже, вы еще не добавили такого мема в список ${listName[type]}`
-                              : `Вы не добавили ни одного мема в список ${listName[type]}`)}
+                              : `Вы не добавили ни одного мема в список ${listName[type]}`}
                     </Placeholder>
-                ))}
+                )}
             </div>
         </>
     )

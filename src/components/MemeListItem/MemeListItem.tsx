@@ -16,20 +16,20 @@ export const MemeListItem = ({
 }: {
     item: MemeItem
     children?: ReactNode | null
-    onClick?: ((id: number) => void) | null
+    onClick?: ((item: MemeItem) => void) | null
 }) => {
     const navigator = useRouteNavigator()
 
     const openMeme = (memeId: number) => {
         navigator.push(`/meme/${memeId}`)
     }
-    console.log(item)
+
     return (
         <div
             key={item.id}
             className={styles.card}
             onClick={() =>
-                onClick !== null ? onClick(item.id) : openMeme(item.id)
+                onClick !== null ? onClick(item) : openMeme(item.id)
             }
         >
             <div

@@ -1,28 +1,36 @@
-import { setSnackbar } from "@shared"
+import { ProfileEffects, setSnackbar } from "@shared"
 import { IModalProps } from "@types"
 import { Icon24MoreHorizontal } from "@vkontakte/icons"
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router"
 import { Button, ButtonGroup, ModalCard, Snackbar } from "@vkontakte/vkui"
+import { useUnit } from "effector-react/compat"
 
 export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
     const navigator = useRouteNavigator()
     const params = useParams<"list" | "memeId">()
+    const memes = useUnit(ProfileEffects.$memesList)
+    const currentMeme = memes?.find((it) => it.id === Number(params?.memeId))
+    const deleteMemeIsLoading = useUnit(ProfileEffects.deleteMemeFx.pending)
 
-    const dropFromList = () => {
-        // const currentList = params?.list as Mark | "favorite"
-        // addToList(currentList)
-
+    const deleteAction = () => {
+        ProfileEffects.deleteMeme(Number(params?.memeId))
         setSnackbar(
             <Snackbar onClose={() => setSnackbar(null)}>
-                Фича на доработке, просим понять и простить
+                {currentMeme?.isSuggest
+                    ? "Предложенный мем удалён"
+                    : "Мем удалён из приложения"}
             </Snackbar>,
         )
 
-        // console.log(currentList)
+        navigator.hideModal()
     }
 
-    const openMeme = () => {
-        navigator.replace(`/meme/${params?.memeId}`)
+    const edit = () => {
+        setSnackbar(
+            <Snackbar onClose={() => setSnackbar(null)}>
+                Этот мем пока нельзя редактировать
+            </Snackbar>,
+        )
     }
 
     return (
@@ -38,13 +46,14 @@ export const ProfileMemeListActionsModal = ({ id }: IModalProps) => {
                             stretched
                             size="l"
                             appearance="negative"
-                            onClick={dropFromList}
+                            onClick={deleteAction}
+                            loading={deleteMemeIsLoading}
                         >
                             Удалить
                         </Button>
 
-                        <Button stretched size="l" onClick={openMeme}>
-                            Открыть
+                        <Button stretched size="l" onClick={edit}>
+                            Редактировать
                         </Button>
                     </ButtonGroup>
 
