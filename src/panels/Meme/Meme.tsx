@@ -76,6 +76,14 @@ export const Meme = ({ id }: IPanelProps) => {
         </div>
     ))
 
+    const markBackground: Record<Mark | "none", string> = {
+        none: "var(--card-background)",
+        [Mark.LIKE]:
+            "linear-gradient(90deg, var(--card-background), var(--like-background-alpha))",
+        [Mark.DISLIKE]:
+            "linear-gradient(90deg, var(--dislike-background-alpha), var(--card-background))",
+    }
+
     return (
         <Panel id={id}>
             <PanelHeader
@@ -167,7 +175,14 @@ export const Meme = ({ id }: IPanelProps) => {
                                 <div style={{ height: 16 }} />
 
                                 <div className={styles.actionsContainer}>
-                                    <div>
+                                    <div
+                                        style={{
+                                            background:
+                                                markBackground[
+                                                    meme.mark ?? "none"
+                                                ],
+                                        }}
+                                    >
                                         <div
                                             onClick={() =>
                                                 addToList(Mark.DISLIKE)
