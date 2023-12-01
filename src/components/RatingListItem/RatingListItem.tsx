@@ -17,7 +17,13 @@ export const RatingListItem = ({ item }: { item: TRatingItem }) => {
 
     return (
         <div key={item.id}>
-            <Tappable className={styles.card} onClick={openMeme}>
+            <Tappable
+                className={styles.card}
+                onClick={openMeme}
+                hasActive={false}
+                hasHover={false}
+                style={{ cursor: "pointer" }}
+            >
                 <div>
                     <div
                         style={{ backgroundImage: `url(${item.image})` }}

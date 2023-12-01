@@ -5,9 +5,9 @@
 }
 
 .memeImage {
-    height: 100px;
+    height: 95px;
     width: 150px;
-    border-radius: 16px;
+    border-radius: 10px;
 
     background-size: cover;
     background-repeat: no-repeat;
@@ -55,7 +55,8 @@
 .memeInfoCounters {
     display: flex;
     align-items: center;
-    column-gap: 8px;
+    gap: 6px;
+    flex-wrap: wrap;
 }
 
 .memeInfoCounters div {
@@ -67,4 +68,24 @@
     border-radius: 20px;
     padding: 4px 10px;
     font-size: 14px;
+}
+
+@media screen and (max-width: 560px) {
+    .memeImage {
+        height: 80px;
+        width: 120px;
+    }
+
+    .memeInfoCounters div {
+        padding: 3px 6px;
+        font-size: 12px;
+    }
+
+    .memeDescription {
+        font-size: 12px;
+    }
+
+    .memeTitle {
+        font-size: 14px;
+    }
 }

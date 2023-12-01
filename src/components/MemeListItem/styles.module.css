@@ -82,12 +82,13 @@
 
 .mobileTitle {
     display: none;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    font-size: 13px;
-    padding: 2px 8px;
-    border-radius: 10px 10px 10px 0;
     color: white;
+    font-weight: 600;
+    text-shadow:
+            1px 1px 1px rgba(0, 0, 0, .30),
+            2px 2px 1px rgba(0, 0, 0, .25),
+            3px 3px 1px rgba(0, 0, 0, .20),
+            4px 4px 1px rgba(0, 0, 0, .15);
 }
 
 .onModeration {
