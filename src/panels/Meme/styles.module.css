@@ -57,6 +57,7 @@
     column-gap: 8px;
     align-items: center;
     user-select: none;
+    transition: .3s all ease;
 }
 
 .isFavorites, .favoritesCheck, .favorites {
@@ -64,7 +65,7 @@
 }
 
 .favoritesCheck {
-    background: #bd951a !important;
+    background: var(--app-accent) !important;
 }
 
 .favorites {
