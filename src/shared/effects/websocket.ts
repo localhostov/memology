@@ -40,8 +40,6 @@ export const closeWsConnectionFx = createEffect((ws: WebSocket) => {
 })
 export const disconnectWs = createEvent()
 
-$ws.on(connectSocketFx.doneData, (_, ws) => ws)
-
 sample({
     clock: connectWs,
     target: connectSocketFx,
